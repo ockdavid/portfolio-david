@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David Landeo — Data Engineer</title>
+  <meta name="description" content="Portfolio de David Landeo, Data Engineer con experiencia en Python, PySpark, Databricks y Azure. Tres años construyendo infraestructuras de datos.">
+  <meta name="theme-color" content="#090c12">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <link rel="preload" as="image" href="assets/photos/source/david-hero.png" fetchpriority="high">
+
+  <link rel="stylesheet" href="styles.css?v=20260520">
+
+  <script defer src="lib/gsap.min.js"></script>
+  <script defer src="lib/ScrollTrigger.min.js"></script>
+  <script defer src="lib/manifest.js?v=20260520"></script>
+  <script defer src="main.js?v=20260520"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Ir al contenido principal</a>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav class="nav" id="nav" role="navigation" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="David Landeo — inicio">DL</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#timeline">Experiencia</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="nav-cta">GitHub ↗</a>
+    <button class="nav-burger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-mobile">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+    <ul role="list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#timeline">Experiencia</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#contact">Contacto</a></li>
+      <li><a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero" id="hero" aria-label="Presentación">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="assets/photos/source/david-hero.png" alt="" loading="eager" fetchpriority="high">
+      <div class="hero-bg-tint"></div>
+    </div>
+    <div class="hero-gradient" data-mouse-gradient aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <p class="hero-kicker">
+        <span class="kicker-dot" aria-hidden="true"></span>
+        <span class="mono">Data Engineer · Disponible para nuevos proyectos</span>
+      </p>
+      <h1 class="hero-title">David<br>Landeo.</h1>
+      <p class="hero-sub">Construyo la infraestructura que convierte datos crudos en decisiones.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="assets/cv-david-landeo.pdf" download class="btn btn-ghost">Descargar CV ↓</a>
+        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span class="mono">scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATS BAR
+       ============================================================ -->
+  <section class="stats-bar" aria-label="Estadísticas">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-num" data-count-to="3">3</span>
+          <span class="stat-label mono">años como Data Engineer</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count-to="3">3</span>
+          <span class="stat-label mono">empresas en el sector</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count-to="2">2</span>
+          <span class="stat-label mono">países de formación</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count-to="10">10</span>
+          <span class="stat-label mono">tecnologías del stack</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT
+       ============================================================ -->
+  <section class="about" id="about" aria-label="Sobre mí">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-photo">
+          <div class="about-photo-wrap reveal" data-reveal>
+            <img src="assets/photos/source/david-about.png" alt="David Landeo trabajando en su escritorio" loading="lazy" decoding="async">
+            <div class="about-photo-border" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="about-content">
+          <p class="section-label mono reveal" data-reveal>01 — About</p>
+          <h2 class="about-title reveal" data-reveal>
+            Ingeniero electrónico<br>
+            convertido en arquitecto<br>
+            de datos.
+          </h2>
+          <p class="about-text reveal" data-reveal>
+            Empecé diseñando circuitos. Lo que más me fascinaba era el flujo de la información. Tras años entrenando equipos de natación y waterpolo, enseñando en tres facultades universitarias, y cruzar el Atlántico para formarme en Vigo y Barcelona, encontré en la ingeniería de datos el cruce perfecto entre rigor técnico y pensamiento sistémico.
+          </p>
+          <p class="about-text reveal" data-reveal>
+            Hoy construyo pipelines, orquesto plataformas en Azure y Databricks, y transformo volúmenes masivos de datos crudos en infraestructuras limpias y confiables. Tres años, tres empresas, una sola obsesión: que los datos lleguen listos para ser usados.
+          </p>
+          <div class="about-links reveal" data-reveal>
+            <a href="#contact" class="link-arrow">Hablar conmigo →</a>
+            <a href="assets/cv-david-landeo.pdf" download class="link-arrow link-secondary">Descargar CV ↓</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STACK
+       ============================================================ -->
+  <section class="stack-section" id="stack" aria-label="Stack técnico">
+    <div class="container">
+      <p class="section-label mono reveal" data-reveal>02 — Stack técnico</p>
+      <h2 class="section-title reveal" data-reveal>Las herramientas con las<br>que construyo.</h2>
+
+      <div class="stack-grid">
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">🐍</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">Python</h3>
+            <p class="stack-card-desc">Pandas, Scikit-learn, PyTorch, Selenium, Streamlit</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">🗄️</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">SQL</h3>
+            <p class="stack-card-desc">Modelado dimensional, queries complejas, optimización</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">⚡</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">PySpark</h3>
+            <p class="stack-card-desc">Procesamiento distribuido a gran escala</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">◈</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">Databricks</h3>
+            <p class="stack-card-desc">Lakehouse, Delta Lake, MLflow</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">☁️</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">Azure</h3>
+            <p class="stack-card-desc">ADF, ADLS Gen2, Synapse, Power BI, DevOps</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stack-card reveal" data-reveal>
+          <div class="stack-card-icon" aria-hidden="true">⎈</div>
+          <div class="stack-card-body">
+            <h3 class="stack-card-name">Airflow & Docker</h3>
+            <p class="stack-card-desc">Orquestación de pipelines, contenedores</p>
+          </div>
+          <div class="stack-card-glow" aria-hidden="true"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TIMELINE
+       ============================================================ -->
+  <section class="timeline-section" id="timeline" aria-label="Trayectoria profesional y formativa">
+    <div class="container">
+      <p class="section-label mono reveal" data-reveal>03 — Trayectoria</p>
+      <h2 class="section-title reveal" data-reveal>De los circuitos<br>a los datos.</h2>
+
+      <div class="timeline">
+
+        <!-- Experiencia -->
+        <div class="timeline-col">
+          <h3 class="timeline-col-title mono">Experiencia</h3>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">Sep 2023 — hoy</span>
+              <span class="tl-badge badge-data">Data Eng.</span>
+            </div>
+            <h4 class="tl-role">Data Engineer</h4>
+            <p class="tl-org">Procter & Gamble · Madrid, España</p>
+            <p class="tl-desc">Diseño y mantenimiento de pipelines de datos a escala en Azure y Databricks. Transformación distribuida con PySpark y SQL para equipos globales de analítica de negocio.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">Sep 2023 — Feb 2025</span>
+              <span class="tl-badge badge-data">Data Eng.</span>
+            </div>
+            <h4 class="tl-role">Data Engineer</h4>
+            <p class="tl-org">Instituto Escalae · España</p>
+            <p class="tl-desc">Construcción de la infraestructura de datos de la institución. Integración de fuentes heterogéneas, pipelines ETL con Python y modelado dimensional en SQL.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">May 2023 — Jul 2023</span>
+              <span class="tl-badge badge-data">Data Eng.</span>
+            </div>
+            <h4 class="tl-role">Data Engineer</h4>
+            <p class="tl-org">Rentals United · Barcelona, España</p>
+            <p class="tl-desc">Integración y normalización de datos de plataformas de alquiler vacacional. Automatización de flujos con Python y Azure Data Factory.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">2019 — 2022</span>
+              <span class="tl-badge badge-eng">Ingeniería</span>
+            </div>
+            <h4 class="tl-role">Ingeniero Electrónico</h4>
+            <p class="tl-org">Lima, Perú</p>
+            <p class="tl-desc">Diseño de sistemas electrónicos, automatización industrial y programación embebida. Primera toma de contacto con el análisis de datos de sensores y control.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">2012 — 2020</span>
+              <span class="tl-badge badge-sport">Deporte</span>
+            </div>
+            <h4 class="tl-role">Entrenador Nacional de Natación y Waterpolo</h4>
+            <p class="tl-org">Selección peruana · Lima, Perú</p>
+            <p class="tl-desc">Preparación de atletas de alto rendimiento para competición nacional e internacional. Planificación táctica, análisis de rendimiento y liderazgo de equipo.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">2014 — 2019</span>
+              <span class="tl-badge badge-teach">Docencia</span>
+            </div>
+            <h4 class="tl-role">Asistente de Cátedra</h4>
+            <p class="tl-org">3 universidades · Lima, Perú</p>
+            <p class="tl-desc">Docencia en tres facultades de ingeniería: electrónica, procesamiento de señales y sistemas de control. Corrección, tutorías y diseño de prácticas de laboratorio.</p>
+          </article>
+        </div>
+
+        <!-- Formación -->
+        <div class="timeline-col">
+          <h3 class="timeline-col-title mono">Formación</h3>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">Oct 2022 — Jul 2023</span>
+              <span class="tl-badge badge-master">Máster</span>
+            </div>
+            <h4 class="tl-role">Máster en Data Science &amp; Big Data</h4>
+            <p class="tl-org">Barcelona Technology School · Universitat de Barcelona</p>
+            <p class="tl-desc">Machine learning, arquitecturas de datos y estadística avanzada en entornos productivos. Proyectos reales con empresas del sector tecnológico.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">Ene 2019 — Jun 2019</span>
+              <span class="tl-badge badge-inter">Intercambio</span>
+            </div>
+            <h4 class="tl-role">Intercambio Internacional</h4>
+            <p class="tl-org">Universidad de Vigo · Galicia, España</p>
+            <p class="tl-desc">Semestre académico en Europa. Inmersión en metodologías de investigación y estándares de ingeniería de la UE.</p>
+          </article>
+
+          <article class="timeline-item reveal" data-reveal>
+            <div class="tl-meta">
+              <span class="tl-year mono">Mar 2013 — Jun 2019</span>
+              <span class="tl-badge badge-grado">Grado</span>
+            </div>
+            <h4 class="tl-role">Ingeniería Electrónica</h4>
+            <p class="tl-org">Pontificia Universidad Católica del Perú · Lima</p>
+            <p class="tl-desc">Formación de base en electrónica, sistemas embebidos, señales y comunicaciones digitales. Programación, control automático y diseño de circuitos.</p>
+          </article>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROJECTS
+       ============================================================ -->
+  <section class="projects-section" id="projects" aria-label="Proyectos">
+    <div class="container">
+      <p class="section-label mono reveal" data-reveal>04 — Proyectos</p>
+      <h2 class="section-title reveal" data-reveal>Lo que he construido.</h2>
+
+      <div class="project-list" role="list">
+
+        <article class="project-row" role="listitem" data-project>
+          <div class="project-row-header">
+            <div class="project-row-left">
+              <span class="project-num mono" aria-hidden="true">01</span>
+              <h3 class="project-name">Word Cloud de WhatsApp</h3>
+            </div>
+            <div class="project-row-tags" aria-label="Tecnologías">
+              <span class="tag">Python</span>
+              <span class="tag">NLP</span>
+              <span class="tag">Streamlit</span>
+            </div>
+            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Word Cloud de WhatsApp">+</button>
+          </div>
+          <div class="project-row-body" hidden>
+            <p>App que parsea el historial exportado de un chat de WhatsApp y genera visualizaciones interactivas de las palabras y emojis más frecuentes. Procesamiento de texto con Python y deploy público en Streamlit Cloud sin instalación del lado del usuario.</p>
+            <div class="project-row-links">
+              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-row" role="listitem" data-project>
+          <div class="project-row-header">
+            <div class="project-row-left">
+              <span class="project-num mono" aria-hidden="true">02</span>
+              <h3 class="project-name">Análisis de Sentimiento NLP</h3>
+            </div>
+            <div class="project-row-tags" aria-label="Tecnologías">
+              <span class="tag">Python</span>
+              <span class="tag">Scikit-learn</span>
+              <span class="tag">NLTK</span>
+            </div>
+            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Análisis de Sentimiento NLP">+</button>
+          </div>
+          <div class="project-row-body" hidden>
+            <p>Pipeline de clasificación de texto para detectar el tono emocional de reseñas en español e inglés. Entrenado sobre corpus de clientes reales con validación cruzada. El modelo alcanza un 88% de precisión en el conjunto de test.</p>
+            <div class="project-row-links">
+              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-row" role="listitem" data-project>
+          <div class="project-row-header">
+            <div class="project-row-left">
+              <span class="project-num mono" aria-hidden="true">03</span>
+              <h3 class="project-name">Predictor de Precio de Coches</h3>
+            </div>
+            <div class="project-row-tags" aria-label="Tecnologías">
+              <span class="tag">Python</span>
+              <span class="tag">Scikit-learn</span>
+              <span class="tag">Flask</span>
+            </div>
+            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Predictor de Precio de Coches">+</button>
+          </div>
+          <div class="project-row-body" hidden>
+            <p>Modelo de regresión entrenado sobre +30.000 anuncios de vehículos de segunda mano. Predice el valor de mercado dado el modelo, año, kilometraje y combustible. Expuesto como API REST con Flask para consulta en tiempo real.</p>
+            <div class="project-row-links">
+              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-row" role="listitem" data-project>
+          <div class="project-row-header">
+            <div class="project-row-left">
+              <span class="project-num mono" aria-hidden="true">04</span>
+              <h3 class="project-name">Web Scraper Automatizado</h3>
+            </div>
+            <div class="project-row-tags" aria-label="Tecnologías">
+              <span class="tag">Python</span>
+              <span class="tag">Selenium</span>
+              <span class="tag">SQL</span>
+            </div>
+            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Web Scraper Automatizado">+</button>
+          </div>
+          <div class="project-row-body" hidden>
+            <p>Bot de extracción automatizada de datos de portales públicos según un esquema configurable. Almacenamiento estructurado en base de datos SQL y generación automática de informes CSV para análisis posterior.</p>
+            <div class="project-row-links">
+              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="projects-footer reveal" data-reveal>
+        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Ver todos en GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+       ============================================================ -->
+  <section class="contact-section" id="contact" aria-label="Contacto">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-content">
+          <p class="section-label mono reveal" data-reveal>05 — Contacto</p>
+          <h2 class="contact-title reveal" data-reveal>¿Tienes un proyecto<br>de datos?</h2>
+          <p class="contact-sub reveal" data-reveal>
+            Disponible para nuevos proyectos, colaboraciones y posiciones de Data Engineering. Escríbeme.
+          </p>
+          <div class="contact-links reveal" data-reveal>
+            <a href="https://www.linkedin.com/in/david-landeo/" target="_blank" rel="noopener noreferrer" class="link-arrow">LinkedIn ↗</a>
+            <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="link-arrow">GitHub ↗</a>
+            <a href="mailto:davidwp37@gmail.com" class="link-arrow">davidwp37@gmail.com →</a>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" data-reveal data-contact-form novalidate>
+          <div class="form-group">
+            <label for="cf-name">Nombre</label>
+            <input type="text" id="cf-name" name="name" placeholder="Tu nombre" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" placeholder="tu@email.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="cf-message">Mensaje</label>
+            <textarea id="cf-message" name="message" rows="5" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <span class="btn-text">Enviar mensaje</span>
+          </button>
+          <p class="form-note">O escríbeme directamente a <a href="mailto:davidwp37@gmail.com">davidwp37@gmail.com</a></p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-name">David Landeo</span>
+        <span class="footer-role mono">Data Engineer</span>
+      </div>
+      <p class="footer-copy">© 2026 — Construido con intención.</p>
+      <nav class="footer-nav" aria-label="Navegación de pie de página">
+        <a href="https://www.linkedin.com/in/david-landeo/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:davidwp37@gmail.com">Email</a>
+        <a href="#hero">Arriba ↑</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
