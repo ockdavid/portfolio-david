@@ -504,6 +504,12 @@
   .contact-link .ic svg { width: 15px; height: 15px; }
   .contact-link .v { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  /* Deploy log row — responsive */
+  @media (max-width: 720px) {
+    .deploy-row { grid-template-columns: 1fr !important; }
+    .deploy-row .deploy-link-btn { display: none; }
+  }
+
   /* Footer */
   footer {
     margin-top: 40px; padding-top: 18px;
@@ -594,6 +600,43 @@
         </dl>
       </div>
     </div>
+  </div>
+
+  <!-- ── Recently shipped ─────────────────────────────── -->
+  <div class="section-head" style="margin-top:20px;margin-bottom:10px;">
+    <span class="num" style="color:var(--good)">↑</span>
+    <h2>Recently shipped</h2>
+    <span class="meta">side projects · in production</span>
+  </div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-head">
+      <span class="dot" style="background:var(--good)"></span> deploy log
+      <span class="right" style="color:var(--good);display:flex;align-items:center;gap:6px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--good);display:inline-block;animation:pulse 1.8s infinite;"></span>
+        all systems live
+      </span>
+    </div>
+    <a href="https://lamona.pages.dev/" target="_blank" rel="noopener" class="deploy-row" style="text-decoration:none;color:inherit;display:grid;grid-template-columns:90px 1fr auto;gap:16px 28px;align-items:center;padding:18px 24px;transition:background .15s;" onmouseenter="this.style.background='color-mix(in srgb,var(--good) 4%,transparent)'" onmouseleave="this.style.background='transparent'">
+      <div style="font-family:var(--mono);font-size:10.5px;color:var(--fg-3);line-height:1.6;">
+        May 2026<br>
+        <span style="color:var(--good);display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:99px;background:color-mix(in srgb,var(--good) 10%,transparent);margin-top:4px;">● live</span>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--fg);letter-spacing:-.01em;margin-bottom:7px;">
+          La Mona — silver-jewelry e-commerce
+        </div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">catalog</span> <span style="color:var(--warn);font-weight:600;">77 products</span></span>
+          <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">feature</span> <span style="color:var(--accent);font-weight:600;">live customizer</span></span>
+          <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">AI</span> <span style="color:var(--accent-2);font-weight:600;">offline chatbot</span></span>
+          <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">orders via</span> <span style="color:var(--good);font-weight:600;">WhatsApp</span></span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--fg-2);padding:8px 14px;border:1px solid var(--line);border-radius:7px;white-space:nowrap;background:var(--panel-2);">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        lamona.pages.dev
+      </div>
+    </a>
   </div>
 
   <!-- ── KPI strip ─────────────────────────────────────── -->
@@ -873,7 +916,7 @@
         <div class="cert"><span class="ix">01</span><span class="nm"><b>Databases &amp; SQL</b> for Data Science</span><span class="src">IBM · Coursera</span></div>
         <div class="cert"><span class="ix">02</span><span class="nm"><b>Python</b> for Data Science &amp; AI</span><span class="src">IBM · Coursera</span></div>
         <div class="cert"><span class="ix">03</span><span class="nm"><b>Python</b> programming</span><span class="src">PUCP</span></div>
-        <div class="cert"><span class="ix">04</span><span class="nm">Intermediate <b>Excel</b></span><span class="src">cert · ES</span></div>
+        <div class="cert"><span class="ix">04</span><span class="nm"><b>Excel</b> advanced</span><span class="src">cert · ES</span></div>
         <div class="cert"><span class="ix">05</span><span class="nm"><b>PLC</b> · programmable logic controllers</span><span class="src">cert · ES</span></div>
         <div class="cert"><span class="ix">06</span><span class="nm"><b>English</b> · advanced</span><span class="src">cert · ES</span></div>
       </div>
