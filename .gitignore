@@ -4,3 +4,6 @@ Thumbs.db
 .idea/
 node_modules/
 *.log
+
+# CV — upload manually to hosting, do not commit
+assets/David-Landeo-CV.pdf
