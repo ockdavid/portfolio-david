@@ -1,507 +1,1171 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>David Landeo — Data Engineer</title>
-  <meta name="description" content="Portfolio de David Landeo, Data Engineer con experiencia en Python, PySpark, Databricks y Azure. Tres años construyendo infraestructuras de datos.">
-  <meta name="theme-color" content="#090c12">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>David Landeo — Data Engineer · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --panel: #111726;
+    --panel-2: #161d2f;
+    --line: #1f2740;
+    --line-soft: #18203a;
+    --fg: #e8ecf5;
+    --fg-2: #a6b0c3;
+    --fg-3: #6a7591;
+    --accent: #5eead4;
+    --accent-2: #818cf8;
+    --warn: #fbbf24;
+    --pink: #f472b6;
+    --good: #34d399;
+    --grid: rgba(255,255,255,0.04);
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  :root[data-theme="light"] {
+    --bg: #f3f4f8;
+    --panel: #ffffff;
+    --panel-2: #f7f8fb;
+    --line: #e2e5ed;
+    --line-soft: #ebedf3;
+    --fg: #0d1224;
+    --fg-2: #4a5269;
+    --fg-3: #7a8198;
+    --accent: #0f9c84;
+    --accent-2: #4f46e5;
+    --warn: #c08400;
+    --pink: #d6307a;
+    --good: #109456;
+    --grid: rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  ::selection { background: rgba(94,234,212,0.25); }
+  .mono { font-family: var(--mono); }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap">
+  /* ── Topbar ─────────────────────────────────────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1320px; margin: 0 auto;
+    padding: 14px 28px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center;
+  }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 18px; gap: 14px; } }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 13px; }
+  .brand .logo {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bg); font-weight: 700; font-size: 13px;
+  }
+  .brand .name b { color: var(--fg); font-weight: 600; }
+  .brand .name span { color: var(--fg-3); }
+  .breadcrumb { color: var(--fg-3); font-family: var(--mono); font-size: 12px; }
+  .breadcrumb .sep { margin: 0 6px; opacity: 0.5; }
+  .breadcrumb b { color: var(--fg-2); font-weight: 500; }
+  .topbar-actions { display: flex; gap: 8px; align-items: center; }
+  .action {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--fg-2); background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 6px 12px; border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    text-decoration: none;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .action:hover { color: var(--fg); border-color: var(--accent); }
+  .action svg { width: 13px; height: 13px; }
+  .action.live {
+    color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, var(--line));
+    background: color-mix(in srgb, var(--good) 8%, var(--panel));
+  }
+  .action.live .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--good);
+    box-shadow: 0 0 0 0 var(--good); animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent); }
+    70% { box-shadow: 0 0 0 8px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .action.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .action.primary:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  @media (max-width: 720px) { .breadcrumb, .action.live { display: none; } }
 
-  <link rel="preload" as="image" href="assets/photos/source/david-hero.png" fetchpriority="high">
+  /* ── Layout ─────────────────────────────────────────────── */
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 26px 28px 80px; }
+  @media (max-width: 720px) { .wrap { padding: 20px 18px 50px; } }
 
-  <link rel="stylesheet" href="styles.css?v=20260520">
+  /* Section headers */
+  .section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin: 36px 0 16px;
+  }
+  .section-head h2 {
+    margin: 0; font-size: 20px; font-weight: 700; color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .section-head .num {
+    font-family: var(--mono); color: var(--fg-3); font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .section-head .meta { margin-left: auto; color: var(--fg-3); font-family: var(--mono); font-size: 11px; }
 
-  <script defer src="lib/gsap.min.js"></script>
-  <script defer src="lib/ScrollTrigger.min.js"></script>
-  <script defer src="lib/manifest.js?v=20260520"></script>
-  <script defer src="main.js?v=20260520"></script>
+  /* ── Hero / overview ──────────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 920px) { .hero { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-head {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px; color: var(--fg-3);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .card-head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .card-head .right { margin-left: auto; }
+  .card-body { padding: 22px 24px; }
+  .card-body.dense { padding: 16px 18px; }
+
+  .hero-main h1 {
+    margin: 6px 0 8px;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(34px, 4.6vw, 52px);
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    color: var(--fg);
+  }
+  .hero-main h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-main .sub {
+    color: var(--fg-2); max-width: 56ch; font-size: 15px; line-height: 1.55;
+    margin: 8px 0 22px;
+  }
+  .hero-main .sub b { color: var(--fg); font-weight: 600; }
+  .hero-main .meta-row {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--fg-3);
+    margin-bottom: 20px;
+  }
+  .hero-main .meta-row b { color: var(--fg-2); font-weight: 500; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 8px;
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    border: 1px solid var(--line); color: var(--fg); background: var(--panel-2);
+    text-decoration: none; cursor: pointer;
+    transition: transform .12s, border-color .15s, background .15s, color .15s;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--bg); border-color: transparent; font-weight: 600;
+  }
+  .btn.primary:hover { filter: brightness(1.05); color: var(--bg); }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* Right card — profile micro card */
+  .profile-card .avatar {
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--line);
+  }
+  .profile-card .avatar img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 42% 30%;
+    display: block;
+    transition: opacity .25s;
+  }
+  .profile-card .avatar .photo-light { opacity: 0; }
+  :root[data-theme="light"] .profile-card .avatar .photo-light { opacity: 1; }
+  :root[data-theme="light"] .profile-card .avatar .photo-dark { opacity: 0; }
+  .profile-card .avatar::before {
+    content: 'photo.jpg'; position: absolute; top: 10px; left: 12px;
+    font-family: var(--mono); font-size: 10px; color: #fff;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    background: rgba(0,0,0,0.45); padding: 2px 6px; border-radius: 3px;
+    z-index: 1;
+  }
+  .profile-card h3 { margin: 0 0 4px; font-size: 18px; color: var(--fg); font-weight: 700; letter-spacing: -0.01em; }
+  .profile-card .role { color: var(--accent); font-family: var(--mono); font-size: 12px; margin-bottom: 14px; }
+  .profile-card .kv {
+    display: grid; grid-template-columns: auto 1fr; gap: 6px 14px;
+    font-family: var(--mono); font-size: 12px;
+  }
+  .profile-card .kv dt { color: var(--fg-3); }
+  .profile-card .kv dd { margin: 0; color: var(--fg); }
+  .profile-card .kv dd .ok { color: var(--good); }
+
+  /* ── KPI strip ───────────────────────────────────────── */
+  .kpis {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  @media (max-width: 920px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi-card { padding: 18px 20px; }
+  .kpi-card .label { color: var(--fg-3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .kpi-card .big {
+    display: flex; align-items: baseline; gap: 8px; margin-top: 8px;
+  }
+  .kpi-card .v {
+    font-family: var(--sans);
+    font-size: 36px; font-weight: 800;
+    color: var(--fg); letter-spacing: -0.03em; line-height: 1;
+  }
+  .kpi-card .u { color: var(--fg-3); font-family: var(--mono); font-size: 13px; }
+  .kpi-card .delta {
+    margin-left: auto;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--good);
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 3px 7px;
+    background: color-mix(in srgb, var(--good) 12%, transparent);
+    border-radius: 99px;
+  }
+  .kpi-card .delta.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .kpi-card .delta.flat { color: var(--fg-3); background: var(--panel-2); }
+  .kpi-card .spark { margin-top: 10px; height: 28px; width: 100%; }
+  .kpi-card .note { color: var(--fg-3); font-size: 11px; margin-top: 8px; font-family: var(--mono); }
+
+  /* ── About + stack two-col ────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+  @media (max-width: 920px) { .two-col { grid-template-columns: 1fr; } }
+  .about p { margin: 0 0 14px; color: var(--fg-2); font-size: 14.5px; line-height: 1.6; }
+  .about p:last-child { margin-bottom: 0; }
+  .about p b { color: var(--fg); font-weight: 600; }
+
+  .stack-rows { display: flex; flex-direction: column; gap: 14px; }
+  .stack-row .row-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 11px; color: var(--fg-3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .stack-row .row-head b { color: var(--fg); font-family: var(--sans); font-weight: 600; font-size: 13px; text-transform: none; letter-spacing: 0; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    font-family: var(--mono); font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--fg-2);
+  }
+  .pill.hot { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+
+  /* ── Experience timeline ─────────────────────────────── */
+  .exp-grid { display: flex; flex-direction: column; gap: 0; }
+  .exp {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line-soft);
+    align-items: start;
+  }
+  .exp:last-child { border-bottom: 0; }
+  @media (max-width: 720px) { .exp { grid-template-columns: 1fr; gap: 8px; padding: 18px; } }
+  .exp .when { color: var(--fg-3); font-family: var(--mono); font-size: 11px; padding-top: 4px; line-height: 1.7; }
+  .exp .when .now-tag {
+    color: var(--good); display: inline-flex; align-items: center; gap: 5px;
+  }
+  .exp .when .now-tag::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--good);
+    box-shadow: 0 0 0 0 var(--good); animation: pulse 1.8s infinite;
+  }
+  .exp h3 {
+    margin: 0 0 4px;
+    font-size: 17px; color: var(--fg); font-weight: 700; letter-spacing: -0.01em;
+  }
+  .exp .at { color: var(--fg-3); font-family: var(--mono); font-size: 12px; margin-bottom: 12px; }
+  .exp .at b { color: var(--accent); font-weight: 500; }
+  .exp .bullets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; margin: 6px 0 12px; }
+  @media (max-width: 800px) { .exp .bullets { grid-template-columns: 1fr; } }
+  .exp .b {
+    color: var(--fg-2); font-size: 13.5px;
+    padding-left: 18px; position: relative; line-height: 1.5;
+  }
+  .exp .b::before {
+    content: ''; position: absolute; left: 0; top: 0.6em;
+    width: 8px; height: 1px; background: var(--accent);
+  }
+  .exp .b b { color: var(--fg); font-weight: 600; }
+  .exp .row-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ── Projects (bento) ────────────────────────────────── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 920px) { .bento { grid-template-columns: 1fr; } }
+  .proj { display: flex; flex-direction: column; min-height: 220px; }
+  .proj.wide { grid-column: span 4; }
+  .proj.thin { grid-column: span 2; }
+  @media (max-width: 920px) { .proj.wide, .proj.thin { grid-column: span 1; } }
+
+  .proj .card-head .badge {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+    padding: 1px 7px; border-radius: 99px;
+    text-transform: none; letter-spacing: 0;
+    font-size: 10px;
+  }
+  .proj-body { padding: 18px 20px; display: flex; flex-direction: column; flex: 1; gap: 12px; }
+  .proj h3 { margin: 0; font-size: 18px; color: var(--fg); font-weight: 700; letter-spacing: -0.01em; }
+  .proj .blurb { color: var(--fg-2); font-size: 13.5px; line-height: 1.5; margin: 0; }
+  .proj .blurb b { color: var(--fg); font-weight: 600; }
+  .proj .metric {
+    margin-top: auto;
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border-radius: 8px;
+    border: 1px solid var(--line-soft);
+  }
+  .proj .metric .n { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+  .proj .metric .l { color: var(--fg-3); font-family: var(--mono); font-size: 11px; }
+  .proj .stk { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  /* Featured/wide project — has a chart */
+  .featured .chart-area {
+    margin-top: 8px;
+    background:
+      linear-gradient(to right, var(--line-soft) 1px, transparent 1px) 0 0 / 60px 100%,
+      linear-gradient(to bottom, var(--line-soft) 1px, transparent 1px) 0 0 / 100% 30px,
+      var(--panel-2);
+    border-radius: 8px;
+    border: 1px solid var(--line-soft);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured .chart-area .ax-l {
+    position: absolute; left: 6px; top: 10px;
+    font-family: var(--mono); font-size: 9px; color: var(--fg-3); letter-spacing: 0.04em;
+  }
+  .featured .chart-legend {
+    display: flex; gap: 14px; font-family: var(--mono); font-size: 11px; color: var(--fg-3);
+    margin-bottom: 8px;
+  }
+  .featured .chart-legend .sw { display: inline-block; width: 10px; height: 2px; vertical-align: middle; margin-right: 5px; }
+
+  /* ── Education ────────────────────────────────────────── */
+  .edu-two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+  @media (max-width: 920px) { .edu-two { grid-template-columns: 1fr; } }
+  .edu-list { display: flex; flex-direction: column; }
+  .edu-item {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line-soft);
+    display: grid; grid-template-columns: 110px 1fr; gap: 18px;
+    align-items: start;
+  }
+  .edu-item:last-child { border-bottom: 0; }
+  @media (max-width: 720px) { .edu-item { grid-template-columns: 1fr; gap: 4px; padding: 16px 18px; } }
+  .edu-item .when { color: var(--fg-3); font-family: var(--mono); font-size: 11px; padding-top: 3px; line-height: 1.5; }
+  .edu-item h4 { margin: 0 0 3px; font-size: 15px; color: var(--fg); font-weight: 700; letter-spacing: -0.005em; }
+  .edu-item .where { color: var(--fg-2); font-family: var(--mono); font-size: 12px; }
+  .edu-item .where b { color: var(--accent); font-weight: 500; }
+  .edu-item .note { color: var(--fg-3); font-size: 12.5px; margin-top: 6px; line-height: 1.5; }
+
+  .certs { display: grid; grid-template-columns: 1fr; gap: 0; }
+  .cert {
+    display: grid; grid-template-columns: 22px 1fr auto;
+    align-items: baseline; gap: 12px;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13px;
+  }
+  .cert:last-child { border-bottom: 0; }
+  .cert .ix { color: var(--fg-3); font-family: var(--mono); font-size: 10px; }
+  .cert .nm { color: var(--fg); }
+  .cert .nm b { color: var(--fg); font-weight: 600; }
+  .cert .src { color: var(--fg-3); font-family: var(--mono); font-size: 10.5px; }
+
+  /* ── Lab (small project cards) ────────────────────────── */
+  .lab-head {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 28px 0 12px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--fg-3); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .lab-head b { color: var(--fg-2); font-weight: 500; }
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 1100px) { .lab-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px)  { .lab-grid { grid-template-columns: 1fr; } }
+  .lab-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    display: flex; flex-direction: column; gap: 6px;
+    min-height: 140px;
+    transition: border-color .15s, transform .12s;
+  }
+  .lab-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .lab-card .ix { font-family: var(--mono); font-size: 10px; color: var(--fg-3); letter-spacing: 0.06em; }
+  .lab-card h5 { margin: 0; font-size: 13.5px; color: var(--fg); font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; }
+  .lab-card p { margin: 0; color: var(--fg-3); font-size: 11.5px; line-height: 1.45; }
+  .lab-card .tag {
+    margin-top: auto;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--accent); letter-spacing: 0.04em;
+  }
+
+  /* ── Beyond ───────────────────────────────────────────── */
+  .beyond-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 1100px) { .beyond-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 800px) { .beyond-grid { grid-template-columns: 1fr; } }
+  .beyond-card .card-body { padding: 18px 20px; }
+  .beyond-card h4 { margin: 0 0 4px; font-size: 15px; color: var(--fg); font-weight: 700; }
+  .beyond-card .yr { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .beyond-card p { margin: 0; color: var(--fg-2); font-size: 13.5px; line-height: 1.5; }
+
+  /* ── Contact ──────────────────────────────────────────── */
+  .contact { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .contact { grid-template-columns: 1fr; } }
+  .contact-call h3 { margin: 0 0 10px; font-size: 28px; color: var(--fg); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .contact-call h3 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .contact-call p { color: var(--fg-2); font-size: 14px; line-height: 1.55; max-width: 50ch; margin: 0 0 18px; }
+  .contact-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 500px) { .contact-list { grid-template-columns: 1fr; } }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    color: var(--fg-2); text-decoration: none;
+    font-family: var(--mono); font-size: 12px;
+    transition: color .15s, border-color .15s, transform .12s, background .15s;
+  }
+  .contact-link:hover { color: var(--fg); border-color: var(--accent); transform: translateY(-1px); }
+  .contact-link .ic { color: var(--accent); display: flex; }
+  .contact-link .ic svg { width: 15px; height: 15px; }
+  .contact-link .v { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Footer */
+  footer {
+    margin-top: 40px; padding-top: 18px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    color: var(--fg-3); font-family: var(--mono); font-size: 11px;
+  }
+
+  #tweaks-mount { position: fixed; bottom: 18px; right: 18px; z-index: 50; }
+</style>
 </head>
 <body>
 
-<a class="skip-link" href="#main">Ir al contenido principal</a>
-
-<!-- ============================================================
-     NAV
-     ============================================================ -->
-<nav class="nav" id="nav" role="navigation" aria-label="Navegación principal">
-  <div class="nav-inner">
-    <a href="#hero" class="nav-logo" aria-label="David Landeo — inicio">DL</a>
-    <ul class="nav-links" role="list">
-      <li><a href="#about">About</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#timeline">Experiencia</a></li>
-      <li><a href="#projects">Proyectos</a></li>
-      <li><a href="#contact">Contacto</a></li>
-    </ul>
-    <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="nav-cta">GitHub ↗</a>
-    <button class="nav-burger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-mobile">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
-    <ul role="list">
-      <li><a href="#about">About</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#timeline">Experiencia</a></li>
-      <li><a href="#projects">Proyectos</a></li>
-      <li><a href="#contact">Contacto</a></li>
-      <li><a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
-    </ul>
-  </div>
-</nav>
-
-<main id="main">
-
-  <!-- ============================================================
-       HERO
-       ============================================================ -->
-  <section class="hero" id="hero" aria-label="Presentación">
-    <div class="hero-bg" aria-hidden="true">
-      <img src="assets/photos/source/david-hero.png" alt="" loading="eager" fetchpriority="high">
-      <div class="hero-bg-tint"></div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo">D</div>
+      <div class="name"><b>david-landeo</b> <span>/ portfolio</span></div>
     </div>
-    <div class="hero-gradient" data-mouse-gradient aria-hidden="true"></div>
-    <div class="hero-grain" aria-hidden="true"></div>
-
-    <div class="hero-inner">
-      <p class="hero-kicker">
-        <span class="kicker-dot" aria-hidden="true"></span>
-        <span class="mono">Data Engineer · Disponible para nuevos proyectos</span>
-      </p>
-      <h1 class="hero-title">David<br>Landeo.</h1>
-      <p class="hero-sub">Construyo la infraestructura que convierte datos crudos en decisiones.</p>
-      <div class="hero-actions">
-        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
-        <a href="assets/cv-david-landeo.pdf" download class="btn btn-ghost">Descargar CV ↓</a>
-        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub ↗</a>
-      </div>
+    <div class="breadcrumb">
+      <span>~</span><span class="sep">/</span>
+      <b>overview</b><span class="sep">/</span>
+      <span>2026</span>
     </div>
-
-    <div class="hero-scroll-hint" aria-hidden="true">
-      <span class="mono">scroll</span>
-      <div class="hero-scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       STATS BAR
-       ============================================================ -->
-  <section class="stats-bar" aria-label="Estadísticas">
-    <div class="container">
-      <div class="stats-row">
-        <div class="stat-item">
-          <span class="stat-num" data-count-to="3">3</span>
-          <span class="stat-label mono">años como Data Engineer</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-num" data-count-to="3">3</span>
-          <span class="stat-label mono">empresas en el sector</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-num" data-count-to="2">2</span>
-          <span class="stat-label mono">países de formación</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-num" data-count-to="10">10</span>
-          <span class="stat-label mono">tecnologías del stack</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       ABOUT
-       ============================================================ -->
-  <section class="about" id="about" aria-label="Sobre mí">
-    <div class="container">
-      <div class="about-grid">
-
-        <div class="about-photo">
-          <div class="about-photo-wrap reveal" data-reveal>
-            <img src="assets/photos/source/david-about.png" alt="David Landeo trabajando en su escritorio" loading="lazy" decoding="async">
-            <div class="about-photo-border" aria-hidden="true"></div>
-          </div>
-        </div>
-
-        <div class="about-content">
-          <p class="section-label mono reveal" data-reveal>01 — About</p>
-          <h2 class="about-title reveal" data-reveal>
-            Ingeniero electrónico<br>
-            convertido en arquitecto<br>
-            de datos.
-          </h2>
-          <p class="about-text reveal" data-reveal>
-            Empecé diseñando circuitos. Lo que más me fascinaba era el flujo de la información. Tras años entrenando equipos de natación y waterpolo, enseñando en tres facultades universitarias, y cruzar el Atlántico para formarme en Vigo y Barcelona, encontré en la ingeniería de datos el cruce perfecto entre rigor técnico y pensamiento sistémico.
-          </p>
-          <p class="about-text reveal" data-reveal>
-            Hoy construyo pipelines, orquesto plataformas en Azure y Databricks, y transformo volúmenes masivos de datos crudos en infraestructuras limpias y confiables. Tres años, tres empresas, una sola obsesión: que los datos lleguen listos para ser usados.
-          </p>
-          <div class="about-links reveal" data-reveal>
-            <a href="#contact" class="link-arrow">Hablar conmigo →</a>
-            <a href="assets/cv-david-landeo.pdf" download class="link-arrow link-secondary">Descargar CV ↓</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       STACK
-       ============================================================ -->
-  <section class="stack-section" id="stack" aria-label="Stack técnico">
-    <div class="container">
-      <p class="section-label mono reveal" data-reveal>02 — Stack técnico</p>
-      <h2 class="section-title reveal" data-reveal>Las herramientas con las<br>que construyo.</h2>
-
-      <div class="stack-grid">
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">🐍</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">Python</h3>
-            <p class="stack-card-desc">Pandas, Scikit-learn, PyTorch, Selenium, Streamlit</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">🗄️</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">SQL</h3>
-            <p class="stack-card-desc">Modelado dimensional, queries complejas, optimización</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">⚡</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">PySpark</h3>
-            <p class="stack-card-desc">Procesamiento distribuido a gran escala</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">◈</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">Databricks</h3>
-            <p class="stack-card-desc">Lakehouse, Delta Lake, MLflow</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">☁️</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">Azure</h3>
-            <p class="stack-card-desc">ADF, ADLS Gen2, Synapse, Power BI, DevOps</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-        <div class="stack-card reveal" data-reveal>
-          <div class="stack-card-icon" aria-hidden="true">⎈</div>
-          <div class="stack-card-body">
-            <h3 class="stack-card-name">Airflow & Docker</h3>
-            <p class="stack-card-desc">Orquestación de pipelines, contenedores</p>
-          </div>
-          <div class="stack-card-glow" aria-hidden="true"></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       TIMELINE
-       ============================================================ -->
-  <section class="timeline-section" id="timeline" aria-label="Trayectoria profesional y formativa">
-    <div class="container">
-      <p class="section-label mono reveal" data-reveal>03 — Trayectoria</p>
-      <h2 class="section-title reveal" data-reveal>De los circuitos<br>a los datos.</h2>
-
-      <div class="timeline">
-
-        <!-- Experiencia -->
-        <div class="timeline-col">
-          <h3 class="timeline-col-title mono">Experiencia</h3>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">Sep 2023 — hoy</span>
-              <span class="tl-badge badge-data">Data Eng.</span>
-            </div>
-            <h4 class="tl-role">Data Engineer</h4>
-            <p class="tl-org">Procter & Gamble · Madrid, España</p>
-            <p class="tl-desc">Diseño y mantenimiento de pipelines de datos a escala en Azure y Databricks. Transformación distribuida con PySpark y SQL para equipos globales de analítica de negocio.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">Sep 2023 — Feb 2025</span>
-              <span class="tl-badge badge-data">Data Eng.</span>
-            </div>
-            <h4 class="tl-role">Data Engineer</h4>
-            <p class="tl-org">Instituto Escalae · España</p>
-            <p class="tl-desc">Construcción de la infraestructura de datos de la institución. Integración de fuentes heterogéneas, pipelines ETL con Python y modelado dimensional en SQL.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">May 2023 — Jul 2023</span>
-              <span class="tl-badge badge-data">Data Eng.</span>
-            </div>
-            <h4 class="tl-role">Data Engineer</h4>
-            <p class="tl-org">Rentals United · Barcelona, España</p>
-            <p class="tl-desc">Integración y normalización de datos de plataformas de alquiler vacacional. Automatización de flujos con Python y Azure Data Factory.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">2019 — 2022</span>
-              <span class="tl-badge badge-eng">Ingeniería</span>
-            </div>
-            <h4 class="tl-role">Ingeniero Electrónico</h4>
-            <p class="tl-org">Lima, Perú</p>
-            <p class="tl-desc">Diseño de sistemas electrónicos, automatización industrial y programación embebida. Primera toma de contacto con el análisis de datos de sensores y control.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">2012 — 2020</span>
-              <span class="tl-badge badge-sport">Deporte</span>
-            </div>
-            <h4 class="tl-role">Entrenador Nacional de Natación y Waterpolo</h4>
-            <p class="tl-org">Selección peruana · Lima, Perú</p>
-            <p class="tl-desc">Preparación de atletas de alto rendimiento para competición nacional e internacional. Planificación táctica, análisis de rendimiento y liderazgo de equipo.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">2014 — 2019</span>
-              <span class="tl-badge badge-teach">Docencia</span>
-            </div>
-            <h4 class="tl-role">Asistente de Cátedra</h4>
-            <p class="tl-org">3 universidades · Lima, Perú</p>
-            <p class="tl-desc">Docencia en tres facultades de ingeniería: electrónica, procesamiento de señales y sistemas de control. Corrección, tutorías y diseño de prácticas de laboratorio.</p>
-          </article>
-        </div>
-
-        <!-- Formación -->
-        <div class="timeline-col">
-          <h3 class="timeline-col-title mono">Formación</h3>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">Oct 2022 — Jul 2023</span>
-              <span class="tl-badge badge-master">Máster</span>
-            </div>
-            <h4 class="tl-role">Máster en Data Science &amp; Big Data</h4>
-            <p class="tl-org">Barcelona Technology School · Universitat de Barcelona</p>
-            <p class="tl-desc">Machine learning, arquitecturas de datos y estadística avanzada en entornos productivos. Proyectos reales con empresas del sector tecnológico.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">Ene 2019 — Jun 2019</span>
-              <span class="tl-badge badge-inter">Intercambio</span>
-            </div>
-            <h4 class="tl-role">Intercambio Internacional</h4>
-            <p class="tl-org">Universidad de Vigo · Galicia, España</p>
-            <p class="tl-desc">Semestre académico en Europa. Inmersión en metodologías de investigación y estándares de ingeniería de la UE.</p>
-          </article>
-
-          <article class="timeline-item reveal" data-reveal>
-            <div class="tl-meta">
-              <span class="tl-year mono">Mar 2013 — Jun 2019</span>
-              <span class="tl-badge badge-grado">Grado</span>
-            </div>
-            <h4 class="tl-role">Ingeniería Electrónica</h4>
-            <p class="tl-org">Pontificia Universidad Católica del Perú · Lima</p>
-            <p class="tl-desc">Formación de base en electrónica, sistemas embebidos, señales y comunicaciones digitales. Programación, control automático y diseño de circuitos.</p>
-          </article>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       PROJECTS
-       ============================================================ -->
-  <section class="projects-section" id="projects" aria-label="Proyectos">
-    <div class="container">
-      <p class="section-label mono reveal" data-reveal>04 — Proyectos</p>
-      <h2 class="section-title reveal" data-reveal>Lo que he construido.</h2>
-
-      <div class="project-list" role="list">
-
-        <article class="project-row" role="listitem" data-project>
-          <div class="project-row-header">
-            <div class="project-row-left">
-              <span class="project-num mono" aria-hidden="true">01</span>
-              <h3 class="project-name">Word Cloud de WhatsApp</h3>
-            </div>
-            <div class="project-row-tags" aria-label="Tecnologías">
-              <span class="tag">Python</span>
-              <span class="tag">NLP</span>
-              <span class="tag">Streamlit</span>
-            </div>
-            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Word Cloud de WhatsApp">+</button>
-          </div>
-          <div class="project-row-body" hidden>
-            <p>App que parsea el historial exportado de un chat de WhatsApp y genera visualizaciones interactivas de las palabras y emojis más frecuentes. Procesamiento de texto con Python y deploy público en Streamlit Cloud sin instalación del lado del usuario.</p>
-            <div class="project-row-links">
-              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-row" role="listitem" data-project>
-          <div class="project-row-header">
-            <div class="project-row-left">
-              <span class="project-num mono" aria-hidden="true">02</span>
-              <h3 class="project-name">Análisis de Sentimiento NLP</h3>
-            </div>
-            <div class="project-row-tags" aria-label="Tecnologías">
-              <span class="tag">Python</span>
-              <span class="tag">Scikit-learn</span>
-              <span class="tag">NLTK</span>
-            </div>
-            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Análisis de Sentimiento NLP">+</button>
-          </div>
-          <div class="project-row-body" hidden>
-            <p>Pipeline de clasificación de texto para detectar el tono emocional de reseñas en español e inglés. Entrenado sobre corpus de clientes reales con validación cruzada. El modelo alcanza un 88% de precisión en el conjunto de test.</p>
-            <div class="project-row-links">
-              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-row" role="listitem" data-project>
-          <div class="project-row-header">
-            <div class="project-row-left">
-              <span class="project-num mono" aria-hidden="true">03</span>
-              <h3 class="project-name">Predictor de Precio de Coches</h3>
-            </div>
-            <div class="project-row-tags" aria-label="Tecnologías">
-              <span class="tag">Python</span>
-              <span class="tag">Scikit-learn</span>
-              <span class="tag">Flask</span>
-            </div>
-            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Predictor de Precio de Coches">+</button>
-          </div>
-          <div class="project-row-body" hidden>
-            <p>Modelo de regresión entrenado sobre +30.000 anuncios de vehículos de segunda mano. Predice el valor de mercado dado el modelo, año, kilometraje y combustible. Expuesto como API REST con Flask para consulta en tiempo real.</p>
-            <div class="project-row-links">
-              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-row" role="listitem" data-project>
-          <div class="project-row-header">
-            <div class="project-row-left">
-              <span class="project-num mono" aria-hidden="true">04</span>
-              <h3 class="project-name">Web Scraper Automatizado</h3>
-            </div>
-            <div class="project-row-tags" aria-label="Tecnologías">
-              <span class="tag">Python</span>
-              <span class="tag">Selenium</span>
-              <span class="tag">SQL</span>
-            </div>
-            <button class="project-toggle" aria-expanded="false" aria-label="Expandir detalles de Web Scraper Automatizado">+</button>
-          </div>
-          <div class="project-row-body" hidden>
-            <p>Bot de extracción automatizada de datos de portales públicos según un esquema configurable. Almacenamiento estructurado en base de datos SQL y generación automática de informes CSV para análisis posterior.</p>
-            <div class="project-row-links">
-              <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-      <div class="projects-footer reveal" data-reveal>
-        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Ver todos en GitHub ↗</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CONTACT
-       ============================================================ -->
-  <section class="contact-section" id="contact" aria-label="Contacto">
-    <div class="container">
-      <div class="contact-grid">
-
-        <div class="contact-content">
-          <p class="section-label mono reveal" data-reveal>05 — Contacto</p>
-          <h2 class="contact-title reveal" data-reveal>¿Tienes un proyecto<br>de datos?</h2>
-          <p class="contact-sub reveal" data-reveal>
-            Disponible para nuevos proyectos, colaboraciones y posiciones de Data Engineering. Escríbeme.
-          </p>
-          <div class="contact-links reveal" data-reveal>
-            <a href="https://www.linkedin.com/in/david-landeo/" target="_blank" rel="noopener noreferrer" class="link-arrow">LinkedIn ↗</a>
-            <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer" class="link-arrow">GitHub ↗</a>
-            <a href="mailto:davidwp37@gmail.com" class="link-arrow">davidwp37@gmail.com →</a>
-          </div>
-        </div>
-
-        <form class="contact-form reveal" data-reveal data-contact-form novalidate>
-          <div class="form-group">
-            <label for="cf-name">Nombre</label>
-            <input type="text" id="cf-name" name="name" placeholder="Tu nombre" required autocomplete="name">
-          </div>
-          <div class="form-group">
-            <label for="cf-email">Email</label>
-            <input type="email" id="cf-email" name="email" placeholder="tu@email.com" required autocomplete="email">
-          </div>
-          <div class="form-group">
-            <label for="cf-message">Mensaje</label>
-            <textarea id="cf-message" name="message" rows="5" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-full">
-            <span class="btn-text">Enviar mensaje</span>
-          </button>
-          <p class="form-note">O escríbeme directamente a <a href="mailto:davidwp37@gmail.com">davidwp37@gmail.com</a></p>
-        </form>
-
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer class="site-footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="footer-name">David Landeo</span>
-        <span class="footer-role mono">Data Engineer</span>
-      </div>
-      <p class="footer-copy">© 2026 — Construido con intención.</p>
-      <nav class="footer-nav" aria-label="Navegación de pie de página">
-        <a href="https://www.linkedin.com/in/david-landeo/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://github.com/ockdavid" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="mailto:davidwp37@gmail.com">Email</a>
-        <a href="#hero">Arriba ↑</a>
-      </nav>
+    <div class="topbar-actions">
+      <div class="action live"><span class="pulse"></span> available</div>
+      <button class="action" id="themeToggle" title="Toggle theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span id="themeLabel">dark</span>
+      </button>
+      <a class="action primary" href="mailto:davidwp37@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        get in touch
+      </a>
     </div>
   </div>
-</footer>
+</header>
+
+<div class="wrap">
+
+  <!-- ── Hero ────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="card hero-main">
+      <div class="card-head"><span class="dot"></span> profile · summary <span class="right">updated · May 2026</span></div>
+      <div class="card-body">
+        <div style="font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:8px;letter-spacing:0.06em;">DATA ENGINEER · MADRID, ES</div>
+        <h1>I build <span class="grad">reliable pipelines</span><br>that other engineers don't hate.</h1>
+        <p class="sub">
+          <b>3 years</b> designing &amp; optimizing scalable data pipelines and analytics solutions. Currently at <b>Procter &amp; Gamble</b> — building ETL in <b>Python / PySpark / Databricks</b> across Bronze + Silver, shipping Power BI dashboards stakeholders actually open, and enforcing data-quality checks on production pipelines.
+        </p>
+        <div class="meta-row">
+          <span>📍 <b>Madrid, ES</b></span>
+          <span>🎓 <b>MSc Big Data &amp; AI</b> · UB</span>
+          <span>⚡ <b>BSc Electronic Eng.</b> · PUCP</span>
+          <span>🌐 ES native · <b>EN</b> advanced</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn primary" href="#projects">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            view projects
+          </a>
+          <a class="btn" href="assets/David-Landeo-CV.pdf" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            download CV
+          </a>
+          <a class="btn" href="https://github.com/ockdavid" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            github
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card profile-card">
+      <div class="card-head"><span class="dot"></span> identity</div>
+      <div class="card-body dense">
+        <div class="avatar">
+          <img class="photo-dark" src="assets/photo-dark.png" alt="David Landeo at his desk" />
+          <img class="photo-light" src="assets/photo-light.png" alt="David Landeo at his desk" />
+        </div>
+        <h3>David J. Landeo</h3>
+        <div class="role">// Data Engineer @ P&amp;G</div>
+        <dl class="kv">
+          <dt>status</dt><dd><span class="ok">● open to roles</span></dd>
+          <dt>location</dt><dd>Madrid, ES</dd>
+          <dt>timezone</dt><dd>UTC+1 (CET)</dd>
+          <dt>remote</dt><dd>EU ✓</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KPI strip ─────────────────────────────────────── -->
+  <div class="section-head">
+    <span class="num">01</span>
+    <h2>Key metrics</h2>
+    <span class="meta">last 36 months</span>
+  </div>
+  <div class="kpis">
+
+    <div class="card kpi-card">
+      <div class="label">Years in production</div>
+      <div class="big"><span class="v">3.0</span><span class="u">yrs</span><span class="delta">↑ growing</span></div>
+      <svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none">
+        <polyline fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--accent);opacity:.85"
+          points="0,22 14,20 28,18 42,15 56,12 70,9 85,6 100,4" />
+        <polyline fill="currentColor" stroke="none" style="color:var(--accent);opacity:.10"
+          points="0,22 14,20 28,18 42,15 56,12 70,9 85,6 100,4 100,28 0,28" />
+      </svg>
+    </div>
+
+    <div class="card kpi-card">
+      <div class="label">PySpark runtime cut</div>
+      <div class="big"><span class="v">~1h</span><span class="u">runtime</span><span class="delta">↓ faster</span></div>
+      <svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none">
+        <polyline fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--accent-2);opacity:.85"
+          points="0,4 14,5 28,8 42,9 56,18 70,20 85,22 100,23" />
+      </svg>
+      <div class="note">from several hours → ~1h</div>
+    </div>
+
+    <div class="card kpi-card">
+      <div class="label">BI dashboards owned</div>
+      <div class="big"><span class="v">2</span><span class="u">live</span><span class="delta flat">stable</span></div>
+      <svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none">
+        <g style="color:var(--pink);opacity:.9" fill="currentColor">
+          <rect x="2"  y="14" width="6" height="12"/>
+          <rect x="14" y="12" width="6" height="14"/>
+          <rect x="26" y="10" width="6" height="16"/>
+          <rect x="38" y="8"  width="6" height="18"/>
+          <rect x="50" y="6"  width="6" height="20"/>
+          <rect x="62" y="6"  width="6" height="20"/>
+          <rect x="74" y="6"  width="6" height="20"/>
+          <rect x="86" y="6"  width="6" height="20"/>
+        </g>
+      </svg>
+      <div class="note">biz + eng stakeholders</div>
+    </div>
+
+    <div class="card kpi-card">
+      <div class="label">Languages shipped (AI tool)</div>
+      <div class="big"><span class="v">5</span><span class="u">locales</span><span class="delta warn">ES·EN·PT·FI·SV</span></div>
+      <svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none">
+        <g style="color:var(--warn);opacity:.9" fill="currentColor">
+          <circle cx="10" cy="14" r="4"/>
+          <circle cx="30" cy="14" r="4"/>
+          <circle cx="50" cy="14" r="4"/>
+          <circle cx="70" cy="14" r="4"/>
+          <circle cx="90" cy="14" r="4"/>
+        </g>
+        <line x1="10" y1="14" x2="90" y2="14" style="stroke:var(--warn);opacity:.4;stroke-width:1"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- ── About + stack ───────────────────────────────── -->
+  <div class="section-head">
+    <span class="num">02</span>
+    <h2>About &amp; stack</h2>
+    <span class="meta">how I think · what I use</span>
+  </div>
+  <div class="two-col">
+
+    <div class="card">
+      <div class="card-head"><span class="dot"></span> about</div>
+      <div class="card-body about">
+        <p>I'm an <b>electronic engineer</b> who became a <b>data engineer</b>. Five years as a teaching assistant at <b>PUCP</b>, an exchange semester in <b>Vigo</b>, hardware roles building drones, air-quality monitors and Peru's first oxygen concentrator — then an <b>MSc in Big Data &amp; AI</b> at the University of Barcelona to pivot into data.</p>
+        <p>Most of what I do now is unglamorous on purpose: <b>reading other people's PySpark, making it faster, and writing the data-quality checks they wish they'd had.</b> I prefer pipelines that recover quietly to pipelines that look impressive in a slide deck.</p>
+        <p>Friendliest with <b>Databricks / PySpark / Power BI</b>, comfortable across the rest of the modern data stack, and quick to pick up the next tool when the work calls for it.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="dot"></span> stack <span class="right">primary · secondary</span></div>
+      <div class="card-body dense">
+        <div class="stack-rows">
+          <div class="stack-row">
+            <div class="row-head"><b>Data &amp; pipelines</b><span>core</span></div>
+            <div class="pill-row">
+              <span class="pill hot">PySpark</span><span class="pill hot">Databricks</span><span class="pill hot">Python</span>
+              <span class="pill">SQL</span><span class="pill">Airflow</span><span class="pill">Delta Lake</span><span class="pill">BigQuery</span>
+            </div>
+          </div>
+          <div class="stack-row">
+            <div class="row-head"><b>Analytics &amp; BI</b><span>delivery</span></div>
+            <div class="pill-row">
+              <span class="pill hot">Power BI</span><span class="pill">Tableau</span><span class="pill">Excel</span>
+              <span class="pill">Power Automate</span><span class="pill">VBA</span>
+            </div>
+          </div>
+          <div class="stack-row">
+            <div class="row-head"><b>Platform &amp; ops</b><span>ship + own</span></div>
+            <div class="pill-row">
+              <span class="pill">Git</span><span class="pill">GH Actions</span>
+              <span class="pill">Docker</span><span class="pill">Azure</span><span class="pill">Flask</span><span class="pill">Linux</span>
+            </div>
+          </div>
+          <div class="stack-row">
+            <div class="row-head"><b>ML / AI</b><span>when it earns it</span></div>
+            <div class="pill-row">
+              <span class="pill">scikit-learn</span><span class="pill">PyTorch</span><span class="pill">Selenium</span><span class="pill">Streamlit</span><span class="pill">NLP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Experience ───────────────────────────────────── -->
+  <div class="section-head" id="experience">
+    <span class="num">03</span>
+    <h2>Experience</h2>
+    <span class="meta">6 roles · data + hardware · newest first</span>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="dot"></span> work history · descending</div>
+    <div class="exp-grid">
+
+      <div class="exp">
+        <div class="when">Sep 2023<br>→ <span class="now-tag">present</span></div>
+        <div>
+          <h3>Data Engineer</h3>
+          <div class="at">@ <b>Procter &amp; Gamble</b> · Madrid</div>
+          <div class="bullets">
+            <div class="b">Built &amp; maintained <b>ETL pipelines in Databricks (PySpark)</b> across Bronze + Silver.</div>
+            <div class="b">Refactored a legacy PySpark codebase — <b>several hours → ~1h</b>.</div>
+            <div class="b">Designed <b>2 Power BI dashboards</b> used by business + engineering.</div>
+            <div class="b">Adapted CI/CD bundles · added <b>data-quality checks &amp; alerting</b>.</div>
+            <div class="b">Designed Power Automate workflows that cut recurring manual ops.</div>
+            <div class="b">Owned Master Data accuracy &amp; functionality.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">PySpark</span><span class="pill">Databricks</span><span class="pill">Power BI</span>
+            <span class="pill">Git</span><span class="pill">Power Automate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="when">Sep 2023<br>→ Feb 2025</div>
+        <div>
+          <h3>AI &amp; Big Data Analyst</h3>
+          <div class="at">@ <b>Instituto Escalae</b> · remote</div>
+          <div class="bullets">
+            <div class="b">AI-driven translation pipeline for files in <b>ES / EN / PT / FI / SV</b>.</div>
+            <div class="b">Azure-hosted API that <b>transcribes videos to text</b> over HTTP.</div>
+            <div class="b">Automated certificate delivery to thousands via Open Badge Factory.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">Python</span><span class="pill">Azure</span><span class="pill">Flask</span><span class="pill">OpenAI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="when">May 2023<br>→ Jul 2023</div>
+        <div>
+          <h3>Data Engineer · Intern</h3>
+          <div class="at">@ <b>Rentals United</b> · Barcelona</div>
+          <div class="bullets">
+            <div class="b">Web scrapers for prospect contact data.</div>
+            <div class="b">Automations that shaved <b>hours/week</b> off sales-ops admin.</div>
+            <div class="b">Pipelines wiring <b>Sheets ↔ BigQuery ↔ APIs</b>.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">Python</span><span class="pill">BigQuery</span><span class="pill">Selenium</span><span class="pill">APIs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="when">Jan 2022<br>→ Sep 2022</div>
+        <div>
+          <h3>Electronic Project Engineer</h3>
+          <div class="at">@ <b>Diacsa</b> · Lima</div>
+          <div class="bullets">
+            <div class="b">Helped assemble <b>Covox</b> — Peru's <b>first oxygen concentrator</b>.</div>
+            <div class="b">Selected components &amp; designed schematics in <b>Eagle</b>.</div>
+            <div class="b">Printed circuit boards for electronic devices.</div>
+            <div class="b">Assembled finished electronic devices for customers.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">Eagle</span><span class="pill">PCB</span><span class="pill">Hardware</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="when">Jan 2021<br>→ Sep 2021</div>
+        <div>
+          <h3>Head of Hardware Area</h3>
+          <div class="at">@ <b>Qaira</b> · Lima</div>
+          <div class="bullets">
+            <div class="b">Led a <b>team of 5</b> — technicians + engineers.</div>
+            <div class="b">Trained customers on the <b>qHAWAX</b> air-quality device.</div>
+            <div class="b">Planned &amp; supervised delivery of customer purchases.</div>
+            <div class="b">Welding &amp; QA of printed-circuit-board manufacturing.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">Team lead</span><span class="pill">qHAWAX</span><span class="pill">PCB QA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="when">Jun 2020<br>→ Dec 2020</div>
+        <div>
+          <h3>Technology Development Manager</h3>
+          <div class="at">@ <b>Qaira</b> · Lima</div>
+          <div class="bullets">
+            <div class="b">Drone flight testing — improved autonomous flight time &amp; video coverage.</div>
+            <div class="b">3D-printed parts &amp; CNC cuts for the drone <b>gimbal</b>.</div>
+            <div class="b">Improved the working environment inside the Hardware Area.</div>
+          </div>
+          <div class="row-stack">
+            <span class="pill">Drones</span><span class="pill">3D printing</span><span class="pill">CNC</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Education & Certifications ──────────────────── -->
+  <div class="section-head" id="education">
+    <span class="num">04</span>
+    <h2>Education &amp; certifications</h2>
+    <span class="meta">degrees · courses · newest first</span>
+  </div>
+  <div class="edu-two">
+
+    <div class="card">
+      <div class="card-head"><span class="dot"></span> formal education</div>
+      <div class="edu-list">
+        <div class="edu-item">
+          <div class="when">Oct 2022<br>→ Jul 2023</div>
+          <div>
+            <h4>MSc · Big Data &amp; Artificial Intelligence Solutions</h4>
+            <div class="where">@ <b>Barcelona Technology School</b> · Universitat de Barcelona</div>
+            <div class="note">Master's thesis &amp; capstone projects across Spark, ML, NLP. Career pivot from hardware into data.</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="when">Jan 2019<br>→ Jun 2019</div>
+          <div>
+            <h4>Student Exchange Program</h4>
+            <div class="where">@ <b>Universidad de Vigo</b> · Galicia, ES</div>
+            <div class="note">Semester abroad in Electronic Engineering — first time outside Peru on an academic track.</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="when">Mar 2013<br>→ Jun 2019</div>
+          <div>
+            <h4>BSc · Electronic Engineering</h4>
+            <div class="where">@ <b>Pontificia Universidad Católica del Perú</b> (PUCP) · Lima</div>
+            <div class="note">Bachiller in Electronics. 5 years as <b>teaching assistant</b>, Student Representative before the University Assembly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="dot" style="background:var(--accent-2)"></span> certifications</div>
+      <div class="certs">
+        <div class="cert"><span class="ix">01</span><span class="nm"><b>Databases &amp; SQL</b> for Data Science</span><span class="src">IBM · Coursera</span></div>
+        <div class="cert"><span class="ix">02</span><span class="nm"><b>Python</b> for Data Science &amp; AI</span><span class="src">IBM · Coursera</span></div>
+        <div class="cert"><span class="ix">03</span><span class="nm"><b>Python</b> programming</span><span class="src">PUCP</span></div>
+        <div class="cert"><span class="ix">04</span><span class="nm">Intermediate <b>Excel</b></span><span class="src">cert · ES</span></div>
+        <div class="cert"><span class="ix">05</span><span class="nm"><b>PLC</b> · programmable logic controllers</span><span class="src">cert · ES</span></div>
+        <div class="cert"><span class="ix">06</span><span class="nm"><b>English</b> · advanced</span><span class="src">cert · ES</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Projects (bento) ────────────────────────────── -->
+  <div class="section-head" id="projects">
+    <span class="num">05</span>
+    <h2>Selected projects</h2>
+    <span class="meta">click email for case-study deep-dive</span>
+  </div>
+
+  <div class="bento">
+
+    <div class="card proj wide featured">
+      <div class="card-head"><span class="dot"></span> case study · 01 <span class="right"><span class="badge">featured</span></span></div>
+      <div class="proj-body">
+        <h3>Legacy PySpark refactor</h3>
+        <div class="chart-legend">
+          <span><span class="sw" style="background:var(--pink)"></span>before</span>
+          <span><span class="sw" style="background:var(--accent)"></span>after</span>
+        </div>
+        <div class="chart-area">
+          <div class="ax-l">runtime</div>
+          <svg viewBox="0 0 460 110" preserveAspectRatio="none" style="width:100%;height:110px;">
+            <!-- Y axis ticks -->
+            <g style="font-family:var(--mono);font-size:9px;fill:var(--fg-3)">
+              <text x="2" y="14">high</text>
+              <text x="2" y="54">mid</text>
+              <text x="2" y="94">low</text>
+            </g>
+            <!-- before line (high) -->
+            <polyline fill="none" stroke="var(--pink)" stroke-width="2"
+              points="40,18 90,22 140,16 190,24 240,20 290,26 340,22 390,28 440,24" />
+            <!-- big drop -->
+            <line x1="440" y1="24" x2="450" y2="90" stroke="var(--pink)" stroke-width="2" stroke-dasharray="2 3" opacity="0.5"/>
+            <!-- after line (low) -->
+            <polyline fill="none" stroke="var(--accent)" stroke-width="2"
+              points="40,92 90,90 140,93 190,88 240,90 290,92 340,89 390,91 440,90" opacity="0" id="afterLine"/>
+            <!-- annotation -->
+            <text x="200" y="48" style="font-family:var(--mono);font-size:10px;fill:var(--pink)">several hours before</text>
+            <text x="200" y="80" style="font-family:var(--mono);font-size:10px;fill:var(--accent)">~1h after refactor</text>
+          </svg>
+        </div>
+        <p class="blurb">Untangled a PySpark codebase nobody wanted to touch — <b>narrower DataFrames, fewer shuffles, cleaner partitioning</b>. Diffs the team could actually review. Runtime dropped from several hours to about one.</p>
+        <div class="stk">
+          <span class="pill">PySpark</span><span class="pill">Databricks</span><span class="pill">Delta</span><span class="pill">Git</span>
+        </div>
+        <div class="metric">
+          <span class="n">~1h</span><span class="l">from several hours · stable for 6+ months</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card proj thin">
+      <div class="card-head"><span class="dot" style="background:var(--pink)"></span> case study · 02</div>
+      <div class="proj-body">
+        <h3>Power BI dashboards</h3>
+        <p class="blurb">Two dashboards tracking pipeline health and business KPIs. Modeled the semantic layer, owned the data contracts, set up alerting.</p>
+        <div class="stk"><span class="pill">Power BI</span><span class="pill">DAX</span><span class="pill">SQL</span></div>
+        <div class="metric">
+          <span class="n">2</span><span class="l">dashboards · biz + eng</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card proj thin">
+      <div class="card-head"><span class="dot" style="background:var(--accent-2)"></span> case study · 03</div>
+      <div class="proj-body">
+        <h3>Contact scraper · RU</h3>
+        <p class="blurb">Selenium + Sheets/BigQuery/APIs glue and tiny automations that compounded into real hours back to the sales-ops team.</p>
+        <div class="stk"><span class="pill">Selenium</span><span class="pill">BigQuery</span><span class="pill">APIs</span></div>
+        <div class="metric">
+          <span class="n">~hrs</span><span class="l">/week saved</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card proj wide">
+      <div class="card-head"><span class="dot" style="background:var(--warn)"></span> case study · 04 <span class="right">side project</span></div>
+      <a class="proj-body" href="https://testlamona1.netlify.app/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <h3>Silver-jewelry storefront ↗</h3>
+        <p class="blurb">Designed &amp; built an online storefront for <b>my mom's silver-jewelry brand</b> — product catalog, checkout, light CMS, SEO. First time her work reached buyers outside the city. Not data work — proof I ship.</p>
+        <div class="stk">
+          <span class="pill">Web</span><span class="pill">Storefront</span><span class="pill">SEO</span><span class="pill">CMS</span>
+        </div>
+        <div class="metric">
+          <span class="n">live</span><span class="l">shipped &amp; running · &gt;0 customers</span>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="lab-head">
+    <span>— lab notebook</span>
+    <b>small projects · learning &amp; play</b>
+  </div>
+  <div class="lab-grid">
+    <div class="lab-card">
+      <div class="ix">L.01</div>
+      <h5>AI-powered app</h5>
+      <p>Wrapper UI on top of an LLM — prompt scaffolding, response formatting, light persistence.</p>
+      <div class="tag">Python · LLM</div>
+    </div>
+    <div class="lab-card">
+      <div class="ix">L.02</div>
+      <h5>WhatsApp word cloud</h5>
+      <p>Generator that turns an exported chat into a visual word cloud — with stopword cleanup &amp; emoji handling.</p>
+      <div class="tag">Python · NLP</div>
+    </div>
+    <div class="lab-card">
+      <div class="ix">L.03</div>
+      <h5>Chat sentiment analysis</h5>
+      <p>NLP notebook scoring sentiment across WhatsApp chats over time — who's the optimist?</p>
+      <div class="tag">Jupyter · NLP</div>
+    </div>
+    <div class="lab-card">
+      <div class="ix">L.04</div>
+      <h5>Used-car price model</h5>
+      <p>ML regression to predict used-car prices from listing features — baseline + feature engineering iterations.</p>
+      <div class="tag">scikit-learn</div>
+    </div>
+    <div class="lab-card">
+      <div class="ix">L.05</div>
+      <h5>Bedroom-price scraper</h5>
+      <p>Web scraper analysing shared-bedroom listing prices across neighbourhoods — a personal house-hunting tool that escaped.</p>
+      <div class="tag">Selenium</div>
+    </div>
+  </div>
+
+  <!-- ── Beyond ───────────────────────────────────────── -->
+  <div class="section-head">
+    <span class="num">06</span>
+    <h2>Beyond data</h2>
+    <span class="meta">the non-linear part</span>
+  </div>
+  <div class="beyond-grid">
+    <div class="card beyond-card">
+      <div class="card-body">
+        <div class="yr">2014 — 2019</div>
+        <h4>Teaching assistant</h4>
+        <p>5 years explaining electronics at PUCP. Learned how to translate dense things into "I get it now."</p>
+      </div>
+    </div>
+    <div class="card beyond-card">
+      <div class="card-body">
+        <div class="yr">2015 — 2018</div>
+        <h4>Water polo · National Team</h4>
+        <p>3 years on Peru's NT. Recognized as a qualified athlete. I bring team-sport rhythm to standups.</p>
+      </div>
+    </div>
+    <div class="card beyond-card">
+      <div class="card-body">
+        <div class="yr">student years</div>
+        <h4>Student Representative</h4>
+        <p>Elected to the <b>University Assembly</b> at PUCP. Also swam on the university swim team — early lessons in showing up.</p>
+      </div>
+    </div>
+    <div class="card beyond-card">
+      <div class="card-body">
+        <div class="yr">ongoing</div>
+        <h4>Coach</h4>
+        <p>Coached swimming and water polo. A good coach asks better questions than a junior data engineer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Contact ─────────────────────────────────────── -->
+  <div class="section-head" id="contact">
+    <span class="num">07</span>
+    <h2>Get in touch</h2>
+    <span class="meta">replies within 24h on weekdays</span>
+  </div>
+  <div class="contact">
+    <div class="card contact-call">
+      <div class="card-head"><span class="dot" style="background:var(--good)"></span> currently open</div>
+      <div class="card-body">
+        <h3>Let's talk about <span class="grad">data engineering</span>.</h3>
+        <p>Open to Data Engineer roles in Madrid or fully-remote across the EU. Email is fastest — happy to share a case-study deep-dive if you want one.</p>
+        <a class="btn primary" href="mailto:davidwp37@gmail.com?subject=Hi%20David%20%E2%80%94%20Data%20Engineer%20role">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          davidwp37@gmail.com
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="dot"></span> channels</div>
+      <div class="card-body dense">
+        <div class="contact-list">
+          <a class="contact-link" href="https://linkedin.com/in/david-landeo/" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+            <span class="v">david-landeo</span>
+          </a>
+          <a class="contact-link" href="https://github.com/ockdavid" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></span>
+            <span class="v">ockdavid</span>
+          </a>
+          <a class="contact-link" href="assets/David-Landeo-CV.pdf" download>
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+            <span class="v">CV · download</span>
+          </a>
+          <a class="contact-link" href="tel:+34695128762">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+            <span class="v">+34 695 12 87 62</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>© 2026 David Landeo · v3.dashboard</div>
+    <div>Built with HTML / CSS / a few SVG sparklines</div>
+    <div>Madrid · UTC+1 · <span style="color:var(--good)">● available</span></div>
+  </footer>
+
+</div>
+
+<div id="tweaks-mount"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('v3-theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  document.getElementById('themeLabel').textContent = saved;
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', cur);
+    document.getElementById('themeLabel').textContent = cur;
+    localStorage.setItem('v3-theme', cur);
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  // Reveal "after" line on chart scroll-into-view
+  const after = document.getElementById('afterLine');
+  if (after) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { after.style.transition = 'opacity 1.2s ease 0.2s'; after.style.opacity = '1'; } });
+    });
+    obs.observe(after);
+  }
+</script>
+
+<script type="text/babel" data-presets="env,react">
+  const { useEffect } = React;
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "palette": [
+      "#fbbf24",
+      "#f472b6"
+    ]
+  }/*EDITMODE-END*/;
+
+  const PALETTES = [
+    ["#5eead4","#818cf8"], // teal · indigo (default)
+    ["#fbbf24","#f472b6"], // amber · pink
+    ["#34d399","#22d3ee"], // emerald · cyan
+    ["#f87171","#fb923c"], // coral · orange
+    ["#a78bfa","#ec4899"], // violet · magenta
+  ];
+
+  function App() {
+    const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+    useEffect(() => {
+      document.documentElement.style.setProperty('--accent', t.palette[0]);
+      document.documentElement.style.setProperty('--accent-2', t.palette[1]);
+    }, [t.palette]);
+
+    return (
+      <window.TweaksPanel title="Tweaks">
+        <window.TweakSection title="Color palette">
+          <window.TweakColor
+            label="Pair"
+            value={t.palette}
+            onChange={(v) => setTweak('palette', v)}
+            options={PALETTES}
+          />
+        </window.TweakSection>
+      </window.TweaksPanel>
+    );
+  }
+
+  function mount() {
+    if (!window.TweaksPanel || !window.useTweaks) { setTimeout(mount, 60); return; }
+    ReactDOM.createRoot(document.getElementById('tweaks-mount')).render(<App />);
+  }
+  mount();
+</script>
 
 </body>
 </html>
