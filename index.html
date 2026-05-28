@@ -616,27 +616,49 @@
         all systems live
       </span>
     </div>
-    <a href="https://lamona.pages.dev/" target="_blank" rel="noopener" class="deploy-row" style="text-decoration:none;color:inherit;display:grid;grid-template-columns:90px 1fr auto;gap:16px 28px;align-items:center;padding:18px 24px;transition:background .15s;" onmouseenter="this.style.background='color-mix(in srgb,var(--good) 4%,transparent)'" onmouseleave="this.style.background='transparent'">
-      <div style="font-family:var(--mono);font-size:10.5px;color:var(--fg-3);line-height:1.6;">
-        May 2026<br>
-        <span style="color:var(--good);display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:99px;background:color-mix(in srgb,var(--good) 10%,transparent);margin-top:4px;">● live</span>
+    <div class="deploy-row" style="display:grid;grid-template-columns:90px 1fr auto;gap:16px 28px;align-items:start;padding:18px 24px;">
+
+      <!-- Date -->
+      <div style="padding-top:3px;">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--fg-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;">shipped</div>
+        <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--fg);line-height:1.1;letter-spacing:-.02em;">May<br>2026</div>
+        <span style="color:var(--good);display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:99px;background:color-mix(in srgb,var(--good) 10%,transparent);margin-top:8px;">● live</span>
       </div>
+
+      <!-- Content -->
       <div>
-        <div style="font-size:15px;font-weight:700;color:var(--fg);letter-spacing:-.01em;margin-bottom:7px;">
+        <div style="font-size:15px;font-weight:700;color:var(--fg);letter-spacing:-.01em;margin-bottom:8px;">
           La Mona — silver-jewelry e-commerce
         </div>
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px;">
           <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">catalog</span> <span style="color:var(--warn);font-weight:600;">77 products</span></span>
           <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">feature</span> <span style="color:var(--accent);font-weight:600;">live customizer</span></span>
           <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">AI</span> <span style="color:var(--accent-2);font-weight:600;">offline chatbot</span></span>
           <span style="font-family:var(--mono);font-size:11px;"><span style="color:var(--fg-3);">orders via</span> <span style="color:var(--good);font-weight:600;">WhatsApp</span></span>
         </div>
+        <button onclick="toggleLaMonaCtx()" id="lamona-toggle-btn"
+          style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--fg-3);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer;transition:color .15s,border-color .15s;"
+          onmouseenter="this.style.color='var(--fg)';this.style.borderColor='var(--accent)'"
+          onmouseleave="this.style.color='var(--fg-3)';this.style.borderColor='var(--line)'">
+          <span id="lamona-toggle-arrow">▾</span> context
+        </button>
+        <div id="lamona-context" style="display:none;margin-top:12px;padding:14px 16px;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:8px;font-size:13px;color:var(--fg-2);line-height:1.6;max-width:68ch;">
+          Built for my <b style="color:var(--fg);">mother's artisan jewelry business</b> in Lima, Peru. She wanted to improve how she reaches and communicates with customers, display her <b style="color:var(--fg);">full catalog in one place</b> — no more sending product photos one by one over WhatsApp — and run her business in a more <b style="color:var(--fg);">organized, professional way</b>. The WhatsApp-first checkout fits her current scale: online payment isn't enabled yet since demand is still growing, but the foundation is already in place for when that changes.
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--fg-2);padding:8px 14px;border:1px solid var(--line);border-radius:7px;white-space:nowrap;background:var(--panel-2);">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        lamona.pages.dev
+
+      <!-- Link -->
+      <div style="padding-top:3px;">
+        <a href="https://lamona.pages.dev/" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--fg-2);padding:8px 14px;border:1px solid var(--line);border-radius:7px;white-space:nowrap;background:var(--panel-2);text-decoration:none;transition:color .15s,border-color .15s;"
+          onmouseenter="this.style.color='var(--fg)';this.style.borderColor='var(--accent)'"
+          onmouseleave="this.style.color='var(--fg-2)';this.style.borderColor='var(--line)'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          lamona.pages.dev
+        </a>
       </div>
-    </a>
+
+    </div>
   </div>
 
   <!-- ── KPI strip ─────────────────────────────────────── -->
@@ -1189,6 +1211,14 @@
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 
 <script>
+  function toggleLaMonaCtx() {
+    const ctx = document.getElementById('lamona-context');
+    const arrow = document.getElementById('lamona-toggle-arrow');
+    const isOpen = ctx.style.display !== 'none';
+    ctx.style.display = isOpen ? 'none' : 'block';
+    arrow.textContent = isOpen ? '▾' : '▴';
+  }
+
   const root = document.documentElement;
   const saved = localStorage.getItem('v3-theme') || 'dark';
   root.setAttribute('data-theme', saved);
