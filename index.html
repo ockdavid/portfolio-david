@@ -346,7 +346,16 @@
   .proj { display: flex; flex-direction: column; min-height: 220px; }
   .proj.wide { grid-column: span 4; }
   .proj.thin { grid-column: span 2; }
-  @media (max-width: 920px) { .proj.wide, .proj.thin { grid-column: span 1; } }
+  .proj.full { grid-column: span 6; }
+  @media (max-width: 920px) { .proj.wide, .proj.thin, .proj.full { grid-column: span 1; } }
+
+  .proj-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 920px) { .proj-inner { grid-template-columns: 1fr; } }
+  .proj-feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .proj-feat-item { background: var(--panel-2); border: 1px solid var(--line-soft); border-radius: 8px; padding: 12px 14px; }
+  .proj-feat-item .feat-cat { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 5px; }
+  .proj-feat-item .feat-n { font-size: 24px; font-weight: 800; color: var(--fg); letter-spacing: -.025em; line-height: 1; }
+  .proj-feat-item .feat-l { color: var(--fg-3); font-family: var(--mono); font-size: 10.5px; margin-top: 3px; }
 
   .proj .card-head .badge {
     background: color-mix(in srgb, var(--accent) 15%, transparent);
@@ -945,18 +954,61 @@
       </div>
     </div>
 
-    <div class="card proj wide">
-      <div class="card-head"><span class="dot" style="background:var(--warn)"></span> case study · 04 <span class="right">side project</span></div>
-      <a class="proj-body" href="https://testlamona1.netlify.app/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-        <h3>Silver-jewelry storefront ↗</h3>
-        <p class="blurb">Designed &amp; built an online storefront for <b>my mom's silver-jewelry brand</b> — product catalog, checkout, light CMS, SEO. First time her work reached buyers outside the city. Not data work — proof I ship.</p>
-        <div class="stk">
-          <span class="pill">Web</span><span class="pill">Storefront</span><span class="pill">SEO</span><span class="pill">CMS</span>
+    <div class="card proj full featured">
+      <div class="card-head">
+        <span class="dot" style="background:var(--warn)"></span> case study · 04
+        <span class="right">
+          <span class="badge" style="background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)">side project · live</span>
+        </span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-inner">
+          <div>
+            <h3>
+              <a href="https://lamona.pages.dev/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">
+                La Mona — silver-jewelry storefront ↗
+              </a>
+            </h3>
+            <p class="blurb" style="margin-top:8px;">
+              Full e-commerce site for <b>my mom's artisanal jewelry brand</b>. 77-piece catalog with category filters, a <b>live customizer</b> for real-time engraving preview, and a smart cart that auto-generates <b>WhatsApp orders</b>. Built an offline <b>AI chatbot ("Mona")</b> handling 12+ customer intents — materials, pricing, shipping — zero external APIs. GSAP scroll animations &amp; 3D card tilt. Deployed on Cloudflare Pages. Not data work — proof I ship.
+            </p>
+            <div class="stk" style="margin-top:12px;">
+              <span class="pill hot">JavaScript</span>
+              <span class="pill hot">GSAP</span>
+              <span class="pill">HTML / CSS</span>
+              <span class="pill">WhatsApp API</span>
+              <span class="pill">AI chatbot</span>
+              <span class="pill">Cloudflare Pages</span>
+            </div>
+            <a class="btn" href="https://lamona.pages.dev/" target="_blank" rel="noopener" style="margin-top:14px;width:fit-content;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              lamona.pages.dev
+            </a>
+          </div>
+          <div class="proj-feat-grid">
+            <div class="proj-feat-item">
+              <div class="feat-cat" style="color:var(--warn)">Catalog</div>
+              <div class="feat-n">77</div>
+              <div class="feat-l">handcrafted pieces · filterable</div>
+            </div>
+            <div class="proj-feat-item">
+              <div class="feat-cat" style="color:var(--accent)">Customizer</div>
+              <div class="feat-n">live</div>
+              <div class="feat-l">real-time engraving preview</div>
+            </div>
+            <div class="proj-feat-item">
+              <div class="feat-cat" style="color:var(--accent-2)">AI chatbot</div>
+              <div class="feat-n">12+</div>
+              <div class="feat-l">intents · offline · no API key</div>
+            </div>
+            <div class="proj-feat-item">
+              <div class="feat-cat" style="color:var(--good)">Orders</div>
+              <div class="feat-n">WA ↗</div>
+              <div class="feat-l">auto WhatsApp order gen</div>
+            </div>
+          </div>
         </div>
-        <div class="metric">
-          <span class="n">live</span><span class="l">shipped &amp; running · &gt;0 customers</span>
-        </div>
-      </a>
+      </div>
     </div>
 
   </div>
