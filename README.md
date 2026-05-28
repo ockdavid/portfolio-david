@@ -2,7 +2,7 @@
 
 Personal portfolio site for **David J. Landeo Vargas** — Data Engineer based in Madrid.
 
-Live: _(add your GitHub Pages URL here once deployed)_
+Live: [My portfolio](https://davidlandeo.me/)
 
 ---
 
