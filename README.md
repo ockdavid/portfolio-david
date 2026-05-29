@@ -1,6 +1,6 @@
 # David Landeo — Portfolio
 
-Personal portfolio site for **David J. Landeo Vargas** — Data Engineer based in Madrid.
+Personal portfolio site for **David Landeo Vargas** — Data Engineer based in Madrid.
 
 Live: [My portfolio](https://davidlandeo.me/)
 
