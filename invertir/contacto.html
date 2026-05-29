@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto · David Landeo · Personal Shopper Inmobiliario</title>
+<meta name="description" content="Contacta con David Landeo, Personal Shopper Inmobiliario en Madrid. Llamada sin compromiso.">
+<link rel="stylesheet" href="estilos.css">
+<style>
+  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;
+    min-height:100vh;display:flex;flex-direction:column;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px;flex:1;width:100%;}
+  .cab{text-align:center;padding:56px 0 30px;}
+  .cab .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--acento);font-weight:700;margin-bottom:14px;}
+  .cab h1{font-size:34px;}
+  .cab p{color:var(--gris);max-width:480px;margin:12px auto 0;}
+
+  .tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0 30px;}
+  .tarjeta{background:#fff;border-radius:14px;padding:22px;text-align:center;text-decoration:none;color:var(--tinta);
+    box-shadow:0 8px 26px rgba(15,29,40,.07);transition:.15s;}
+  .tarjeta:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(15,29,40,.13);}
+  .tarjeta .ico{font-size:30px;margin-bottom:10px;}
+  .tarjeta b{display:block;font-size:16px;margin-bottom:4px;}
+  .tarjeta span{font-size:14px;color:var(--acento);font-weight:600;}
+
+  .form{background:#fff;border-radius:16px;padding:30px;box-shadow:0 12px 40px rgba(15,29,40,.08);margin-bottom:50px;}
+  .form h2{font-size:20px;margin-bottom:18px;}
+  .form input,.form textarea{width:100%;padding:14px;border:1px solid var(--linea);border-radius:10px;
+    margin-bottom:12px;font-size:15px;font-family:inherit;}
+  .form textarea{min-height:110px;resize:vertical;}
+  .form .consent{font-size:11.5px;color:var(--gris);display:flex;gap:8px;align-items:flex-start;margin:4px 0 16px;}
+  .form button{width:100%;background:var(--acento);color:#fff;border:none;border-radius:11px;padding:16px;
+    font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .form button:hover{background:var(--acento2);}
+  .form .ok{display:none;text-align:center;font-size:16px;color:var(--acento);font-weight:600;}
+
+  @media(max-width:560px){ .tarjetas{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Inicio</a>
+    <a href="radar.html">Radar</a>
+    <a href="mapa.html">Mapa de calor</a>
+    <a href="contacto.html" class="btn-nav activo">Contacto</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="cab">
+    <div class="k">Hablemos</div>
+    <h1>¿Damos el primer paso?</h1>
+    <p>Cuéntame qué buscas y vemos, sin compromiso, cómo invertir en Madrid de forma rentable.</p>
+  </div>
+
+  <div class="tarjetas">
+    <a class="tarjeta" href="tel:+34695128762">
+      <div class="ico">📞</div><b>Llámame</b><span>695 128 762</span>
+    </a>
+    <a class="tarjeta" href="mailto:davidwp37@gmail.com">
+      <div class="ico">✉️</div><b>Escríbeme</b><span>davidwp37@gmail.com</span>
+    </a>
+  </div>
+
+  <div class="form">
+    <h2>O déjame tus datos y te contacto yo</h2>
+    <form id="form-contacto" onsubmit="return enviar(event)">
+      <input type="text"  name="nombre"   placeholder="Tu nombre" required>
+      <input type="email" name="email"    placeholder="Tu email" required>
+      <input type="tel"   name="telefono" placeholder="Tu teléfono (WhatsApp)" required>
+      <textarea name="mensaje" placeholder="Cuéntame brevemente qué buscas (capital, zona, objetivo…)"></textarea>
+      <label class="consent">
+        <input type="checkbox" required>
+        Acepto que David Landeo me contacte y guarde mis datos conforme al RGPD.
+      </label>
+      <button type="submit">Enviar</button>
+    </form>
+    <div class="ok" id="ok">¡Gracias! 🎉 Te contacto en menos de 24 horas. — David</div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
+  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+</footer>
+
+<script>
+/* Para recibir los envíos: crea un formulario gratis en https://formspree.io
+   y pega tu endpoint en FORM_ENDPOINT. Si lo dejas vacío, abre el correo (mailto). */
+const FORM_ENDPOINT = "";
+function enviar(e){
+  e.preventDefault();
+  const f = e.target;
+  const d = {nombre:f.nombre.value,email:f.email.value,telefono:f.telefono.value,mensaje:f.mensaje.value};
+  if(FORM_ENDPOINT){
+    fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)})
+      .then(()=>ok(f)).catch(()=>mail(d));
+  } else { mail(d); ok(f); }
+  return false;
+}
+function ok(f){ f.style.display='none'; document.getElementById('ok').style.display='block'; }
+function mail(d){
+  const c = `Nombre: ${d.nombre}%0AEmail: ${d.email}%0ATel: ${d.telefono}%0A%0A${encodeURIComponent(d.mensaje)}`;
+  window.location.href = `mailto:davidwp37@gmail.com?subject=Contacto web&body=${c}`;
+}
+</script>
+</body>
+</html>

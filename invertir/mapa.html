@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de calor · Rentabilidad por distrito · Madrid</title>
+<meta name="description" content="Mapa de calor interactivo de la rentabilidad del alquiler por distrito en Madrid. Por David Landeo, Personal Shopper Inmobiliario.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  :root{--tinta:#0f1d28;--acento:#0e7c66;--oro:#c8a24a;--gris:#64757f;--linea:#e3eae8;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);}
+  #map{position:absolute;top:62px;left:0;right:0;bottom:0;background:#eef2f3;z-index:1;}
+
+  /* CABECERA FLOTANTE */
+  .titulo{position:absolute;top:78px;left:16px;z-index:1000;background:rgba(255,255,255,.96);
+    border-radius:14px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:16px 18px;max-width:340px;}
+  .titulo .k{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acento);font-weight:700;}
+  .titulo h1{font-size:18px;line-height:1.2;margin:4px 0 8px;}
+  .titulo p{font-size:12px;color:var(--gris);line-height:1.45;margin-bottom:12px;}
+  .toggle{display:flex;gap:6px;background:#eef2f3;border-radius:10px;padding:4px;}
+  .toggle button{flex:1;border:none;background:transparent;border-radius:7px;padding:8px 4px;font-size:11.5px;
+    font-weight:700;color:var(--gris);cursor:pointer;font-family:inherit;transition:.15s;}
+  .toggle button.activo{background:#fff;color:var(--acento);box-shadow:0 2px 6px rgba(15,29,40,.12);}
+
+  /* PANEL RANKING */
+  .ranking{position:absolute;top:78px;right:16px;z-index:1000;background:rgba(255,255,255,.96);
+    border-radius:14px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:14px 16px;width:248px;max-height:calc(100vh - 96px);overflow:auto;}
+  .ranking h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--gris);margin-bottom:10px;}
+  .rank-row{display:flex;align-items:center;gap:10px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:.12s;}
+  .rank-row:hover{background:#eef6f4;}
+  .rank-row .pos{font-size:13px;font-weight:800;color:var(--linea);min-width:18px;}
+  .rank-row .dot{width:12px;height:12px;border-radius:3px;flex:0 0 12px;}
+  .rank-row .nm{flex:1;font-size:12.5px;font-weight:600;}
+  .rank-row .vl{font-size:13px;font-weight:800;color:var(--tinta);}
+
+  /* LEYENDA */
+  .leyenda{position:absolute;bottom:74px;left:16px;z-index:1000;background:rgba(255,255,255,.96);
+    border-radius:12px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:12px 14px;font-size:11.5px;}
+  .leyenda b{display:block;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gris);}
+  .leyenda .fila{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .leyenda .sw{width:18px;height:14px;border-radius:3px;}
+
+  /* CONTACTO */
+  .contacto{position:absolute;bottom:16px;left:16px;right:auto;z-index:1000;background:var(--tinta);color:#fff;
+    border-radius:12px;box-shadow:0 8px 30px rgba(15,29,40,.25);padding:11px 16px;font-size:12px;display:flex;gap:12px;align-items:center;}
+  .contacto .av{width:34px;height:34px;border-radius:50%;background:var(--acento);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+  .contacto b{color:#fff;}
+  .contacto span{color:#aebfc7;display:block;font-size:11px;}
+
+  /* TOOLTIP leaflet */
+  .leaflet-tooltip.dist{background:var(--tinta);color:#fff;border:none;border-radius:8px;padding:7px 11px;
+    font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.3);}
+  .leaflet-tooltip.dist .big{font-size:16px;font-weight:800;color:var(--oro);}
+  .leaflet-tooltip.dist:before{display:none;}
+
+  .aviso{position:absolute;bottom:16px;right:16px;z-index:1000;font-size:10px;color:#7b8b94;
+    background:rgba(255,255,255,.85);border-radius:8px;padding:6px 10px;max-width:230px;line-height:1.4;}
+
+  @media(max-width:720px){
+    .ranking{display:none;}
+    .titulo{max-width:calc(100% - 32px);}
+    .leyenda{bottom:96px;}
+  }
+</style>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body class="mapa">
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Inicio</a>
+    <a href="radar.html">Radar</a>
+    <a href="mapa.html" class="activo">Mapa de calor</a>
+    <a href="contacto.html" class="btn-nav">Contacto</a>
+  </nav>
+</header>
+
+<div id="map"></div>
+
+<div class="titulo">
+  <div class="k">David Landeo · PSI Madrid</div>
+  <h1>Mapa de calor de rentabilidad</h1>
+  <p>Rentabilidad bruta del alquiler por distrito de Madrid, área metropolitana y Corredor del Henares. Pasa el ratón o toca una zona.</p>
+  <div class="toggle" id="toggle">
+    <button data-m="rent" class="activo">Rentabilidad</button>
+    <button data-m="precio">Precio m²</button>
+    <button data-m="alquiler">Alquiler m²</button>
+  </div>
+  <a href="radar.html" style="display:block;text-align:center;margin-top:10px;background:var(--acento);color:#fff;
+     text-decoration:none;font-weight:700;font-size:12.5px;padding:9px;border-radius:9px;">🎯 Calcula tu inversión →</a>
+</div>
+
+<div class="ranking">
+  <h2 id="rank-titulo">Ranking por rentabilidad</h2>
+  <div id="rank-lista"></div>
+</div>
+
+<div class="leyenda" id="leyenda"></div>
+
+<div class="contacto">
+  <div class="av">DL</div>
+  <div><b>David Landeo</b><span>695 128 762 · davidwp37@gmail.com</span></div>
+</div>
+
+<div class="aviso">Datos medios orientativos de mercado, editables. No constituyen asesoramiento ni oferta.</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="madrid-distritos.js"></script>
+<script src="municipios-area.js"></script>
+<script>
+/* =====================================================================
+   DATOS POR DISTRITO  —  ⚠️ EDITA CON TUS DATOS REALES DE MADRID
+   precioM2  = precio medio de compra (€/m²)
+   alquilerM2 = alquiler medio (€/m²/mes)
+   La rentabilidad bruta se calcula sola: alquilerM2*12 / precioM2.
+   Las claves DEBEN coincidir con el "name" del GeoJSON.
+   ===================================================================== */
+const DATA = {
+  "Centro":              {precioM2:5200, alquilerM2:19.5},
+  "Arganzuela":          {precioM2:4600, alquilerM2:18.0},
+  "Retiro":              {precioM2:5300, alquilerM2:18.5},
+  "Salamanca":           {precioM2:6800, alquilerM2:21.0},
+  "Chamartin":           {precioM2:5800, alquilerM2:19.0},
+  "Tetuan":              {precioM2:4300, alquilerM2:17.5},
+  "Chamberi":            {precioM2:5900, alquilerM2:19.5},
+  /* "Fuencarral-El Pardo": excluido del mapa (mayoría Monte de El Pardo, zona no residencial) */
+  "Moncloa-Aravaca":     {precioM2:4800, alquilerM2:17.5},
+  "Latina":              {precioM2:2800, alquilerM2:15.0},
+  "Carabanchel":         {precioM2:2650, alquilerM2:15.0},
+  "Usera":               {precioM2:2450, alquilerM2:14.8},
+  "Puente de Vallecas":  {precioM2:2350, alquilerM2:14.8},
+  "Moratalaz":           {precioM2:2900, alquilerM2:15.0},
+  "Ciudad Lineal":       {precioM2:3100, alquilerM2:15.8},
+  "Hortaleza":           {precioM2:3800, alquilerM2:16.0},
+  "Villaverde":          {precioM2:2000, alquilerM2:13.5},
+  "Villa de Vallecas":   {precioM2:2700, alquilerM2:14.5},
+  "Vicalvaro":           {precioM2:2600, alquilerM2:14.2},
+  "San Blas":            {precioM2:2900, alquilerM2:14.8},
+  "Barajas":             {precioM2:3500, alquilerM2:15.0},
+  /* --- Área metropolitana y Corredor del Henares (municipios) --- */
+  "Alcorcón":                  {precioM2:2400, alquilerM2:12.5},
+  "Móstoles":                  {precioM2:2050, alquilerM2:11.8},
+  "Leganés":                   {precioM2:2300, alquilerM2:12.5},
+  "Getafe":                    {precioM2:2350, alquilerM2:12.8},
+  "Fuenlabrada":               {precioM2:1950, alquilerM2:11.5},
+  "Parla":                     {precioM2:1650, alquilerM2:11.0},
+  "Pinto":                     {precioM2:2100, alquilerM2:12.0},
+  "Valdemoro":                 {precioM2:1950, alquilerM2:11.5},
+  "Coslada":                   {precioM2:2150, alquilerM2:12.5},
+  "San Sebastián de los Reyes":{precioM2:2900, alquilerM2:13.5},
+  "Torrejón de Ardoz":         {precioM2:2050, alquilerM2:12.0},
+  "Alcalá de Henares":         {precioM2:1850, alquilerM2:11.5},
+  "Azuqueca de Henares":       {precioM2:1300, alquilerM2:9.5},
+  "Guadalajara":               {precioM2:1500, alquilerM2:10.0}
+};
+
+const yield_ = d => (d.alquilerM2*12)/d.precioM2*100;
+const valor = (d,m) => m==='rent'? yield_(d) : m==='precio'? d.precioM2 : d.alquilerM2;
+const fmt = (v,m) => m==='rent'? v.toFixed(1).replace('.',',')+' %'
+                   : m==='precio'? Math.round(v).toLocaleString('es-ES')+' €/m²'
+                   : v.toFixed(1).replace('.',',')+' €/m²';
+
+function color(v,m){
+  if(m==='rent')   return v>=7?'#0b6b3a':v>=6.3?'#2e9e57':v>=5.6?'#74c476':v>=5?'#c7e89b':v>=4.5?'#ffe08a':v>=4?'#fdae61':'#e34a33';
+  if(m==='precio') return v<2500?'#0b6b3a':v<3000?'#2e9e57':v<3500?'#74c476':v<4500?'#c7e89b':v<5500?'#ffe08a':v<6500?'#fdae61':'#e34a33';
+  /* alquiler */   return v>=19?'#0b6b3a':v>=17?'#2e9e57':v>=15?'#74c476':v>=13?'#c7e89b':v>=11?'#ffe08a':v>=10?'#fdae61':'#e34a33';
+}
+const LEYENDAS = {
+  rent:    {t:'Rentabilidad bruta', bins:[['≥ 7 %',7],['6,3–7 %',6.3],['5,6–6,3 %',5.6],['5–5,6 %',5],['4,5–5 %',4.5],['4–4,5 %',4],['< 4 %',0]]},
+  precio:  {t:'Precio de compra', bins:[['< 2.500',2400],['2.500–3.000',2900],['3.000–3.500',3400],['3.500–4.500',4400],['4.500–5.500',5400],['5.500–6.500',6400],['> 6.500',7000]]},
+  alquiler:{t:'Alquiler €/m²/mes', bins:[['≥ 19',19],['17–19',17],['15–17',15],['13–15',13],['11–13',11],['10–11',10],['< 10',9]]}
+};
+
+let metric = 'rent';
+const map = L.map('map',{scrollWheelZoom:true}).setView([40.435,-3.69],11);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+  attribution:'&copy; OpenStreetMap &copy; CARTO', subdomains:'abcd', maxZoom:19
+}).addTo(map);
+
+function estilo(f){
+  const d = DATA[f.properties.name];
+  if(!d) return {fillColor:'#e6ebed',weight:1,color:'#fff',fillOpacity:.35,dashArray:'3'};
+  return {fillColor:color(valor(d,metric),metric),weight:1.3,color:'#ffffff',fillOpacity:.85};
+}
+
+let capa, primeraVez = true;
+function geoCombinado(){
+  const feats = (window.MADRID_GEO ? window.MADRID_GEO.features : [])
+    .concat(window.MUNICIPIOS_GEO ? window.MUNICIPIOS_GEO.features : []);
+  return {type:'FeatureCollection', features:feats};
+}
+function onEach(f,layer){
+  const nombre = f.properties.name;
+  const d = DATA[nombre];
+  layer.on({
+    mouseover:e=>{ e.target.setStyle({weight:2.5,color:'#0f1d28',fillOpacity:.95}); e.target.bringToFront(); },
+    mouseout:e=>{ capa.resetStyle(e.target); },
+    click:e=>{ map.fitBounds(e.target.getBounds(),{maxZoom:13,padding:[40,40]}); }
+  });
+  if(d){
+    layer.bindTooltip(
+      `<div>${nombre}</div><div class="big">${fmt(valor(d,metric),metric)}</div>`,
+      {className:'dist',sticky:true}
+    );
+  } else {
+    layer.bindTooltip(
+      `<div>${nombre}</div><div style="font-size:11px;opacity:.8">Zona excluida (no residencial)</div>`,
+      {className:'dist',sticky:true}
+    );
+  }
+}
+
+function pintaTodo(){
+  if(capa) map.removeLayer(capa);
+  capa = L.geoJSON(geoCombinado(),{style:estilo,onEachFeature:onEach}).addTo(map);
+  if(primeraVez){ map.fitBounds(capa.getBounds(),{padding:[20,20]}); primeraVez=false; }
+  pintaLeyenda();
+  pintaRanking();
+}
+
+function pintaLeyenda(){
+  const L_ = LEYENDAS[metric];
+  let html = `<b>${L_.t}</b>`;
+  L_.bins.forEach(([txt,ref])=> html += `<div class="fila"><span class="sw" style="background:${color(ref,metric)}"></span>${txt}</div>`);
+  document.getElementById('leyenda').innerHTML = html;
+}
+
+function pintaRanking(){
+  document.getElementById('rank-titulo').textContent =
+    'Ranking por ' + (metric==='rent'?'rentabilidad':metric==='precio'?'precio m²':'alquiler m²');
+  let arr = Object.entries(DATA).map(([n,d])=>({n,v:valor(d,metric),d}));
+  arr.sort((a,b)=> metric==='precio' ? a.v-b.v : b.v-a.v); // precio: barato primero
+  const cont = document.getElementById('rank-lista'); cont.innerHTML='';
+  arr.forEach((r,i)=>{
+    const row = document.createElement('div');
+    row.className='rank-row';
+    row.innerHTML = `<span class="pos">${i+1}</span>
+      <span class="dot" style="background:${color(r.v,metric)}"></span>
+      <span class="nm">${r.n}</span><span class="vl">${fmt(r.v,metric)}</span>`;
+    row.onclick = ()=>{
+      capa.eachLayer(l=>{ if(l.feature.properties.name===r.n){ map.fitBounds(l.getBounds(),{maxZoom:13,padding:[40,40]}); l.openTooltip(); }});
+    };
+    cont.appendChild(row);
+  });
+}
+
+document.getElementById('toggle').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON') return;
+  document.querySelectorAll('#toggle button').forEach(b=>b.classList.remove('activo'));
+  e.target.classList.add('activo');
+  metric = e.target.dataset.m;
+  pintaTodo();
+});
+
+pintaTodo();
+</script>
+</body>
+</html>

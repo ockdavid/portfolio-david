@@ -114,6 +114,11 @@
   }
   .action.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
   .action.primary:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .action.invest {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--bg); border: none; font-weight: 700;
+  }
+  .action.invest:hover { filter: brightness(1.08); color: var(--bg); border: none; }
   @media (max-width: 720px) { .breadcrumb, .action.live { display: none; } }
 
   /* ── Layout ─────────────────────────────────────────────── */
@@ -535,6 +540,10 @@
       <span>2026</span>
     </div>
     <div class="topbar-actions">
+      <a class="action invest" href="invertir/index.html" title="Invierte en vivienda en Madrid">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+        Invierte en inmuebles
+      </a>
       <div class="action live"><span class="pulse"></span> available</div>
       <button class="action" id="themeToggle" title="Toggle theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Landeo · Personal Shopper Inmobiliario en Madrid</title>
+<meta name="description" content="Te ayudo a encontrar y comprar vivienda de inversión rentable en Madrid. Calcula dónde invertir y consulta la rentabilidad por zona.">
+<link rel="stylesheet" href="estilos.css">
+<style>
+  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0f1d28 0%,#173546 100%);color:#fff;text-align:center;padding:80px 0 88px;}
+  .hero .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--oro);font-weight:700;margin-bottom:18px;}
+  .hero h1{font-size:clamp(30px,5vw,48px);font-weight:800;line-height:1.1;max-width:780px;margin:0 auto;}
+  .hero p{font-size:clamp(15px,2.4vw,19px);color:#aebfc7;max-width:600px;margin:20px auto 32px;}
+  .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* TARJETAS HERRAMIENTAS */
+  .tools{margin:-50px auto 50px;display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:920px;}
+  .tool{background:#fff;border-radius:18px;box-shadow:0 16px 50px rgba(15,29,40,.12);padding:30px;text-decoration:none;color:var(--tinta);
+    transition:.18s;border:1px solid transparent;display:flex;flex-direction:column;}
+  .tool:hover{transform:translateY(-4px);border-color:var(--acento);box-shadow:0 22px 60px rgba(15,29,40,.18);}
+  .tool .ico{font-size:34px;margin-bottom:14px;}
+  .tool h3{font-size:21px;margin-bottom:8px;}
+  .tool p{color:var(--gris);font-size:14.5px;flex:1;}
+  .tool .go{margin-top:16px;color:var(--acento);font-weight:700;font-size:14.5px;}
+
+  /* COMO FUNCIONA */
+  .seccion{padding:20px 0 60px;}
+  .seccion h2{text-align:center;font-size:28px;margin-bottom:8px;}
+  .seccion .sub{text-align:center;color:var(--gris);margin-bottom:36px;}
+  .pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .paso{background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 8px 26px rgba(15,29,40,.06);}
+  .paso .n{width:42px;height:42px;border-radius:50%;background:var(--acento);color:#fff;font-weight:800;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:18px;}
+  .paso h4{font-size:16px;margin-bottom:6px;}
+  .paso p{font-size:13.5px;color:var(--gris);}
+
+  /* CIERRE */
+  .cierre{background:var(--acento);color:#fff;text-align:center;padding:54px 22px;border-radius:20px;margin:0 auto 60px;max-width:920px;}
+  .cierre h2{font-size:28px;margin-bottom:10px;color:#fff;}
+  .cierre p{color:#d7ece6;max-width:520px;margin:0 auto 26px;}
+
+  @media(max-width:680px){ .tools,.pasos{grid-template-columns:1fr;} .tools{margin-top:-30px;} }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html" class="activo">Inicio</a>
+    <a href="radar.html">Radar</a>
+    <a href="mapa.html">Mapa de calor</a>
+    <a href="contacto.html" class="btn-nav">Contacto</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="k">Personal Shopper Inmobiliario · Madrid</div>
+    <h1>Invierte en vivienda en Madrid con alguien de tu lado</h1>
+    <p>Te ayudo a encontrar, analizar y comprar el piso de inversión adecuado — defendiendo tus intereses desde la búsqueda hasta la firma ante notario.</p>
+    <div class="cta">
+      <a href="radar.html" class="btn btn-primario">Calcula dónde invertir →</a>
+      <a href="mapa.html" class="btn btn-fantasma">Ver rentabilidad por zona</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="tools">
+    <a class="tool" href="radar.html">
+      <div class="ico">🎯</div>
+      <h3>Radar de Inversión</h3>
+      <p>Dime tu capital y tu objetivo y descubre en 30 segundos en qué barrios de Madrid puedes comprar y a qué rentabilidad.</p>
+      <span class="go">Probar el Radar →</span>
+    </a>
+    <a class="tool" href="mapa.html">
+      <div class="ico">🗺️</div>
+      <h3>Mapa de calor de rentabilidad</h3>
+      <p>Explora la rentabilidad, el precio y el alquiler por distrito de Madrid, el área metropolitana y el Corredor del Henares.</p>
+      <span class="go">Abrir el mapa →</span>
+    </a>
+  </div>
+
+  <section class="seccion">
+    <h2>Cómo trabajamos</h2>
+    <p class="sub">Sencillo, transparente y a tu ritmo.</p>
+    <div class="pasos">
+      <div class="paso"><div class="n">1</div><h4>Exploras</h4><p>Usa el Radar y el mapa para entender dónde y cuánto puedes invertir en Madrid.</p></div>
+      <div class="paso"><div class="n">2</div><h4>Hablamos</h4><p>Una llamada sin compromiso para conocer tus objetivos y ver cómo puedo ayudarte.</p></div>
+      <div class="paso"><div class="n">3</div><h4>Compras bien</h4><p>Busco, negocio y te acompaño hasta la firma, con los números claros desde el día uno.</p></div>
+    </div>
+  </section>
+
+  <section class="cierre">
+    <h2>¿Damos el primer paso?</h2>
+    <p>Cuéntame qué buscas y vemos, sin compromiso, cómo invertir en Madrid de forma rentable.</p>
+    <a href="contacto.html" class="btn btn-fantasma">Contactar con David →</a>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
+  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+  <div class="legal">Las herramientas de esta web ofrecen estimaciones orientativas basadas en precios medios de mercado y no constituyen asesoramiento financiero ni una oferta.</div>
+</footer>
+
+</body>
+</html>

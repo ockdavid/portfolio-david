@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar de Inversión Madrid · ¿Dónde y cuánto puedes rentar?</title>
+<meta name="description" content="Descubre en segundos en qué barrios de Madrid puedes invertir con tu capital y qué rentabilidad alcanzarías. Análisis gratuito por David Landeo, Personal Shopper Inmobiliario.">
+<style>
+  :root{
+    --tinta:#0f1d28; --acento:#0e7c66; --acento-claro:#16a085; --oro:#c8a24a;
+    --suave:#f4f7f6; --linea:#e3eae8; --gris:#64757f; --blanco:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);
+    background:var(--suave);line-height:1.6;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px;}
+
+  /* HERO */
+  header.hero{background:linear-gradient(135deg,#0f1d28 0%,#173546 100%);color:#fff;padding:60px 0 70px;text-align:center;}
+  .kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--oro);font-weight:700;margin-bottom:16px;}
+  header.hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.1;max-width:760px;margin:0 auto;}
+  header.hero p{font-size:clamp(15px,2.5vw,19px);color:#aebfc7;max-width:560px;margin:18px auto 0;}
+  .scroll-hint{margin-top:30px;font-size:13px;color:#7c919c;}
+
+  /* TARJETA CALCULADORA */
+  .panel{background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(15,29,40,.12);
+    margin:-40px auto 40px;padding:32px;max-width:760px;}
+  .panel h2{font-size:20px;margin-bottom:6px;}
+  .panel .sub{color:var(--gris);font-size:14px;margin-bottom:24px;}
+  .campo{margin-bottom:22px;}
+  .campo label{display:block;font-weight:600;font-size:14px;margin-bottom:8px;}
+  .campo .hint{font-weight:400;color:var(--gris);font-size:12.5px;}
+  input[type=range]{width:100%;accent-color:var(--acento);height:6px;}
+  .valor-range{font-size:22px;font-weight:800;color:var(--acento);}
+  .opciones{display:flex;flex-wrap:wrap;gap:10px;}
+  .opciones button{flex:1;min-width:120px;border:2px solid var(--linea);background:#fff;border-radius:10px;
+    padding:12px 10px;font-size:13.5px;font-weight:600;color:var(--tinta);cursor:pointer;transition:.15s;font-family:inherit;}
+  .opciones button:hover{border-color:var(--acento-claro);}
+  .opciones button.activo{border-color:var(--acento);background:var(--suave);color:var(--acento);}
+  .btn-calcular{width:100%;background:var(--acento);color:#fff;border:none;border-radius:12px;padding:17px;
+    font-size:16px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;margin-top:6px;}
+  .btn-calcular:hover{background:#0b6353;}
+
+  /* RESULTADOS */
+  #resultados{display:none;margin-bottom:40px;}
+  .res-cabe{text-align:center;margin-bottom:24px;}
+  .res-cabe h2{font-size:24px;}
+  .res-cabe p{color:var(--gris);}
+  .res-resumen{background:#fff;border-radius:16px;padding:24px;display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:var(--linea);overflow:hidden;box-shadow:0 10px 30px rgba(15,29,40,.08);margin-bottom:22px;}
+  .res-resumen .celda{background:#fff;padding:18px;text-align:center;}
+  .res-resumen .et{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--gris);margin-bottom:6px;}
+  .res-resumen .n{font-size:24px;font-weight:800;color:var(--tinta);}
+  .res-resumen .n.verde{color:var(--acento);}
+  .barrios{display:flex;flex-direction:column;gap:12px;}
+  .barrio{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:16px;
+    box-shadow:0 6px 20px rgba(15,29,40,.06);border-left:5px solid var(--acento);}
+  .barrio .rank{font-size:22px;font-weight:800;color:var(--linea);min-width:30px;}
+  .barrio .info{flex:1;}
+  .barrio .info b{font-size:16px;}
+  .barrio .info span{display:block;font-size:12.5px;color:var(--gris);}
+  .barrio .rent{text-align:right;}
+  .barrio .rent .pct{font-size:22px;font-weight:800;color:var(--acento);}
+  .barrio .rent .lab{font-size:10.5px;color:var(--gris);text-transform:uppercase;letter-spacing:.4px;}
+  .sin-resultado{background:#fff7e8;border:1px solid #f0d9a8;border-radius:12px;padding:18px;color:#8a6516;font-size:14px;}
+
+  /* GATE / FORMULARIO */
+  .gate{background:linear-gradient(135deg,#0f1d28,#173546);color:#fff;border-radius:18px;padding:34px;margin-top:30px;text-align:center;}
+  .gate h3{font-size:22px;margin-bottom:10px;}
+  .gate p{color:#aebfc7;font-size:14.5px;max-width:480px;margin:0 auto 22px;}
+  .gate .check-list{display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;margin-bottom:24px;font-size:13.5px;color:#dce6ea;}
+  .gate .check-list span::before{content:"✓ ";color:var(--oro);font-weight:800;}
+  .gate form{max-width:420px;margin:0 auto;text-align:left;}
+  .gate input[type=text],.gate input[type=email],.gate input[type=tel]{
+    width:100%;padding:14px;border-radius:10px;border:none;margin-bottom:12px;font-size:15px;font-family:inherit;}
+  .gate .consent{font-size:11.5px;color:#9fb0b8;display:flex;gap:8px;align-items:flex-start;margin:6px 0 18px;}
+  .gate .consent input{margin-top:3px;}
+  .gate button{width:100%;background:var(--oro);color:#0f1d28;border:none;border-radius:11px;padding:16px;
+    font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;transition:.15s;}
+  .gate button:hover{background:#d9b35c;}
+  .gate .ok{display:none;font-size:17px;color:#fff;font-weight:600;}
+  .gate .ok b{color:var(--oro);}
+
+  /* CONFIANZA / FOOTER */
+  .confianza{text-align:center;padding:30px 0;}
+  .confianza .foto{width:84px;height:84px;border-radius:50%;background:var(--acento);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;margin:0 auto 14px;}
+  .confianza h4{font-size:18px;}
+  .confianza p{color:var(--gris);font-size:14px;max-width:520px;margin:6px auto 0;}
+  footer{background:var(--tinta);color:#aebfc7;text-align:center;padding:28px 20px;font-size:12.5px;line-height:1.8;}
+  footer b{color:#fff;}
+  footer .legal{font-size:10.5px;color:#5f747f;max-width:680px;margin:14px auto 0;}
+  @media(max-width:560px){
+    .panel{padding:22px;margin-top:-30px;}
+    .res-resumen{grid-template-columns:1fr;}
+    .res-resumen .celda{padding:14px;}
+  }
+</style>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Inicio</a>
+    <a href="radar.html" class="activo">Radar</a>
+    <a href="mapa.html">Mapa de calor</a>
+    <a href="contacto.html" class="btn-nav">Contacto</a>
+  </nav>
+</header>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Personal Shopper Inmobiliario · Madrid</div>
+    <h1>¿Dónde puedes invertir en Madrid con tu capital — y cuánto rentaría?</h1>
+    <p>Responde 4 preguntas y descubre en 30 segundos los barrios que encajan con tu bolsillo y tu objetivo. Gratis y sin compromiso.</p>
+    <div class="scroll-hint">↓ Empieza aquí abajo</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- CALCULADORA -->
+  <div class="panel" id="calculadora">
+    <h2>Tu radar de inversión</h2>
+    <p class="sub">Ajusta los valores. No pedimos ningún dato personal para ver el resultado.</p>
+
+    <div class="campo">
+      <label>1. ¿Cuánto capital propio tienes disponible? <span class="hint">(ahorros para entrada + gastos + reforma)</span></label>
+      <input type="range" id="capital" min="15000" max="200000" step="5000" value="60000" oninput="pintaCapital()">
+      <div class="valor-range" id="capital-val">60.000 €</div>
+    </div>
+
+    <div class="campo">
+      <label>2. ¿Vas a financiar con hipoteca?</label>
+      <div class="opciones" id="financiacion">
+        <button data-fin="0" onclick="elige(this,'financiacion')">Al contado</button>
+        <button data-fin="0.7" class="activo" onclick="elige(this,'financiacion')">Sí, ~70%</button>
+        <button data-fin="0.8" onclick="elige(this,'financiacion')">Sí, ~80%</button>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>3. ¿Qué buscas sobre todo?</label>
+      <div class="opciones" id="objetivo">
+        <button data-obj="rentabilidad" class="activo" onclick="elige(this,'objetivo')">Máxima rentabilidad</button>
+        <button data-obj="equilibrio" onclick="elige(this,'objetivo')">Equilibrio</button>
+        <button data-obj="patrimonio" onclick="elige(this,'objetivo')">Buen activo / patrimonio</button>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>4. Estado del piso que aceptarías <span class="hint">(afecta a la reforma estimada)</span></label>
+      <div class="opciones" id="reforma">
+        <button data-ref="8000" onclick="elige(this,'reforma')">Listo / lavado de cara</button>
+        <button data-ref="15000" class="activo" onclick="elige(this,'reforma')">Reforma media</button>
+        <button data-ref="30000" onclick="elige(this,'reforma')">Reforma integral</button>
+      </div>
+    </div>
+
+    <button class="btn-calcular" onclick="calcular()">Ver mis barrios y rentabilidad →</button>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="resultados">
+    <div class="res-cabe">
+      <h2>Esto es lo que tu capital puede conseguir en Madrid</h2>
+      <p>Estimación orientativa y conservadora. La realidad de cada operación se afina en una llamada.</p>
+    </div>
+
+    <div class="res-resumen">
+      <div class="celda"><div class="et">Precio de compra alcanzable</div><div class="n" id="r-precio">—</div></div>
+      <div class="celda"><div class="et">Inversión total estimada</div><div class="n" id="r-inv">—</div></div>
+      <div class="celda"><div class="et">Mejor rentabilidad bruta</div><div class="n verde" id="r-mejor">—</div></div>
+    </div>
+
+    <div class="barrios" id="lista-barrios"></div>
+
+    <!-- LEAD GATE -->
+    <div class="gate">
+      <h3>📩 Recibe tu informe completo + 1 oportunidad real</h3>
+      <p>Te envío el análisis detallado en PDF y, si encaja con tu perfil, una operación concreta que esté hoy sobre la mesa en Madrid.</p>
+      <div class="check-list">
+        <span>Informe personalizado en PDF</span>
+        <span>Una oportunidad real</span>
+        <span>Llamada sin compromiso</span>
+      </div>
+
+      <form id="lead-form" onsubmit="return enviarLead(event)">
+        <input type="text"  name="nombre"   placeholder="Tu nombre" required>
+        <input type="email" name="email"    placeholder="Tu email" required>
+        <input type="tel"   name="telefono" placeholder="Tu teléfono (WhatsApp)" required>
+        <input type="hidden" name="perfil"  id="campo-perfil">
+        <label class="consent">
+          <input type="checkbox" required>
+          Acepto que David Landeo me contacte sobre oportunidades de inversión y guarde mis datos conforme al RGPD.
+        </label>
+        <button type="submit">Quiero mi informe gratis</button>
+      </form>
+      <div class="ok" id="lead-ok">¡Gracias! 🎉 Te escribo en menos de <b>24 horas</b> con tu informe. — David</div>
+    </div>
+  </div>
+
+  <!-- CONFIANZA -->
+  <div class="confianza">
+    <div class="foto">DL</div>
+    <h4>David Landeo · Personal Shopper Inmobiliario</h4>
+    <p>Ayudo a inversores a encontrar y comprar vivienda rentable en Madrid, defendiendo siempre los intereses del comprador — desde la búsqueda hasta la firma ante notario.</p>
+    <p style="margin-top:18px;"><a href="mapa.html" class="btn btn-primario">🗺️ Ver la rentabilidad por zona en el mapa →</a></p>
+  </div>
+</div>
+
+<footer>
+  <b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid<br>
+  📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com
+  <div class="legal">Esta herramienta ofrece estimaciones orientativas basadas en precios medios de mercado y no constituye asesoramiento financiero ni una oferta. Las cifras reales dependen de cada inmueble, de la financiación concedida y de las condiciones de mercado en cada momento.</div>
+</footer>
+
+<script>
+/* =====================================================================
+   DATOS DE BARRIOS DE MADRID  —  ⚠️ EDITA Y ACTUALIZA CON TUS DATOS REALES
+   precioM2 = precio medio de COMPRA por m² (€)
+   alquilerM2 = alquiler medio por m² al mes (€)
+   Valores aproximados de mercado; ajústalos a tu conocimiento de la zona.
+   ===================================================================== */
+const BARRIOS = [
+  {nombre:"Villaverde",          precioM2:2000, alquilerM2:13.0, perfil:"rentabilidad"},
+  {nombre:"Puente de Vallecas",  precioM2:2350, alquilerM2:14.5, perfil:"rentabilidad"},
+  {nombre:"Usera",               precioM2:2450, alquilerM2:14.5, perfil:"rentabilidad"},
+  {nombre:"Carabanchel",         precioM2:2650, alquilerM2:15.0, perfil:"equilibrio"},
+  {nombre:"Latina",              precioM2:2800, alquilerM2:15.0, perfil:"equilibrio"},
+  {nombre:"Ciudad Lineal",       precioM2:3100, alquilerM2:15.5, perfil:"equilibrio"},
+  {nombre:"Tetuán",              precioM2:3600, alquilerM2:16.5, perfil:"patrimonio"},
+  {nombre:"Arganzuela",          precioM2:4600, alquilerM2:18.0, perfil:"patrimonio"},
+  {nombre:"Chamberí",            precioM2:5800, alquilerM2:19.5, perfil:"patrimonio"},
+];
+
+/* ---- estado del formulario ---- */
+const sel = {fin:0.7, obj:"rentabilidad", ref:15000};
+const eur = n => Math.round(n).toLocaleString('es-ES') + " €";
+
+function pintaCapital(){
+  document.getElementById('capital-val').textContent = eur(+document.getElementById('capital').value);
+}
+function elige(btn, grupo){
+  document.querySelectorAll('#'+grupo+' button').forEach(b=>b.classList.remove('activo'));
+  btn.classList.add('activo');
+  if(grupo==='financiacion') sel.fin = parseFloat(btn.dataset.fin);
+  if(grupo==='objetivo')     sel.obj = btn.dataset.obj;
+  if(grupo==='reforma')      sel.ref = parseFloat(btn.dataset.ref);
+}
+
+function calcular(){
+  const capital = +document.getElementById('capital').value;
+  const fin = sel.fin, reforma = sel.ref;
+  const PSI = 2420; // honorarios PSI con IVA
+  // Factores sobre el precio de compra (P):
+  // entrada = (1-fin)*P ; ITP 6% ; notaría+gestoría 2% ; comisión inmob 3%
+  const factor = (1 - fin) + 0.06 + 0.02 + 0.03;
+  // capital = factor*P + reforma + PSI  ->  P = (capital - reforma - PSI)/factor
+  const P = (capital - reforma - PSI) / factor;
+
+  const cont = document.getElementById('lista-barrios');
+  cont.innerHTML = "";
+
+  if(P < 50000){
+    document.getElementById('resultados').style.display='block';
+    document.getElementById('r-precio').textContent = "—";
+    document.getElementById('r-inv').textContent = "—";
+    document.getElementById('r-mejor').textContent = "—";
+    cont.innerHTML = '<div class="sin-resultado">Con estos parámetros, el capital se queda algo justo para comprar bien en Madrid capital. Te puedo mostrar opciones en zonas más asequibles o un plan para llegar. Déjame tus datos abajo y lo vemos juntos.</div>';
+    document.getElementById('campo-perfil').value = perfilTexto(capital, P);
+    document.getElementById('resultados').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  const inversionTotal = P + P*0.06 + P*0.02 + P*0.03 + reforma + PSI;
+
+  // calcula rentabilidad por barrio asumiendo un piso comprable a precio P
+  let resultados = BARRIOS.map(b=>{
+    const m2 = P / b.precioM2;                       // m² que compras con P
+    const alquilerMes = m2 * b.alquilerM2 * 0.92;    // -8% conservador
+    const rentab = (alquilerMes*12) / inversionTotal * 100;
+    return {...b, m2, alquilerMes, rentab};
+  }).filter(b => b.m2 >= 38 && b.m2 <= 130);         // pisos con tamaño razonable
+
+  // ordena según objetivo
+  if(sel.obj === 'patrimonio'){
+    resultados.sort((a,b)=> b.precioM2 - a.precioM2); // zonas mejores primero
+  } else {
+    resultados.sort((a,b)=> b.rentab - a.rentab);     // más rentables primero
+  }
+  resultados = resultados.slice(0,3);
+
+  // pinta resumen
+  document.getElementById('r-precio').textContent = eur(P);
+  document.getElementById('r-inv').textContent = eur(inversionTotal);
+  const mejor = Math.max(...resultados.map(r=>r.rentab));
+  document.getElementById('r-mejor').textContent = mejor.toFixed(1).replace('.',',') + " %";
+
+  // pinta barrios
+  resultados.forEach((b,i)=>{
+    cont.innerHTML += `
+      <div class="barrio">
+        <div class="rank">${i+1}</div>
+        <div class="info">
+          <b>${b.nombre}</b>
+          <span>~${Math.round(b.m2)} m² · alquiler estimado ${eur(b.alquilerMes)}/mes</span>
+        </div>
+        <div class="rent">
+          <div class="pct">${b.rentab.toFixed(1).replace('.',',')}%</div>
+          <div class="lab">rent. bruta</div>
+        </div>
+      </div>`;
+  });
+
+  document.getElementById('campo-perfil').value = perfilTexto(capital, P, resultados);
+  document.getElementById('resultados').style.display='block';
+  document.getElementById('resultados').scrollIntoView({behavior:'smooth'});
+}
+
+function perfilTexto(capital, P, res){
+  const barrios = res ? res.map(r=>r.nombre).join(', ') : 'zonas asequibles';
+  return `Capital: ${eur(capital)} | Financiación: ${sel.fin*100}% | Objetivo: ${sel.obj} | Reforma: ${eur(sel.ref)} | Precio alcanzable: ${eur(P)} | Barrios sugeridos: ${barrios}`;
+}
+
+/* ---- ENVÍO DEL LEAD ----
+   OPCIÓN A (recomendada): crea una cuenta gratis en https://formspree.io,
+   crea un formulario y pega aquí tu endpoint en FORM_ENDPOINT.
+   OPCIÓN B: deja FORM_ENDPOINT vacío y caerá al modo "mailto" (abre el correo).  */
+const FORM_ENDPOINT = ""; // <-- pega aquí "https://formspree.io/f/TU_ID"
+
+function enviarLead(e){
+  e.preventDefault();
+  const form = e.target;
+  const datos = {
+    nombre:   form.nombre.value,
+    email:    form.email.value,
+    telefono: form.telefono.value,
+    perfil:   form.perfil.value
+  };
+
+  if(FORM_ENDPOINT){
+    fetch(FORM_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(datos)
+    }).then(()=>mostrarOk(form)).catch(()=>fallbackMail(datos));
+  } else {
+    fallbackMail(datos);
+    mostrarOk(form);
+  }
+  return false;
+}
+function mostrarOk(form){
+  form.style.display='none';
+  document.getElementById('lead-ok').style.display='block';
+}
+function fallbackMail(d){
+  const cuerpo = `Nombre: ${d.nombre}%0AEmail: ${d.email}%0ATeléfono: ${d.telefono}%0A%0APerfil:%0A${encodeURIComponent(d.perfil)}`;
+  window.location.href = `mailto:davidwp37@gmail.com?subject=Nuevo lead - Radar de Inversión&body=${cuerpo}`;
+}
+
+pintaCapital();
+</script>
+</body>
+</html>
