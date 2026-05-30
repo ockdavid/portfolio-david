@@ -18,7 +18,7 @@
   .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
 
   /* TARJETAS HERRAMIENTAS */
-  .tools{margin:-50px auto 50px;display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:920px;}
+  .tools{margin:-50px auto 50px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:980px;}
   .tool{background:#fff;border-radius:18px;box-shadow:0 16px 50px rgba(15,29,40,.12);padding:30px;text-decoration:none;color:var(--tinta);
     transition:.18s;border:1px solid transparent;display:flex;flex-direction:column;}
   .tool:hover{transform:translateY(-4px);border-color:var(--acento);box-shadow:0 22px 60px rgba(15,29,40,.18);}
@@ -55,6 +55,7 @@
   </a>
   <nav class="links">
     <a href="index.html" class="activo">Inicio</a>
+    <a href="servicio.html">Servicio</a>
     <a href="radar.html">Radar</a>
     <a href="mapa.html">Mapa de calor</a>
     <a href="contacto.html" class="btn-nav">Contacto</a>
@@ -69,12 +70,19 @@
     <div class="cta">
       <a href="radar.html" class="btn btn-primario">Calcula dónde invertir →</a>
       <a href="mapa.html" class="btn btn-fantasma">Ver rentabilidad por zona</a>
+      <a href="servicio.html" class="btn btn-fantasma">Servicio PSI</a>
     </div>
   </div>
 </section>
 
 <div class="wrap">
   <div class="tools">
+    <a class="tool" href="servicio.html">
+      <div class="ico">🛎️</div>
+      <h3>Servicio PSI</h3>
+      <p>Qué es un Personal Shopper Inmobiliario, qué hace, qué incluye y cómo te acompaño en toda la compra.</p>
+      <span class="go">Ver el servicio →</span>
+    </a>
     <a class="tool" href="radar.html">
       <div class="ico">🎯</div>
       <h3>Radar de Inversión</h3>

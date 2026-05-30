@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicio PSI · David Landeo · Personal Shopper Inmobiliario en Madrid</title>
+<meta name="description" content="Qué es un Personal Shopper Inmobiliario, qué hace, qué incluye y cómo te acompaño en la compra de tu vivienda de inversión en Madrid.">
+<link rel="stylesheet" href="estilos.css">
+<style>
+  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0f1d28 0%,#173546 100%);color:#fff;text-align:center;padding:70px 0 78px;}
+  .hero .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--oro);font-weight:700;margin-bottom:16px;}
+  .hero h1{font-size:clamp(28px,4.6vw,42px);font-weight:800;line-height:1.12;max-width:740px;margin:0 auto;}
+  .hero p{font-size:clamp(15px,2.3vw,18px);color:#aebfc7;max-width:600px;margin:18px auto 0;}
+
+  /* SECCIONES */
+  section.blk{padding:54px 0;}
+  section.blk.alt{background:#fff;}
+  .blk h2{text-align:center;font-size:28px;margin-bottom:8px;}
+  .blk .sub{text-align:center;color:var(--gris);max-width:580px;margin:0 auto 36px;}
+  .barra{display:block;width:54px;height:4px;background:var(--acento);border-radius:2px;margin:0 auto 18px;}
+
+  /* QUE ES / QUE NO */
+  .contraste{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .cbox{border-radius:16px;padding:26px;box-shadow:0 8px 26px rgba(15,29,40,.07);}
+  .cbox.si{background:var(--suave);border-left:5px solid var(--acento);}
+  .cbox.no{background:#fff;border-left:5px solid #d8a23a;}
+  .cbox h3{font-size:18px;margin-bottom:12px;}
+  .cbox ul{list-style:none;padding:0;margin:0;}
+  .cbox li{position:relative;padding-left:26px;margin-bottom:10px;font-size:14px;color:#33444f;}
+  .cbox.si li::before{content:"✓";position:absolute;left:0;color:var(--acento);font-weight:800;}
+  .cbox.no li::before{content:"✕";position:absolute;left:0;color:#c0871f;font-weight:800;}
+
+  /* POR QUE (grid) */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .mini{background:#fff;border-radius:14px;padding:22px;box-shadow:0 8px 26px rgba(15,29,40,.06);}
+  section.alt .mini{background:var(--suave);}
+  .mini .ico{font-size:26px;margin-bottom:10px;}
+  .mini h4{font-size:15px;margin-bottom:6px;}
+  .mini p{font-size:13px;color:var(--gris);margin:0;}
+
+  /* PASOS (timeline) */
+  .pasos{max-width:760px;margin:0 auto;}
+  .paso{display:flex;gap:18px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--linea);}
+  .paso:last-child{border-bottom:none;}
+  .paso .num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--acento);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;}
+  .paso .tx b{display:block;font-size:16px;color:var(--tinta);}
+  .paso .tx span{font-size:13.5px;color:var(--gris);}
+
+  /* INCLUYE / NO INCLUYE */
+  .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .col-box{background:#fff;border-radius:16px;padding:26px;box-shadow:0 8px 26px rgba(15,29,40,.07);}
+  section.alt .col-box{background:var(--suave);}
+  .col-box h3{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .col-box ul{list-style:none;padding:0;margin:0;}
+  .col-box li{position:relative;padding-left:26px;margin-bottom:11px;font-size:13.8px;color:#33444f;}
+  .col-box.inc li::before{content:"✓";position:absolute;left:0;color:var(--acento);font-weight:800;}
+  .col-box.exc li::before{content:"→";position:absolute;left:0;color:var(--gris);font-weight:800;}
+  .col-box.exc li b{color:var(--tinta);}
+
+  /* PRESENTACION */
+  .present{max-width:760px;margin:0 auto;}
+  .present ul{list-style:none;padding:0;margin:0 0 18px;}
+  .present li{position:relative;padding-left:26px;margin-bottom:10px;font-size:14.5px;color:#33444f;}
+  .present li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;background:var(--acento);border-radius:50%;}
+  .nota{background:var(--suave);border-left:4px solid var(--oro);border-radius:0 8px 8px 0;padding:16px 18px;font-size:13.5px;color:#33444f;}
+  section.alt .nota{background:#fff;}
+
+  /* CTA */
+  .cierre{background:var(--acento);color:#fff;text-align:center;padding:56px 22px;}
+  .cierre h2{font-size:28px;margin-bottom:10px;color:#fff;}
+  .cierre p{color:#d7ece6;max-width:540px;margin:0 auto 26px;}
+  .cierre .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  @media(max-width:760px){
+    .contraste,.dos-col{grid-template-columns:1fr;}
+    .grid4{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:480px){ .grid4{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Inicio</a>
+    <a href="servicio.html" class="activo">Servicio</a>
+    <a href="radar.html">Radar</a>
+    <a href="mapa.html">Mapa de calor</a>
+    <a href="contacto.html" class="btn-nav">Contacto</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="k">El servicio · Personal Shopper Inmobiliario</div>
+    <h1>Compra tu vivienda de inversión con alguien que solo te defiende a ti</h1>
+    <p>Te acompaño en todo el proceso: busco, investigo, negocio y te guío hasta la firma ante notario, con los números claros desde el primer día.</p>
+  </div>
+</header>
+
+<!-- QUE ES / QUE NO -->
+<section class="blk">
+  <div class="wrap">
+    <span class="barra"></span>
+    <h2>¿Qué es un Personal Shopper Inmobiliario?</h2>
+    <p class="sub">Es la figura que ayuda al comprador a encontrar la oportunidad adecuada y le acompaña durante toda la compra, desde la búsqueda hasta la escritura.</p>
+    <div class="contraste">
+      <div class="cbox si">
+        <h3>Lo que sí soy</h3>
+        <ul>
+          <li>Defiendo tus intereses como comprador, no los del vendedor.</li>
+          <li>Tus ojos sobre el terreno: visito, reviso la zona, la comunidad y la nota simple.</li>
+          <li>Quien negocia el mejor precio y unas arras equilibradas para ti.</li>
+          <li>Tu red de confianza: inmobiliarias, reformistas, banca y notaría.</li>
+        </ul>
+      </div>
+      <div class="cbox no">
+        <h3>Lo que no soy</h3>
+        <ul>
+          <li>No soy un agente inmobiliario que trabaja para el vendedor.</li>
+          <li>No te reenvío operaciones sin filtrar: cada una pasa por mi criterio.</li>
+          <li>No te vendo expectativas: los números son conservadores y reales.</li>
+          <li>No desaparezco tras la compra: te acompaño hasta el final.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE -->
+<section class="blk alt">
+  <div class="wrap">
+    <span class="barra"></span>
+    <h2>¿Por qué contar conmigo?</h2>
+    <p class="sub">Invertir bien requiere tiempo, contactos y criterio. Yo pongo los tres a tu servicio.</p>
+    <div class="grid4">
+      <div class="mini"><div class="ico">⏱️</div><h4>Tu tiempo</h4><p>Me ocupo de la búsqueda, las visitas y la gestión para que tú no tengas que hacerlo.</p></div>
+      <div class="mini"><div class="ico">🤝</div><h4>Mis contactos</h4><p>Acceso a oportunidades que muchas veces ni llegan a publicarse.</p></div>
+      <div class="mini"><div class="ico">🛡️</div><h4>Tranquilidad</h4><p>Negociación, arras y números en manos de alguien que ya domina el proceso.</p></div>
+      <div class="mini"><div class="ico">📊</div><h4>Criterio</h4><p>Te digo con honestidad si una operación merece la pena o no.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO TRABAJO -->
+<section class="blk">
+  <div class="wrap">
+    <span class="barra"></span>
+    <h2>Cómo trabajo, paso a paso</h2>
+    <p class="sub">Un recorrido claro y ordenado, de principio a fin.</p>
+    <div class="pasos">
+      <div class="paso"><div class="num">1</div><div class="tx"><b>Reunión inicial</b><span>Conocemos tus objetivos, tu capital y tu perfil, y definimos qué buscamos.</span></div></div>
+      <div class="paso"><div class="num">2</div><div class="tx"><b>Búsqueda y localización</b><span>Activo mi red de inmobiliarias y filtro oportunidades que encajen contigo.</span></div></div>
+      <div class="paso"><div class="num">3</div><div class="tx"><b>Visitas e investigación</b><span>Visito, reviso nota simple, catastro, comunidad y zona. Descarto lo que no cumple.</span></div></div>
+      <div class="paso"><div class="num">4</div><div class="tx"><b>Presentación de la oportunidad</b><span>Te entrego una ficha visual con números conservadores y te ayudo a decidir.</span></div></div>
+      <div class="paso"><div class="num">5</div><div class="tx"><b>Negociación de precio y arras</b><span>Negocio el mejor precio y reviso las cláusulas del contrato para protegerte.</span></div></div>
+      <div class="paso"><div class="num">6</div><div class="tx"><b>Financiación y tasación</b><span>Te oriento y te pongo en contacto con los profesionales adecuados.</span></div></div>
+      <div class="paso"><div class="num">7</div><div class="tx"><b>Escritura ante notario</b><span>Reviso la documentación y los pagos para que firmes con total tranquilidad.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUYE / NO INCLUYE -->
+<section class="blk alt">
+  <div class="wrap">
+    <span class="barra"></span>
+    <h2>Qué incluye y dónde te doy solución</h2>
+    <p class="sub">Transparencia total sobre el alcance del acompañamiento.</p>
+    <div class="dos-col">
+      <div class="col-box inc">
+        <h3>✅ Incluye</h3>
+        <ul>
+          <li>Reunión inicial y definición de tu estrategia de inversión.</li>
+          <li>Búsqueda y localización de oportunidades a través de mi red.</li>
+          <li>Visitas e investigación a fondo del inmueble y la zona.</li>
+          <li>Análisis de rentabilidad con números conservadores.</li>
+          <li>Negociación del precio y de las cláusulas de las arras.</li>
+          <li>Acompañamiento hasta la firma de la escritura.</li>
+        </ul>
+      </div>
+      <div class="col-box exc">
+        <h3>↗️ No incluye (pero te doy salida)</h3>
+        <ul>
+          <li>No busco la financiación, pero <b>te conecto con brokers y banca</b> de confianza.</li>
+          <li>No respondo del trabajo de terceros, pero <b>coordino y superviso</b> a reformistas y tasador.</li>
+          <li>No garantizo la hipoteca, pero <b>preparo todo</b> para maximizar tus opciones.</li>
+          <li>No estoy disponible 24/7, pero sí <b>en los momentos clave</b>, con un sistema claro.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESENTACION -->
+<section class="blk">
+  <div class="wrap">
+    <span class="barra"></span>
+    <h2>Cómo te presento cada oportunidad</h2>
+    <p class="sub">Cuando encuentro un piso que encaja, lo recibes todo organizado y claro.</p>
+    <div class="present">
+      <ul>
+        <li><b>Ficha visual</b> con rentabilidad, ingresos y desglose de la inversión de un vistazo.</li>
+        <li><b>Fotos y vídeos</b> del piso, la finca y los alrededores.</li>
+        <li><b>Datos de catastro y nota simple</b> revisados, con cualquier detalle señalado.</li>
+        <li><b>Análisis de rentabilidad</b> (tradicional y/o por habitaciones) conservador.</li>
+        <li><b>Informe de la zona:</b> comunicaciones, gastos, motivo de venta y perfil de inquilino.</li>
+      </ul>
+      <div class="nota"><b>Números conservadores a propósito.</b> Estimo el alquiler por debajo de lo que sé que se conseguirá y añado margen a la reforma. Prefiero que la realidad te dé una alegría, no un disgusto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cierre">
+  <h2>¿Vemos si puedo ayudarte?</h2>
+  <p>Calcula dónde invertir con tu capital o cuéntame qué buscas. Primera toma de contacto sin compromiso.</p>
+  <div class="cta">
+    <a href="radar.html" class="btn btn-fantasma">Calcula tu inversión →</a>
+    <a href="contacto.html" class="btn btn-fantasma">Contactar con David</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
+  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+  <div class="legal">Información orientativa sobre el servicio. No constituye asesoramiento financiero ni una oferta.</div>
+</footer>
+
+</body>
+</html>
