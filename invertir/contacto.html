@@ -83,6 +83,9 @@
       <button type="submit">Enviar</button>
     </form>
     <div class="ok" id="ok">¡Gracias! 🎉 Te contacto en menos de 24 horas. — David</div>
+    <div class="err" id="err" style="display:none;text-align:center;color:#b4231f;font-size:13.5px;margin-top:10px;">
+      No se pudo enviar ahora mismo. Escríbeme a <b>davidwp37@gmail.com</b> o llámame al <b>695 128 762</b>.
+    </div>
   </div>
 </div>
 
@@ -92,23 +95,27 @@
 </footer>
 
 <script>
-/* Para recibir los envíos: crea un formulario gratis en https://formspree.io
-   y pega tu endpoint en FORM_ENDPOINT. Si lo dejas vacío, abre el correo (mailto). */
-const FORM_ENDPOINT = "";
+/* Envío directo SIN abrir el correo del visitante (vía FormSubmit, gratis y sin cuenta).
+   Los mensajes llegan a tu email. ⚠️ La PRIMERA vez recibirás un correo de FormSubmit
+   pidiéndote ACTIVAR el formulario: haz clic en su enlace una sola vez y listo. */
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/davidwp37@gmail.com";
 function enviar(e){
   e.preventDefault();
   const f = e.target;
-  const d = {nombre:f.nombre.value,email:f.email.value,telefono:f.telefono.value,mensaje:f.mensaje.value};
-  if(FORM_ENDPOINT){
-    fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)})
-      .then(()=>ok(f)).catch(()=>mail(d));
-  } else { mail(d); ok(f); }
+  const btn = f.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  const d = {
+    nombre:f.nombre.value, email:f.email.value, telefono:f.telefono.value, mensaje:f.mensaje.value,
+    _subject:'Nuevo contacto desde la web', _template:'table', _captcha:'false'
+  };
+  fetch(FORM_ENDPOINT,{
+    method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify(d)
+  })
+  .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+  .then(() => { f.style.display='none'; document.getElementById('ok').style.display='block'; })
+  .catch(() => { btn.disabled=false; btn.textContent='Enviar'; document.getElementById('err').style.display='block'; });
   return false;
-}
-function ok(f){ f.style.display='none'; document.getElementById('ok').style.display='block'; }
-function mail(d){
-  const c = `Nombre: ${d.nombre}%0AEmail: ${d.email}%0ATel: ${d.telefono}%0A%0A${encodeURIComponent(d.mensaje)}`;
-  window.location.href = `mailto:davidwp37@gmail.com?subject=Contacto web&body=${c}`;
 }
 </script>
 </body>

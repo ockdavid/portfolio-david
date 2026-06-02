@@ -203,6 +203,7 @@
         <button type="submit">Quiero mi informe gratis</button>
       </form>
       <div class="ok" id="lead-ok">¡Gracias! 🎉 Te escribo en menos de <b>24 horas</b> con tu informe. — David</div>
+      <div class="ok" id="lead-err" style="display:none;color:#ffd9d6;">No se pudo enviar ahora mismo. Escríbeme a <b>davidwp37@gmail.com</b> o al <b>695 128 762</b>.</div>
     </div>
   </div>
 
@@ -330,40 +331,32 @@ function perfilTexto(capital, P, res){
 }
 
 /* ---- ENVÍO DEL LEAD ----
-   OPCIÓN A (recomendada): crea una cuenta gratis en https://formspree.io,
-   crea un formulario y pega aquí tu endpoint en FORM_ENDPOINT.
-   OPCIÓN B: deja FORM_ENDPOINT vacío y caerá al modo "mailto" (abre el correo).  */
-const FORM_ENDPOINT = ""; // <-- pega aquí "https://formspree.io/f/TU_ID"
+   Envío directo SIN abrir el correo del visitante (vía FormSubmit, gratis y sin cuenta).
+   Los leads llegan a tu email. ⚠️ La PRIMERA vez recibirás un correo de FormSubmit para
+   ACTIVAR el formulario: haz clic en su enlace una sola vez y listo. */
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/davidwp37@gmail.com";
 
 function enviarLead(e){
   e.preventDefault();
   const form = e.target;
+  const btn = form.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Enviando…';
   const datos = {
-    nombre:   form.nombre.value,
-    email:    form.email.value,
-    telefono: form.telefono.value,
-    perfil:   form.perfil.value
+    nombre: form.nombre.value, email: form.email.value, telefono: form.telefono.value, perfil: form.perfil.value,
+    _subject:'Nuevo lead - Radar de Inversión', _template:'table', _captcha:'false'
   };
-
-  if(FORM_ENDPOINT){
-    fetch(FORM_ENDPOINT, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(datos)
-    }).then(()=>mostrarOk(form)).catch(()=>fallbackMail(datos));
-  } else {
-    fallbackMail(datos);
-    mostrarOk(form);
-  }
+  fetch(FORM_ENDPOINT, {
+    method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify(datos)
+  })
+  .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+  .then(() => mostrarOk(form))
+  .catch(() => { btn.disabled=false; btn.textContent='Quiero mi informe gratis'; document.getElementById('lead-err').style.display='block'; });
   return false;
 }
 function mostrarOk(form){
   form.style.display='none';
   document.getElementById('lead-ok').style.display='block';
-}
-function fallbackMail(d){
-  const cuerpo = `Nombre: ${d.nombre}%0AEmail: ${d.email}%0ATeléfono: ${d.telefono}%0A%0APerfil:%0A${encodeURIComponent(d.perfil)}`;
-  window.location.href = `mailto:davidwp37@gmail.com?subject=Nuevo lead - Radar de Inversión&body=${cuerpo}`;
 }
 
 pintaCapital();
