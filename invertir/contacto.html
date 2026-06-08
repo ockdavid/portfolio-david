@@ -84,6 +84,10 @@
   <div class="form">
     <h2>O déjame tus datos y te contacto yo</h2>
     <p class="form-sub">Te respondo en menos de 24 horas. Sin compromiso.</p>
+    <div class="clausula-info">
+      <strong>Información básica sobre protección de datos</strong><br>
+      Responsable: David Landeo (NIF: [NIF]). Finalidad: atender tu solicitud de contacto e información sobre el servicio. Legitimación: tu consentimiento. Puedes ejercer tus derechos y obtener más información en nuestra <a href="privacidad.html">política de privacidad</a>.
+    </div>
     <form id="form-contacto" onsubmit="return enviar(event)">
       <input type="text"  name="nombre"   placeholder="Tu nombre" required>
       <input type="email" name="email"    placeholder="Tu email" required>
@@ -91,7 +95,7 @@
       <textarea name="mensaje" placeholder="Cuéntame brevemente qué buscas (capital, zona, objetivo…)"></textarea>
       <label class="consent">
         <input type="checkbox" required>
-        Acepto que David Landeo me contacte y guarde mis datos conforme al RGPD.
+        He leído y acepto la <a href="privacidad.html" style="color:var(--gold);font-weight:700;">política de privacidad</a> y consiento que David Landeo me contacte y trate mis datos para atender mi consulta.
       </label>
       <button type="submit">Enviar <span class="ic">{{ARROW}}</span></button>
     </form>
@@ -113,7 +117,14 @@
       <a href="mailto:davidwp37@gmail.com"><span class="ic">{{MAIL}}</span> davidwp37@gmail.com</a>
     </div>
   </div>
-  <div class="legal">Tus datos se tratan conforme al RGPD y solo se usan para contactarte sobre tu consulta.</div>
+  <div class="legal">
+    Tus datos se tratan conforme al RGPD y la LOPDGDD y solo se usan para atender tu consulta.
+    <div class="ft-legal-links">
+      <a href="privacidad.html">Política de privacidad</a>
+      <span class="legal-sep">·</span>
+      <span class="legal-pending">Aviso legal (próximamente)</span>
+    </div>
+  </div>
 </footer>
 
 <script>
