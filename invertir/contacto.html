@@ -5,36 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contacto · David Landeo · Personal Shopper Inmobiliario</title>
 <meta name="description" content="Contacta con David Landeo, Personal Shopper Inmobiliario en Madrid. Llamada sin compromiso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 <style>
-  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;
-    min-height:100vh;display:flex;flex-direction:column;}
-  .wrap{max-width:680px;margin:0 auto;padding:0 22px;flex:1;width:100%;}
-  .cab{text-align:center;padding:56px 0 30px;}
-  .cab .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--acento);font-weight:700;margin-bottom:14px;}
-  .cab h1{font-size:34px;}
-  .cab p{color:var(--gris);max-width:480px;margin:12px auto 0;}
+  body{min-height:100vh;display:flex;flex-direction:column;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 22px;flex:1;width:100%;}
+  .cab{text-align:center;padding:64px 0 32px;}
+  .cab .eyebrow{justify-content:center;}
+  .cab h1{font-size:clamp(32px,4.6vw,46px);margin-top:18px;}
+  .cab p{color:var(--ink-70);max-width:48ch;margin:16px auto 0;}
 
-  .tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0 30px;}
-  .tarjeta{background:#fff;border-radius:14px;padding:22px;text-align:center;text-decoration:none;color:var(--tinta);
-    box-shadow:0 8px 26px rgba(15,29,40,.07);transition:.15s;}
-  .tarjeta:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(15,29,40,.13);}
-  .tarjeta .ico{font-size:30px;margin-bottom:10px;}
-  .tarjeta b{display:block;font-size:16px;margin-bottom:4px;}
-  .tarjeta span{font-size:14px;color:var(--acento);font-weight:600;}
+  .tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0 28px;}
+  .tarjeta{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;
+    display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);
+    box-shadow:0 8px 24px rgba(14,27,36,.06);transition:.16s;}
+  .tarjeta:hover{transform:translateY(-3px);border-color:rgba(176,130,49,.4);box-shadow:0 14px 34px rgba(14,27,36,.12);}
+  .tarjeta .icon-chip{width:48px;height:48px;flex:none;}
+  .tarjeta b{display:block;font-family:var(--serif);font-size:17px;font-weight:600;margin-bottom:2px;}
+  .tarjeta span{font-size:14.5px;color:var(--gold);font-weight:700;}
 
-  .form{background:#fff;border-radius:16px;padding:30px;box-shadow:0 12px 40px rgba(15,29,40,.08);margin-bottom:50px;}
-  .form h2{font-size:20px;margin-bottom:18px;}
-  .form input,.form textarea{width:100%;padding:14px;border:1px solid var(--linea);border-radius:10px;
-    margin-bottom:12px;font-size:15px;font-family:inherit;}
-  .form textarea{min-height:110px;resize:vertical;}
-  .form .consent{font-size:11.5px;color:var(--gris);display:flex;gap:8px;align-items:flex-start;margin:4px 0 16px;}
-  .form button{width:100%;background:var(--acento);color:#fff;border:none;border-radius:11px;padding:16px;
-    font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .form button:hover{background:var(--acento2);}
-  .form .ok{display:none;text-align:center;font-size:16px;color:var(--acento);font-weight:600;}
+  .form{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px;
+    box-shadow:0 18px 48px rgba(14,27,36,.10);margin-bottom:54px;}
+  .form h2{font-size:22px;margin-bottom:6px;}
+  .form .form-sub{color:var(--muted);font-size:14px;margin-bottom:22px;}
+  .form input,.form textarea{width:100%;padding:15px;border:1px solid var(--line-strong);border-radius:11px;
+    margin-bottom:13px;font-size:15px;font-family:var(--sans);background:var(--paper);color:var(--ink);transition:.15s;}
+  .form input:focus,.form textarea:focus{outline:none;border-color:var(--gold);background:#fff;}
+  .form textarea{min-height:120px;resize:vertical;}
+  .form .consent{font-size:11.5px;color:var(--muted);display:flex;gap:9px;align-items:flex-start;margin:6px 0 18px;line-height:1.45;}
+  .form .consent input{width:auto;margin:3px 0 0;accent-color:var(--gold);}
+  .form button{width:100%;background:var(--gold);color:#fff;border:none;border-radius:12px;padding:17px;
+    font-size:16px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:.16s;
+    box-shadow:0 10px 26px rgba(176,130,49,.28);display:flex;align-items:center;justify-content:center;gap:10px;}
+  .form button:hover{background:#9a6f27;transform:translateY(-1px);}
+  .form button .ic{width:18px;height:18px;}
+  .form .ok{display:none;text-align:center;font-size:16px;color:var(--green);font-weight:600;line-height:1.6;padding:14px 0;}
 
-  @media(max-width:560px){ .tarjetas{grid-template-columns:1fr;} }
+  @media(max-width:560px){ .tarjetas{grid-template-columns:1fr;} .form{padding:26px;} }
 </style>
 <script src="nav.js" defer></script>
 </head>
@@ -56,22 +65,25 @@
 
 <div class="wrap">
   <div class="cab">
-    <div class="k">Hablemos</div>
+    <span class="eyebrow">Hablemos</span>
     <h1>¿Damos el primer paso?</h1>
     <p>Cuéntame qué buscas y vemos, sin compromiso, cómo invertir en Madrid de forma rentable.</p>
   </div>
 
   <div class="tarjetas">
     <a class="tarjeta" href="tel:+34695128762">
-      <div class="ico">📞</div><b>Llámame</b><span>695 128 762</span>
+      <span class="icon-chip"><span class="ic">{{PHONE}}</span></span>
+      <div><b>Llámame</b><span>695 128 762</span></div>
     </a>
     <a class="tarjeta" href="mailto:davidwp37@gmail.com">
-      <div class="ico">✉️</div><b>Escríbeme</b><span>davidwp37@gmail.com</span>
+      <span class="icon-chip"><span class="ic">{{MAIL}}</span></span>
+      <div><b>Escríbeme</b><span>davidwp37@gmail.com</span></div>
     </a>
   </div>
 
   <div class="form">
     <h2>O déjame tus datos y te contacto yo</h2>
+    <p class="form-sub">Te respondo en menos de 24 horas. Sin compromiso.</p>
     <form id="form-contacto" onsubmit="return enviar(event)">
       <input type="text"  name="nombre"   placeholder="Tu nombre" required>
       <input type="email" name="email"    placeholder="Tu email" required>
@@ -81,9 +93,9 @@
         <input type="checkbox" required>
         Acepto que David Landeo me contacte y guarde mis datos conforme al RGPD.
       </label>
-      <button type="submit">Enviar</button>
+      <button type="submit">Enviar <span class="ic">{{ARROW}}</span></button>
     </form>
-    <div class="ok" id="ok">¡Gracias! 🎉 Te contacto en menos de 24 horas. — David</div>
+    <div class="ok" id="ok">¡Gracias! Te contacto en menos de 24 horas. — David</div>
     <div class="err" id="err" style="display:none;text-align:center;color:#b4231f;font-size:13.5px;margin-top:10px;">
       No se pudo enviar ahora mismo. Escríbeme a <b>davidwp37@gmail.com</b> o llámame al <b>695 128 762</b>.
     </div>
@@ -91,8 +103,17 @@
 </div>
 
 <footer class="site-footer">
-  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
-  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+  <div class="ft-in">
+    <div class="ft-brand">
+      <span class="logo">DL</span>
+      <div><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></div>
+    </div>
+    <div class="ft-contact">
+      <a href="tel:+34695128762"><span class="ic">{{PHONE}}</span> 695 128 762</a>
+      <a href="mailto:davidwp37@gmail.com"><span class="ic">{{MAIL}}</span> davidwp37@gmail.com</a>
+    </div>
+  </div>
+  <div class="legal">Tus datos se tratan conforme al RGPD y solo se usan para contactarte sobre tu consulta.</div>
 </footer>
 
 <script>
@@ -119,5 +140,6 @@ function enviar(e){
   return false;
 }
 </script>
+<script src="iconos.js"></script>
 </body>
 </html>

@@ -5,66 +5,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mapa de calor · Rentabilidad por distrito · Madrid</title>
 <meta name="description" content="Mapa de calor interactivo de la rentabilidad del alquiler por distrito en Madrid. Por David Landeo, Personal Shopper Inmobiliario.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="estilos.css">
 <style>
-  :root{--tinta:#0f1d28;--acento:#0e7c66;--oro:#c8a24a;--gris:#64757f;--linea:#e3eae8;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);}
-  #map{position:absolute;top:62px;left:0;right:0;bottom:0;background:#eef2f3;z-index:1;}
+  html,body{height:100%;}
+  #map{position:absolute;top:var(--nav-h);left:0;right:0;bottom:0;background:#eef2f3;z-index:1;}
 
-  /* CABECERA FLOTANTE */
-  .titulo{position:absolute;top:78px;left:16px;z-index:1000;background:rgba(255,255,255,.96);
-    border-radius:14px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:16px 18px;max-width:340px;}
-  .titulo .k{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acento);font-weight:700;}
-  .titulo h1{font-size:18px;line-height:1.2;margin:4px 0 8px;}
-  .titulo p{font-size:12px;color:var(--gris);line-height:1.45;margin-bottom:12px;}
-  .toggle{display:flex;gap:6px;background:#eef2f3;border-radius:10px;padding:4px;}
-  .toggle button{flex:1;border:none;background:transparent;border-radius:7px;padding:8px 4px;font-size:11.5px;
-    font-weight:700;color:var(--gris);cursor:pointer;font-family:inherit;transition:.15s;}
-  .toggle button.activo{background:#fff;color:var(--acento);box-shadow:0 2px 6px rgba(15,29,40,.12);}
+  /* PANEL: TÍTULO + TOGGLE */
+  .titulo{position:absolute;top:calc(var(--nav-h) + 16px);left:16px;z-index:1000;
+    background:rgba(246,242,234,.96);backdrop-filter:blur(10px);
+    border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(14,27,36,.18);
+    padding:18px 20px;max-width:340px;}
+  .titulo .eyebrow{font-size:10.5px;margin-bottom:8px;}
+  .titulo h1{font-size:20px;line-height:1.15;margin:0 0 8px;}
+  .titulo p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 0 14px;}
+  .toggle{display:flex;gap:5px;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:4px;}
+  .toggle button{flex:1;border:none;background:transparent;border-radius:8px;padding:9px 4px;font-size:11.5px;
+    font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:.15s;}
+  .toggle button:hover{color:var(--ink);}
+  .toggle button.activo{background:var(--ink);color:var(--gold-bright);box-shadow:0 2px 8px rgba(14,27,36,.2);}
+  .titulo .cta-map{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;
+    background:var(--gold);color:#fff;text-decoration:none;font-weight:700;font-size:12.5px;padding:11px;border-radius:10px;
+    box-shadow:0 8px 20px rgba(176,130,49,.26);transition:.15s;}
+  .titulo .cta-map:hover{background:#9a6f27;}
+  .titulo .cta-map .ic{width:16px;height:16px;}
 
   /* PANEL RANKING */
-  .ranking{position:absolute;top:78px;right:16px;z-index:1000;background:rgba(255,255,255,.96);
-    border-radius:14px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:14px 16px;width:248px;max-height:calc(100vh - 96px);overflow:auto;}
-  .ranking h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--gris);margin-bottom:10px;}
-  .rank-row{display:flex;align-items:center;gap:10px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:.12s;}
-  .rank-row:hover{background:#eef6f4;}
-  .rank-row .pos{font-size:13px;font-weight:800;color:var(--linea);min-width:18px;}
-  .rank-row .dot{width:12px;height:12px;border-radius:3px;flex:0 0 12px;}
-  .rank-row .nm{flex:1;font-size:12.5px;font-weight:600;}
-  .rank-row .vl{font-size:13px;font-weight:800;color:var(--tinta);}
+  .ranking{position:absolute;top:calc(var(--nav-h) + 16px);right:16px;z-index:1000;
+    background:rgba(246,242,234,.96);backdrop-filter:blur(10px);
+    border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(14,27,36,.18);
+    padding:16px 16px;width:256px;max-height:calc(100vh - var(--nav-h) - 32px);overflow:auto;}
+  .ranking h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px;
+    font-family:var(--sans);font-weight:700;}
+  .rank-row{display:flex;align-items:center;gap:11px;padding:8px 7px;border-radius:9px;cursor:pointer;transition:.12s;}
+  .rank-row:hover{background:rgba(176,130,49,.1);}
+  .rank-row .pos{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--line-strong);min-width:18px;}
+  .rank-row .dot{width:12px;height:12px;border-radius:4px;flex:0 0 12px;}
+  .rank-row .nm{flex:1;font-size:12.5px;font-weight:600;color:var(--ink);}
+  .rank-row .vl{font-size:13px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;}
 
   /* LEYENDA */
-  .leyenda{position:absolute;bottom:74px;left:16px;z-index:1000;background:rgba(255,255,255,.96);
-    border-radius:12px;box-shadow:0 8px 30px rgba(15,29,40,.18);padding:12px 14px;font-size:11.5px;}
-  .leyenda b{display:block;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gris);}
-  .leyenda .fila{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .leyenda{position:absolute;bottom:74px;left:16px;z-index:1000;
+    background:rgba(246,242,234,.96);backdrop-filter:blur(10px);
+    border:1px solid var(--line);border-radius:13px;box-shadow:0 14px 40px rgba(14,27,36,.18);
+    padding:13px 15px;font-size:11.5px;}
+  .leyenda b{display:block;margin-bottom:9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+    font-family:var(--sans);font-weight:700;}
+  .leyenda .fila{display:flex;align-items:center;gap:9px;margin-bottom:5px;color:var(--ink-70);}
   .leyenda .sw{width:18px;height:14px;border-radius:3px;}
 
-  /* CONTACTO */
-  .contacto{position:absolute;bottom:16px;left:16px;right:auto;z-index:1000;background:var(--tinta);color:#fff;
-    border-radius:12px;box-shadow:0 8px 30px rgba(15,29,40,.25);padding:11px 16px;font-size:12px;display:flex;gap:12px;align-items:center;}
-  .contacto .av{width:34px;height:34px;border-radius:50%;background:var(--acento);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
-  .contacto b{color:#fff;}
-  .contacto span{color:#aebfc7;display:block;font-size:11px;}
+  /* CONTACTO FLOTANTE */
+  .contacto{position:absolute;bottom:16px;left:16px;z-index:1000;background:var(--ink);color:#fff;
+    border-radius:14px;box-shadow:0 14px 40px rgba(14,27,36,.3);padding:12px 17px;font-size:12px;
+    display:flex;gap:13px;align-items:center;border:1px solid rgba(216,178,94,.25);}
+  .contacto .av{width:38px;height:38px;border-radius:50%;background:rgba(216,178,94,.14);color:var(--gold-bright);
+    display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px;
+    border:1px solid rgba(216,178,94,.35);}
+  .contacto b{color:#fff;font-family:var(--serif);font-size:15px;font-weight:600;}
+  .contacto span{color:#9fb0b8;display:block;font-size:11px;margin-top:1px;}
 
   /* TOOLTIP leaflet */
-  .leaflet-tooltip.dist{background:var(--tinta);color:#fff;border:none;border-radius:8px;padding:7px 11px;
-    font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.3);}
-  .leaflet-tooltip.dist .big{font-size:16px;font-weight:800;color:var(--oro);}
+  .leaflet-tooltip.dist{background:var(--ink);color:#fff;border:none;border-radius:10px;padding:9px 13px;
+    font-family:var(--sans);font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid rgba(216,178,94,.3);}
+  .leaflet-tooltip.dist .big{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--gold-bright);margin-top:2px;}
   .leaflet-tooltip.dist:before{display:none;}
 
-  .aviso{position:absolute;bottom:16px;right:16px;z-index:1000;font-size:10px;color:#7b8b94;
-    background:rgba(255,255,255,.85);border-radius:8px;padding:6px 10px;max-width:230px;line-height:1.4;}
+  .aviso{position:absolute;bottom:16px;right:16px;z-index:1000;font-size:10px;color:var(--muted);
+    background:rgba(246,242,234,.9);border:1px solid var(--line);border-radius:10px;padding:7px 11px;max-width:240px;line-height:1.45;}
 
-  @media(max-width:720px){
+  @media(max-width:760px){
     .ranking{display:none;}
     .titulo{max-width:calc(100% - 32px);}
-    .leyenda{bottom:96px;}
+    .leyenda{bottom:104px;}
+    .contacto{bottom:16px;font-size:11px;}
   }
 </style>
-<link rel="stylesheet" href="estilos.css">
-<script src="nav.js" defer></script>
 </head>
 <body class="mapa">
 
@@ -85,7 +103,7 @@
 <div id="map"></div>
 
 <div class="titulo">
-  <div class="k">David Landeo · PSI Madrid</div>
+  <span class="eyebrow">David Landeo · PSI Madrid</span>
   <h1>Mapa de calor de rentabilidad</h1>
   <p>Rentabilidad bruta del alquiler por distrito de Madrid, área metropolitana y Corredor del Henares. Pasa el ratón o toca una zona.</p>
   <div class="toggle" id="toggle">
@@ -93,8 +111,7 @@
     <button data-m="precio">Precio m²</button>
     <button data-m="alquiler">Alquiler m²</button>
   </div>
-  <a href="radar.html" style="display:block;text-align:center;margin-top:10px;background:var(--acento);color:#fff;
-     text-decoration:none;font-weight:700;font-size:12.5px;padding:9px;border-radius:9px;">🎯 Calcula tu inversión →</a>
+  <a href="radar.html" class="cta-map"><span class="ic">{{TARGET}}</span> Calcula tu inversión</a>
 </div>
 
 <div class="ranking">
@@ -261,5 +278,6 @@ document.getElementById('toggle').addEventListener('click',e=>{
 
 pintaTodo();
 </script>
+<script src="iconos.js"></script>
 </body>
 </html>

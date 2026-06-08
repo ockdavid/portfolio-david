@@ -5,45 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>David Landeo · Personal Shopper Inmobiliario en Madrid</title>
 <meta name="description" content="Te ayudo a encontrar y comprar vivienda de inversión rentable en Madrid. Calcula dónde invertir y consulta la rentabilidad por zona.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 <style>
-  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 22px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
 
-  /* HERO */
-  .hero{background:linear-gradient(135deg,#0f1d28 0%,#173546 100%);color:#fff;text-align:center;padding:80px 0 88px;}
-  .hero .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--oro);font-weight:700;margin-bottom:18px;}
-  .hero h1{font-size:clamp(30px,5vw,48px);font-weight:800;line-height:1.1;max-width:780px;margin:0 auto;}
-  .hero p{font-size:clamp(15px,2.4vw,19px);color:#aebfc7;max-width:600px;margin:20px auto 32px;}
-  .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(120% 130% at 85% 0%, rgba(216,178,94,.10) 0%, transparent 55%),
+      linear-gradient(160deg,#0e1b24 0%,#152a36 60%,#1c3340 100%);
+    color:#fff;padding:84px 0 96px;overflow:hidden;position:relative;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  .hero .eyebrow{color:var(--gold-bright);}
+  .hero .eyebrow::before{background:var(--gold-bright);}
+  .hero h1{font-size:clamp(34px,5vw,56px);font-weight:600;line-height:1.06;margin:22px 0 0;max-width:14ch;}
+  .hero h1 em{font-style:italic;color:var(--gold-bright);}
+  .hero .sub{font-size:clamp(16px,2.1vw,19px);color:#b3c2c9;max-width:46ch;margin:24px 0 34px;line-height:1.6;}
+  .hero .cta{display:flex;gap:14px;flex-wrap:wrap;}
+  .hero .reassure{margin-top:26px;display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:#9fb0b8;}
+  .hero .reassure span{display:inline-flex;align-items:center;gap:8px;}
+  .hero .reassure .ic{width:16px;height:16px;color:var(--gold-bright);}
 
-  /* TARJETAS HERRAMIENTAS */
-  .tools{margin:-50px auto 50px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:980px;}
-  .tool{background:#fff;border-radius:18px;box-shadow:0 16px 50px rgba(15,29,40,.12);padding:30px;text-decoration:none;color:var(--tinta);
-    transition:.18s;border:1px solid transparent;display:flex;flex-direction:column;}
-  .tool:hover{transform:translateY(-4px);border-color:var(--acento);box-shadow:0 22px 60px rgba(15,29,40,.18);}
-  .tool .ico{font-size:34px;margin-bottom:14px;}
-  .tool h3{font-size:21px;margin-bottom:8px;}
-  .tool p{color:var(--gris);font-size:14.5px;flex:1;}
-  .tool .go{margin-top:16px;color:var(--acento);font-weight:700;font-size:14.5px;}
+  /* Tarjeta visual del hero (foto de David + Cuatro Torres) */
+  .hero-card{
+    position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/4.4;
+    border:1px solid rgba(255,255,255,.12);
+    background:
+      linear-gradient(180deg, rgba(14,27,36,.05), rgba(14,27,36,.55)),
+      repeating-linear-gradient(135deg,#1d3240 0 2px,#1a2e3a 2px 22px);
+    box-shadow:0 30px 70px rgba(0,0,0,.35);
+  }
+  /* La foto real: se coloca aquí y cubre toda la tarjeta */
+  .hero-card .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+  /* Degradado inferior para que el rótulo se lea siempre sobre la foto */
+  .hero-card::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, transparent 45%, rgba(14,27,36,.65) 100%);}
+  /* Aviso visible solo mientras NO haya foto (se oculta automáticamente al cargar la imagen) */
+  .hero-card .ph-note{
+    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;color:rgba(255,255,255,.6);text-align:center;padding:24px;z-index:1;
+  }
+  .hero-card .ph-note .ic{width:38px;height:38px;color:rgba(216,178,94,.7);}
+  .hero-card .ph-note small{font-size:12px;letter-spacing:.04em;max-width:24ch;line-height:1.5;}
+  .hero-card .tag{
+    position:absolute;left:18px;bottom:18px;right:18px;background:rgba(14,27,36,.72);
+    backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:13px;
+    padding:14px 16px;display:flex;align-items:center;gap:13px;z-index:2;
+  }
+  .hero-card .tag .num{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold-bright);line-height:1;}
+  .hero-card .tag .lab{font-size:12px;color:#c5d2d8;line-height:1.35;}
 
-  /* COMO FUNCIONA */
-  .seccion{padding:20px 0 60px;}
-  .seccion h2{text-align:center;font-size:28px;margin-bottom:8px;}
-  .seccion .sub{text-align:center;color:var(--gris);margin-bottom:36px;}
-  .pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .paso{background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 8px 26px rgba(15,29,40,.06);}
-  .paso .n{width:42px;height:42px;border-radius:50%;background:var(--acento);color:#fff;font-weight:800;
-    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:18px;}
-  .paso h4{font-size:16px;margin-bottom:6px;}
-  .paso p{font-size:13.5px;color:var(--gris);}
+  /* ---------- TARJETAS HERRAMIENTAS ---------- */
+  .tools{margin:-56px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:5;}
+  .tool{
+    background:var(--card);border-radius:18px;border:1px solid var(--line);
+    box-shadow:0 18px 46px rgba(14,27,36,.10);padding:30px 28px 26px;
+    text-decoration:none;color:var(--ink);transition:.2s;display:flex;flex-direction:column;
+  }
+  .tool:hover{transform:translateY(-5px);border-color:rgba(176,130,49,.4);box-shadow:0 26px 60px rgba(14,27,36,.16);}
+  .tool h3{font-size:21px;margin:18px 0 9px;}
+  .tool p{color:var(--muted);font-size:14.5px;flex:1;line-height:1.55;}
+  .tool .go{margin-top:18px;color:var(--gold);font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:7px;}
+  .tool .go .ic{width:16px;height:16px;transition:.2s;}
+  .tool:hover .go .ic{transform:translateX(4px);}
 
-  /* CIERRE */
-  .cierre{background:var(--acento);color:#fff;text-align:center;padding:54px 22px;border-radius:20px;margin:0 auto 60px;max-width:920px;}
-  .cierre h2{font-size:28px;margin-bottom:10px;color:#fff;}
-  .cierre p{color:#d7ece6;max-width:520px;margin:0 auto 26px;}
+  /* ---------- BANDA DE CONFIANZA ---------- */
+  .promise{padding:84px 0 30px;}
+  .promise-head{max-width:60ch;}
+  .promise h2{font-size:clamp(28px,3.6vw,40px);margin-top:18px;}
+  .promise-head p{margin-top:16px;color:var(--ink-70);}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:46px;}
+  .pillar{padding:28px 26px;background:var(--card);border:1px solid var(--line);border-radius:16px;}
+  .pillar h4{font-size:18px;margin:16px 0 8px;}
+  .pillar p{font-size:14px;color:var(--muted);margin:0;line-height:1.55;}
 
-  @media(max-width:680px){ .tools,.pasos{grid-template-columns:1fr;} .tools{margin-top:-30px;} }
+  /* ---------- CÓMO TRABAJAMOS ---------- */
+  .how{padding:70px 0;}
+  .how-head{text-align:center;margin-bottom:46px;}
+  .how-head h2{font-size:clamp(28px,3.6vw,40px);margin-top:16px;}
+  .how-head p{color:var(--ink-70);margin-top:14px;}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card);}
+  .step{padding:34px 30px;position:relative;border-right:1px solid var(--line);}
+  .step:last-child{border-right:none;}
+  .step .n{font-family:var(--serif);font-size:15px;font-weight:700;color:#fff;background:var(--gold);
+    width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .step h4{font-size:19px;margin:18px 0 8px;}
+  .step p{font-size:14px;color:var(--muted);margin:0;line-height:1.55;}
+
+  /* ---------- CIERRE ---------- */
+  .cierre-wrap{padding:30px 0 80px;}
+  .cierre{
+    background:
+      radial-gradient(100% 160% at 100% 0%, rgba(216,178,94,.14) 0%, transparent 50%),
+      linear-gradient(155deg,#0e1b24,#1c3340);
+    color:#fff;border-radius:24px;padding:64px 48px;text-align:center;position:relative;overflow:hidden;
+  }
+  .cierre .eyebrow{color:var(--gold-bright);}
+  .cierre .eyebrow::before{background:var(--gold-bright);}
+  .cierre h2{font-size:clamp(28px,4vw,42px);margin:18px 0 0;}
+  .cierre p{color:#b8c6cd;max-width:50ch;margin:18px auto 30px;}
+
+  @media(max-width:880px){
+    .hero-grid{grid-template-columns:1fr;gap:36px;}
+    .hero-card{aspect-ratio:16/10;max-width:520px;}
+    .tools{grid-template-columns:1fr;margin-top:-40px;}
+    .pillars{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .step{border-right:none;border-bottom:1px solid var(--line);}
+    .step:last-child{border-bottom:none;}
+  }
+  @media(max-width:560px){
+    .hero{padding:60px 0 76px;}
+    .cierre{padding:46px 24px;}
+  }
 </style>
 <script src="nav.js" defer></script>
 </head>
@@ -63,63 +141,148 @@
   </nav>
 </header>
 
+<!-- ===================== HERO ===================== -->
 <section class="hero">
   <div class="wrap">
-    <div class="k">Personal Shopper Inmobiliario · Madrid</div>
-    <h1>Invierte en vivienda en Madrid con alguien de tu lado</h1>
-    <p>Te ayudo a encontrar, analizar y comprar el piso de inversión adecuado — defendiendo tus intereses desde la búsqueda hasta la firma ante notario.</p>
-    <div class="cta">
-      <a href="radar.html" class="btn btn-primario">Calcula dónde invertir →</a>
-      <a href="mapa.html" class="btn btn-fantasma">Ver rentabilidad por zona</a>
-      <a href="servicio.html" class="btn btn-fantasma">Servicio PSI</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Personal Shopper Inmobiliario · Madrid</span>
+        <h1>Invierte en vivienda en Madrid con alguien <em>de tu lado</em></h1>
+        <p class="sub">Encuentro, analizo y negocio el piso de inversión adecuado para ti — defendiendo solo tus intereses, desde la búsqueda hasta la firma ante notario.</p>
+        <div class="cta">
+          <a href="radar.html" class="btn btn-gold">Calcula dónde invertir
+            <span class="ic">{{ARROW}}</span>
+          </a>
+          <a href="mapa.html" class="btn btn-ghost">Ver rentabilidad por zona</a>
+        </div>
+        <div class="reassure">
+          <span><span class="ic">{{SHIELD}}</span> Solo defiendo al comprador</span>
+          <span><span class="ic">{{CHART}}</span> Números conservadores y reales</span>
+        </div>
+      </div>
+
+      <!-- ===== FOTO DEL HERO =====
+           Coloca tu foto (tú con las Cuatro Torres detrás) en la MISMA carpeta que este
+           index.html, con el nombre exacto:  invertir/foto-hero.jpg
+           Formato recomendado: vertical (~900×1000 px o mayor), JPG o WEBP, < 400 KB.
+           Mientras no exista el archivo se muestra el aviso de abajo; al subirla aparece sola. -->
+      <div class="hero-card">
+        <img src="foto-hero.jpg" alt="David Landeo, Personal Shopper Inmobiliario, frente a las Cuatro Torres de Madrid"
+             class="hero-photo"
+             onerror="this.style.display='none'; this.parentElement.querySelector('.ph-note').style.display='flex';">
+        <div class="ph-note">
+          <span class="ic">{{IMAGE}}</span>
+          <small>Sube tu foto como<br><b>invertir/foto-hero.jpg</b><br>(tú con las Cuatro Torres detrás)</small>
+        </div>
+        <div class="tag">
+          <div class="num">21</div>
+          <div class="lab">distritos de Madrid analizados<br>+ área metropolitana y Corredor del Henares</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <div class="wrap">
+  <!-- ===================== HERRAMIENTAS ===================== -->
   <div class="tools">
     <a class="tool" href="servicio.html">
-      <div class="ico">🛎️</div>
+      <span class="icon-chip"><span class="ic">{{BELL}}</span></span>
       <h3>Servicio PSI</h3>
-      <p>Qué es un Personal Shopper Inmobiliario, qué hace, qué incluye y cómo te acompaño en toda la compra.</p>
-      <span class="go">Ver el servicio →</span>
+      <p>Qué es un Personal Shopper Inmobiliario, qué incluye y cómo te acompaño en toda la compra.</p>
+      <span class="go">Ver el servicio <span class="ic">{{ARROW}}</span></span>
     </a>
     <a class="tool" href="radar.html">
-      <div class="ico">🎯</div>
+      <span class="icon-chip"><span class="ic">{{TARGET}}</span></span>
       <h3>Radar de Inversión</h3>
-      <p>Dime tu capital y tu objetivo y descubre en 30 segundos en qué barrios de Madrid puedes comprar y a qué rentabilidad.</p>
-      <span class="go">Probar el Radar →</span>
+      <p>Dime tu capital y tu objetivo y descubre en 30 segundos en qué barrios puedes comprar y a qué rentabilidad.</p>
+      <span class="go">Probar el Radar <span class="ic">{{ARROW}}</span></span>
     </a>
     <a class="tool" href="mapa.html">
-      <div class="ico">🗺️</div>
-      <h3>Mapa de calor de rentabilidad</h3>
-      <p>Explora la rentabilidad, el precio y el alquiler por distrito de Madrid, el área metropolitana y el Corredor del Henares.</p>
-      <span class="go">Abrir el mapa →</span>
+      <span class="icon-chip"><span class="ic">{{MAP}}</span></span>
+      <h3>Mapa de calor</h3>
+      <p>Explora la rentabilidad, el precio y el alquiler por distrito de Madrid y su área metropolitana.</p>
+      <span class="go">Abrir el mapa <span class="ic">{{ARROW}}</span></span>
     </a>
   </div>
 
-  <section class="seccion">
-    <h2>Cómo trabajamos</h2>
-    <p class="sub">Sencillo, transparente y a tu ritmo.</p>
-    <div class="pasos">
-      <div class="paso"><div class="n">1</div><h4>Exploras</h4><p>Usa el Radar y el mapa para entender dónde y cuánto puedes invertir en Madrid.</p></div>
-      <div class="paso"><div class="n">2</div><h4>Hablamos</h4><p>Una llamada sin compromiso para conocer tus objetivos y ver cómo puedo ayudarte.</p></div>
-      <div class="paso"><div class="n">3</div><h4>Compras bien</h4><p>Busco, negocio y te acompaño hasta la firma, con los números claros desde el día uno.</p></div>
+  <!-- ===================== PROMESA / PILARES ===================== -->
+  <section class="promise">
+    <div class="promise-head">
+      <span class="eyebrow">Por qué con David</span>
+      <h2>Comprar para invertir no es comprar para vivir</h2>
+      <p>Una operación rentable necesita criterio, tiempo y contactos. Pongo los tres de tu lado para que inviertas con la cabeza, no con la prisa.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="icon-chip"><span class="ic">{{SHIELD}}</span></span>
+        <h4>De tu lado, siempre</h4>
+        <p>No trabajo para el vendedor. Negocio precio y arras pensando solo en tu rentabilidad.</p>
+      </div>
+      <div class="pillar">
+        <span class="icon-chip"><span class="ic">{{SEARCH}}</span></span>
+        <h4>Acceso real al mercado</h4>
+        <p>Mi red de inmobiliarias me da oportunidades que muchas veces ni llegan a publicarse.</p>
+      </div>
+      <div class="pillar">
+        <span class="icon-chip"><span class="ic">{{CHART}}</span></span>
+        <h4>Números antes que ilusiones</h4>
+        <p>Estimo el alquiler por debajo y la reforma por arriba. Que la realidad te dé alegrías.</p>
+      </div>
     </div>
   </section>
 
+  <!-- ===================== CÓMO TRABAJAMOS ===================== -->
+  <section class="how">
+    <div class="how-head">
+      <span class="eyebrow center">El proceso</span>
+      <h2>Cómo trabajamos</h2>
+      <p>Sencillo, transparente y a tu ritmo.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h4>Exploras</h4>
+        <p>Usa el Radar y el mapa para entender dónde y cuánto puedes invertir en Madrid.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h4>Hablamos</h4>
+        <p>Una llamada sin compromiso para conocer tus objetivos y ver cómo puedo ayudarte.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h4>Compras bien</h4>
+        <p>Busco, negocio y te acompaño hasta la firma, con los números claros desde el día uno.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== CIERRE ===================== -->
+<div class="wrap cierre-wrap">
   <section class="cierre">
+    <span class="eyebrow center">Primer paso</span>
     <h2>¿Damos el primer paso?</h2>
     <p>Cuéntame qué buscas y vemos, sin compromiso, cómo invertir en Madrid de forma rentable.</p>
-    <a href="contacto.html" class="btn btn-fantasma">Contactar con David →</a>
+    <a href="contacto.html" class="btn btn-gold">Contactar con David <span class="ic">{{ARROW}}</span></a>
   </section>
 </div>
 
 <footer class="site-footer">
-  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
-  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+  <div class="ft-in">
+    <div class="ft-brand">
+      <span class="logo">DL</span>
+      <div><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></div>
+    </div>
+    <div class="ft-contact">
+      <a href="tel:+34695128762"><span class="ic">{{PHONE}}</span> 695 128 762</a>
+      <a href="mailto:davidwp37@gmail.com"><span class="ic">{{MAIL}}</span> davidwp37@gmail.com</a>
+    </div>
+  </div>
   <div class="legal">Las herramientas de esta web ofrecen estimaciones orientativas basadas en precios medios de mercado y no constituyen asesoramiento financiero ni una oferta.</div>
 </footer>
 
+<script src="iconos.js"></script>
 </body>
 </html>
