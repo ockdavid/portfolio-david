@@ -5,82 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servicio PSI · David Landeo · Personal Shopper Inmobiliario en Madrid</title>
 <meta name="description" content="Qué es un Personal Shopper Inmobiliario, qué hace, qué incluye y cómo te acompaño en la compra de tu vivienda de inversión en Madrid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 <style>
-  body{margin:0;font-family:'Segoe UI',-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:var(--suave);line-height:1.6;}
-  .wrap{max-width:980px;margin:0 auto;padding:0 22px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .narrow{max-width:920px;}
 
   /* HERO */
-  .hero{background:linear-gradient(135deg,#0f1d28 0%,#173546 100%);color:#fff;text-align:center;padding:70px 0 78px;}
-  .hero .k{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--oro);font-weight:700;margin-bottom:16px;}
-  .hero h1{font-size:clamp(28px,4.6vw,42px);font-weight:800;line-height:1.12;max-width:740px;margin:0 auto;}
-  .hero p{font-size:clamp(15px,2.3vw,18px);color:#aebfc7;max-width:600px;margin:18px auto 0;}
+  .hero{
+    background:
+      radial-gradient(120% 130% at 90% 0%, rgba(216,178,94,.10) 0%, transparent 55%),
+      linear-gradient(160deg,#0e1b24 0%,#152a36 60%,#1c3340 100%);
+    color:#fff;padding:76px 0 84px;
+  }
+  .hero .eyebrow{color:var(--gold-bright);}
+  .hero .eyebrow::before{background:var(--gold-bright);}
+  .hero h1{font-size:clamp(30px,4.6vw,48px);margin:20px 0 0;max-width:20ch;}
+  .hero h1 em{font-style:italic;color:var(--gold-bright);}
+  .hero p{font-size:clamp(16px,2.2vw,19px);color:#b3c2c9;max-width:56ch;margin:22px 0 0;line-height:1.6;}
 
   /* SECCIONES */
-  section.blk{padding:54px 0;}
-  section.blk.alt{background:#fff;}
-  .blk h2{text-align:center;font-size:28px;margin-bottom:8px;}
-  .blk .sub{text-align:center;color:var(--gris);max-width:580px;margin:0 auto 36px;}
-  .barra{display:block;width:54px;height:4px;background:var(--acento);border-radius:2px;margin:0 auto 18px;}
+  section.blk{padding:64px 0;}
+  section.blk.alt{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .blk-head{text-align:center;max-width:62ch;margin:0 auto 44px;}
+  .blk-head h2{font-size:clamp(26px,3.4vw,38px);margin-top:16px;}
+  .blk-head p{color:var(--ink-70);margin-top:14px;}
 
-  /* QUE ES / QUE NO */
-  .contraste{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  .cbox{border-radius:16px;padding:26px;box-shadow:0 8px 26px rgba(15,29,40,.07);}
-  .cbox.si{background:var(--suave);border-left:5px solid var(--acento);}
-  .cbox.no{background:#fff;border-left:5px solid #d8a23a;}
-  .cbox h3{font-size:18px;margin-bottom:12px;}
-  .cbox ul{list-style:none;padding:0;margin:0;}
-  .cbox li{position:relative;padding-left:26px;margin-bottom:10px;font-size:14px;color:#33444f;}
-  .cbox.si li::before{content:"✓";position:absolute;left:0;color:var(--acento);font-weight:800;}
-  .cbox.no li::before{content:"✕";position:absolute;left:0;color:#c0871f;font-weight:800;}
+  /* QUE SÍ / QUE NO */
+  .contraste{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .cbox{border-radius:18px;padding:30px;border:1px solid var(--line);background:var(--card);}
+  section.alt .cbox{background:var(--paper);}
+  .cbox.si{border-top:3px solid var(--green);}
+  .cbox.no{border-top:3px solid var(--gold);}
+  .cbox h3{font-size:20px;margin-bottom:18px;display:flex;align-items:center;gap:11px;}
+  .cbox h3 .ic{width:22px;height:22px;}
+  .cbox.si h3 .ic{color:var(--green);}
+  .cbox.no h3 .ic{color:var(--gold);}
+  .cbox ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:13px;}
+  .cbox li{position:relative;padding-left:30px;font-size:14.5px;color:var(--ink-70);line-height:1.5;}
+  .cbox li .ic{position:absolute;left:0;top:1px;width:19px;height:19px;}
+  .cbox.si li .ic{color:var(--green);}
+  .cbox.no li .ic{color:var(--gold);}
 
-  /* POR QUE (grid) */
-  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  .mini{background:#fff;border-radius:14px;padding:22px;box-shadow:0 8px 26px rgba(15,29,40,.06);}
-  section.alt .mini{background:var(--suave);}
-  .mini .ico{font-size:26px;margin-bottom:10px;}
-  .mini h4{font-size:15px;margin-bottom:6px;}
-  .mini p{font-size:13px;color:var(--gris);margin:0;}
+  /* POR QUÉ — grid */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;}
+  section.alt .mini{background:var(--paper);}
+  .mini h4{font-size:16.5px;margin:16px 0 8px;}
+  .mini p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.55;}
 
-  /* PASOS (timeline) */
-  .pasos{max-width:760px;margin:0 auto;}
-  .paso{display:flex;gap:18px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--linea);}
+  /* PASOS timeline */
+  .pasos{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:4px;}
+  .paso{display:flex;gap:22px;align-items:flex-start;padding:22px 0;border-bottom:1px solid var(--line);}
   .paso:last-child{border-bottom:none;}
-  .paso .num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--acento);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;}
-  .paso .tx b{display:block;font-size:16px;color:var(--tinta);}
-  .paso .tx span{font-size:13.5px;color:var(--gris);}
+  .paso .num{flex:0 0 46px;height:46px;border-radius:13px;background:var(--ink);color:var(--gold-bright);
+    display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:18px;}
+  .paso .tx b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:5px;}
+  .paso .tx span{font-size:14.5px;color:var(--muted);line-height:1.55;}
 
   /* INCLUYE / NO INCLUYE */
-  .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  .col-box{background:#fff;border-radius:16px;padding:26px;box-shadow:0 8px 26px rgba(15,29,40,.07);}
-  section.alt .col-box{background:var(--suave);}
-  .col-box h3{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-  .col-box ul{list-style:none;padding:0;margin:0;}
-  .col-box li{position:relative;padding-left:26px;margin-bottom:11px;font-size:13.8px;color:#33444f;}
-  .col-box.inc li::before{content:"✓";position:absolute;left:0;color:var(--acento);font-weight:800;}
-  .col-box.exc li::before{content:"→";position:absolute;left:0;color:var(--gris);font-weight:800;}
-  .col-box.exc li b{color:var(--tinta);}
+  .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .col-box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;}
+  section.alt .col-box{background:var(--paper);}
+  .col-box h3{font-size:18px;margin-bottom:18px;display:flex;align-items:center;gap:11px;}
+  .col-box h3 .ic{width:22px;height:22px;}
+  .col-box.inc h3 .ic{color:var(--green);}
+  .col-box.exc h3 .ic{color:var(--gold);}
+  .col-box ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;}
+  .col-box li{position:relative;padding-left:30px;font-size:14.3px;color:var(--ink-70);line-height:1.5;}
+  .col-box li .ic{position:absolute;left:0;top:1px;width:19px;height:19px;}
+  .col-box.inc li .ic{color:var(--green);}
+  .col-box.exc li .ic{color:var(--gold);}
+  .col-box.exc li b{color:var(--ink);font-weight:700;}
 
-  /* PRESENTACION */
-  .present{max-width:760px;margin:0 auto;}
-  .present ul{list-style:none;padding:0;margin:0 0 18px;}
-  .present li{position:relative;padding-left:26px;margin-bottom:10px;font-size:14.5px;color:#33444f;}
-  .present li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;background:var(--acento);border-radius:50%;}
-  .nota{background:var(--suave);border-left:4px solid var(--oro);border-radius:0 8px 8px 0;padding:16px 18px;font-size:13.5px;color:#33444f;}
-  section.alt .nota{background:#fff;}
+  /* PRESENTACIÓN */
+  .present{max-width:820px;margin:0 auto;}
+  .present ul{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-direction:column;gap:14px;}
+  .present li{position:relative;padding-left:32px;font-size:15px;color:var(--ink-70);line-height:1.5;}
+  .present li .ic{position:absolute;left:0;top:1px;width:20px;height:20px;color:var(--gold);}
+  .present li b{color:var(--ink);font-weight:700;}
+  .nota{background:var(--gold-soft);border:1px solid rgba(176,130,49,.25);border-radius:14px;
+    padding:22px 24px;font-size:14.5px;color:#5d4a22;line-height:1.6;display:flex;gap:14px;align-items:flex-start;}
+  .nota .ic{width:22px;height:22px;color:var(--gold);flex:none;margin-top:1px;}
+  .nota b{color:#4a3a16;}
 
   /* CTA */
-  .cierre{background:var(--acento);color:#fff;text-align:center;padding:56px 22px;}
-  .cierre h2{font-size:28px;margin-bottom:10px;color:#fff;}
-  .cierre p{color:#d7ece6;max-width:540px;margin:0 auto 26px;}
+  .cierre-wrap{padding:64px 0 80px;}
+  .cierre{
+    background:radial-gradient(100% 160% at 100% 0%, rgba(216,178,94,.14) 0%, transparent 50%),
+      linear-gradient(155deg,#0e1b24,#1c3340);
+    color:#fff;border-radius:24px;padding:60px 48px;text-align:center;}
+  .cierre .eyebrow{color:var(--gold-bright);}
+  .cierre .eyebrow::before{background:var(--gold-bright);}
+  .cierre h2{font-size:clamp(28px,4vw,40px);margin:18px 0 0;}
+  .cierre p{color:#b8c6cd;max-width:52ch;margin:18px auto 30px;}
   .cierre .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
 
-  @media(max-width:760px){
+  @media(max-width:820px){
     .contraste,.dos-col{grid-template-columns:1fr;}
     .grid4{grid-template-columns:1fr 1fr;}
   }
-  @media(max-width:480px){ .grid4{grid-template-columns:1fr;} }
+  @media(max-width:520px){ .grid4{grid-template-columns:1fr;} .cierre{padding:44px 24px;} }
 </style>
 </head>
 <body>
@@ -102,62 +129,68 @@
 <!-- HERO -->
 <header class="hero">
   <div class="wrap">
-    <div class="k">El servicio · Personal Shopper Inmobiliario</div>
-    <h1>Compra tu vivienda de inversión con alguien que solo te defiende a ti</h1>
+    <span class="eyebrow">El servicio · Personal Shopper Inmobiliario</span>
+    <h1>Compra tu vivienda de inversión con alguien que <em>solo te defiende a ti</em></h1>
     <p>Te acompaño en todo el proceso: busco, investigo, negocio y te guío hasta la firma ante notario, con los números claros desde el primer día.</p>
   </div>
 </header>
 
-<!-- QUE ES / QUE NO -->
+<!-- QUÉ ES -->
 <section class="blk">
   <div class="wrap">
-    <span class="barra"></span>
-    <h2>¿Qué es un Personal Shopper Inmobiliario?</h2>
-    <p class="sub">Es la figura que ayuda al comprador a encontrar la oportunidad adecuada y le acompaña durante toda la compra, desde la búsqueda hasta la escritura.</p>
+    <div class="blk-head">
+      <span class="eyebrow center">La figura</span>
+      <h2>¿Qué es un Personal Shopper Inmobiliario?</h2>
+      <p>Es quien ayuda al comprador a encontrar la oportunidad adecuada y le acompaña durante toda la compra, desde la búsqueda hasta la escritura.</p>
+    </div>
     <div class="contraste">
       <div class="cbox si">
-        <h3>Lo que sí soy</h3>
+        <h3><span class="ic">{{SHIELD}}</span> Lo que sí soy</h3>
         <ul>
-          <li>Defiendo tus intereses como comprador, no los del vendedor.</li>
-          <li>Tus ojos sobre el terreno: visito, reviso la zona, la comunidad y la nota simple.</li>
-          <li>Quien negocia el mejor precio y unas arras equilibradas para ti.</li>
-          <li>Tu red de confianza: inmobiliarias, reformistas, banca y notaría.</li>
+          <li><span class="ic">{{CHECK}}</span> Defiendo tus intereses como comprador, no los del vendedor.</li>
+          <li><span class="ic">{{CHECK}}</span> Tus ojos sobre el terreno: visito, reviso la zona, la comunidad y la nota simple.</li>
+          <li><span class="ic">{{CHECK}}</span> Quien negocia el mejor precio y unas arras equilibradas para ti.</li>
+          <li><span class="ic">{{CHECK}}</span> Tu red de confianza: inmobiliarias, reformistas, banca y notaría.</li>
         </ul>
       </div>
       <div class="cbox no">
-        <h3>Lo que no soy</h3>
+        <h3><span class="ic">{{XMARK}}</span> Lo que no soy</h3>
         <ul>
-          <li>No soy un agente inmobiliario que trabaja para el vendedor.</li>
-          <li>No te reenvío operaciones sin filtrar: cada una pasa por mi criterio.</li>
-          <li>No te vendo expectativas: los números son conservadores y reales.</li>
-          <li>No desaparezco tras la compra: te acompaño hasta el final.</li>
+          <li><span class="ic">{{XMARK}}</span> No soy un agente inmobiliario que trabaja para el vendedor.</li>
+          <li><span class="ic">{{XMARK}}</span> No te reenvío operaciones sin filtrar: cada una pasa por mi criterio.</li>
+          <li><span class="ic">{{XMARK}}</span> No te vendo expectativas: los números son conservadores y reales.</li>
+          <li><span class="ic">{{XMARK}}</span> No desaparezco tras la compra: te acompaño hasta el final.</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- POR QUE -->
+<!-- POR QUÉ -->
 <section class="blk alt">
   <div class="wrap">
-    <span class="barra"></span>
-    <h2>¿Por qué contar conmigo?</h2>
-    <p class="sub">Invertir bien requiere tiempo, contactos y criterio. Yo pongo los tres a tu servicio.</p>
+    <div class="blk-head">
+      <span class="eyebrow center">Las ventajas</span>
+      <h2>¿Por qué contar conmigo?</h2>
+      <p>Invertir bien requiere tiempo, contactos y criterio. Yo pongo los tres a tu servicio.</p>
+    </div>
     <div class="grid4">
-      <div class="mini"><div class="ico">⏱️</div><h4>Tu tiempo</h4><p>Me ocupo de la búsqueda, las visitas y la gestión para que tú no tengas que hacerlo.</p></div>
-      <div class="mini"><div class="ico">🤝</div><h4>Mis contactos</h4><p>Acceso a oportunidades que muchas veces ni llegan a publicarse.</p></div>
-      <div class="mini"><div class="ico">🛡️</div><h4>Tranquilidad</h4><p>Negociación, arras y números en manos de alguien que ya domina el proceso.</p></div>
-      <div class="mini"><div class="ico">📊</div><h4>Criterio</h4><p>Te digo con honestidad si una operación merece la pena o no.</p></div>
+      <div class="mini"><span class="icon-chip"><span class="ic">{{CLOCK}}</span></span><h4>Tu tiempo</h4><p>Me ocupo de la búsqueda, las visitas y la gestión para que tú no tengas que hacerlo.</p></div>
+      <div class="mini"><span class="icon-chip"><span class="ic">{{HANDSHAKE}}</span></span><h4>Mis contactos</h4><p>Acceso a oportunidades que muchas veces ni llegan a publicarse.</p></div>
+      <div class="mini"><span class="icon-chip"><span class="ic">{{SHIELD}}</span></span><h4>Tranquilidad</h4><p>Negociación, arras y números en manos de alguien que ya domina el proceso.</p></div>
+      <div class="mini"><span class="icon-chip"><span class="ic">{{CHART}}</span></span><h4>Criterio</h4><p>Te digo con honestidad si una operación merece la pena o no.</p></div>
     </div>
   </div>
 </section>
 
-<!-- COMO TRABAJO -->
+<!-- CÓMO TRABAJO -->
 <section class="blk">
   <div class="wrap">
-    <span class="barra"></span>
-    <h2>Cómo trabajo, paso a paso</h2>
-    <p class="sub">Un recorrido claro y ordenado, de principio a fin.</p>
+    <div class="blk-head">
+      <span class="eyebrow center">El proceso</span>
+      <h2>Cómo trabajo, paso a paso</h2>
+      <p>Un recorrido claro y ordenado, de principio a fin.</p>
+    </div>
     <div class="pasos">
       <div class="paso"><div class="num">1</div><div class="tx"><b>Reunión inicial</b><span>Conocemos tus objetivos, tu capital y tu perfil, y definimos qué buscamos.</span></div></div>
       <div class="paso"><div class="num">2</div><div class="tx"><b>Búsqueda y localización</b><span>Activo mi red de inmobiliarias y filtro oportunidades que encajen contigo.</span></div></div>
@@ -173,68 +206,84 @@
 <!-- INCLUYE / NO INCLUYE -->
 <section class="blk alt">
   <div class="wrap">
-    <span class="barra"></span>
-    <h2>Qué incluye y dónde te doy solución</h2>
-    <p class="sub">Transparencia total sobre el alcance del acompañamiento.</p>
+    <div class="blk-head">
+      <span class="eyebrow center">El alcance</span>
+      <h2>Qué incluye y dónde te doy solución</h2>
+      <p>Transparencia total sobre el alcance del acompañamiento.</p>
+    </div>
     <div class="dos-col">
       <div class="col-box inc">
-        <h3>✅ Incluye</h3>
+        <h3><span class="ic">{{CHECK}}</span> Incluye</h3>
         <ul>
-          <li>Reunión inicial y definición de tu estrategia de inversión.</li>
-          <li>Búsqueda y localización de oportunidades a través de mi red.</li>
-          <li>Visitas e investigación a fondo del inmueble y la zona.</li>
-          <li>Análisis de rentabilidad con números conservadores.</li>
-          <li>Negociación del precio y de las cláusulas de las arras.</li>
-          <li>Acompañamiento hasta la firma de la escritura.</li>
+          <li><span class="ic">{{CHECK}}</span> Reunión inicial y definición de tu estrategia de inversión.</li>
+          <li><span class="ic">{{CHECK}}</span> Búsqueda y localización de oportunidades a través de mi red.</li>
+          <li><span class="ic">{{CHECK}}</span> Visitas e investigación a fondo del inmueble y la zona.</li>
+          <li><span class="ic">{{CHECK}}</span> Análisis de rentabilidad con números conservadores.</li>
+          <li><span class="ic">{{CHECK}}</span> Negociación del precio y de las cláusulas de las arras.</li>
+          <li><span class="ic">{{CHECK}}</span> Acompañamiento hasta la firma de la escritura.</li>
         </ul>
       </div>
       <div class="col-box exc">
-        <h3>↗️ No incluye (pero te doy salida)</h3>
+        <h3><span class="ic">{{ARROW}}</span> No incluye (pero te doy salida)</h3>
         <ul>
-          <li>No busco la financiación, pero <b>te conecto con brokers y banca</b> de confianza.</li>
-          <li>No respondo del trabajo de terceros, pero <b>coordino y superviso</b> a reformistas y tasador.</li>
-          <li>No garantizo la hipoteca, pero <b>preparo todo</b> para maximizar tus opciones.</li>
-          <li>No estoy disponible 24/7, pero sí <b>en los momentos clave</b>, con un sistema claro.</li>
+          <li><span class="ic">{{ARROW}}</span> No busco la financiación, pero <b>te conecto con brokers y banca</b> de confianza.</li>
+          <li><span class="ic">{{ARROW}}</span> No respondo del trabajo de terceros, pero <b>coordino y superviso</b> a reformistas y tasador.</li>
+          <li><span class="ic">{{ARROW}}</span> No garantizo la hipoteca, pero <b>preparo todo</b> para maximizar tus opciones.</li>
+          <li><span class="ic">{{ARROW}}</span> No estoy disponible 24/7, pero sí <b>en los momentos clave</b>, con un sistema claro.</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRESENTACION -->
+<!-- PRESENTACIÓN -->
 <section class="blk">
   <div class="wrap">
-    <span class="barra"></span>
-    <h2>Cómo te presento cada oportunidad</h2>
-    <p class="sub">Cuando encuentro un piso que encaja, lo recibes todo organizado y claro.</p>
+    <div class="blk-head">
+      <span class="eyebrow center">La entrega</span>
+      <h2>Cómo te presento cada oportunidad</h2>
+      <p>Cuando encuentro un piso que encaja, lo recibes todo organizado y claro.</p>
+    </div>
     <div class="present">
       <ul>
-        <li><b>Ficha visual</b> con rentabilidad, ingresos y desglose de la inversión de un vistazo.</li>
-        <li><b>Fotos y vídeos</b> del piso, la finca y los alrededores.</li>
-        <li><b>Datos de catastro y nota simple</b> revisados, con cualquier detalle señalado.</li>
-        <li><b>Análisis de rentabilidad</b> (tradicional y/o por habitaciones) conservador.</li>
-        <li><b>Informe de la zona:</b> comunicaciones, gastos, motivo de venta y perfil de inquilino.</li>
+        <li><span class="ic">{{DOC}}</span> <b>Ficha visual</b> con rentabilidad, ingresos y desglose de la inversión de un vistazo.</li>
+        <li><span class="ic">{{IMAGE}}</span> <b>Fotos y vídeos</b> del piso, la finca y los alrededores.</li>
+        <li><span class="ic">{{SEARCH}}</span> <b>Datos de catastro y nota simple</b> revisados, con cualquier detalle señalado.</li>
+        <li><span class="ic">{{CHART}}</span> <b>Análisis de rentabilidad</b> (tradicional y/o por habitaciones) conservador.</li>
+        <li><span class="ic">{{PIN}}</span> <b>Informe de la zona:</b> comunicaciones, gastos, motivo de venta y perfil de inquilino.</li>
       </ul>
-      <div class="nota"><b>Números conservadores a propósito.</b> Estimo el alquiler por debajo de lo que sé que se conseguirá y añado margen a la reforma. Prefiero que la realidad te dé una alegría, no un disgusto.</div>
+      <div class="nota"><span class="ic">{{SHIELD}}</span><div><b>Números conservadores a propósito.</b> Estimo el alquiler por debajo de lo que sé que se conseguirá y añado margen a la reforma. Prefiero que la realidad te dé una alegría, no un disgusto.</div></div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cierre">
-  <h2>¿Vemos si puedo ayudarte?</h2>
-  <p>Calcula dónde invertir con tu capital o cuéntame qué buscas. Primera toma de contacto sin compromiso.</p>
-  <div class="cta">
-    <a href="radar.html" class="btn btn-fantasma">Calcula tu inversión →</a>
-    <a href="contacto.html" class="btn btn-fantasma">Contactar con David</a>
-  </div>
-</section>
+<div class="wrap cierre-wrap">
+  <section class="cierre">
+    <span class="eyebrow center">Empecemos</span>
+    <h2>¿Vemos si puedo ayudarte?</h2>
+    <p>Calcula dónde invertir con tu capital o cuéntame qué buscas. Primera toma de contacto sin compromiso.</p>
+    <div class="cta">
+      <a href="radar.html" class="btn btn-gold">Calcula tu inversión <span class="ic">{{ARROW}}</span></a>
+      <a href="contacto.html" class="btn btn-ghost">Contactar con David</a>
+    </div>
+  </section>
+</div>
 
 <footer class="site-footer">
-  <div><b>David Landeo</b> · Personal Shopper Inmobiliario · Madrid</div>
-  <div>📞 695 128 762 &nbsp;·&nbsp; ✉️ davidwp37@gmail.com</div>
+  <div class="ft-in">
+    <div class="ft-brand">
+      <span class="logo">DL</span>
+      <div><b>David Landeo</b><small>Personal Shopper Inmobiliario · Madrid</small></div>
+    </div>
+    <div class="ft-contact">
+      <a href="tel:+34695128762"><span class="ic">{{PHONE}}</span> 695 128 762</a>
+      <a href="mailto:davidwp37@gmail.com"><span class="ic">{{MAIL}}</span> davidwp37@gmail.com</a>
+    </div>
+  </div>
   <div class="legal">Información orientativa sobre el servicio. No constituye asesoramiento financiero ni una oferta.</div>
 </footer>
 
+<script src="iconos.js"></script>
 </body>
 </html>
