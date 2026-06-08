@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5">
+<title>Checklist de visita · PSI David Landeo</title>
+<meta name="description" content="Checklist de visita a viviendas de inversión para Personal Shopper Inmobiliario.">
+
+<!-- PWA -->
+<meta name="theme-color" content="#0e1b24">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Visitas PSI">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="visita.css">
+</head>
+<body>
+
+<!-- BARRA SUPERIOR -->
+<header class="topbar">
+  <a class="brand" href="#" id="homeLink">
+    <span class="logo">DL</span>
+    <span class="ttl"><b>Checklist de visita</b><small>Personal Shopper Inmobiliario</small></span>
+  </a>
+  <div class="actions" id="topActions"><!-- se rellena según la vista --></div>
+</header>
+
+<!-- VISTA: LISTA DE VISITAS -->
+<section class="view active" id="view-list">
+  <div class="wrap">
+    <div class="list-head">
+      <span class="eyebrow">Mis visitas</span>
+      <h1>Visitas guardadas</h1>
+      <p>Crea una visita por cada piso. Se guardan en este móvil: puedes rellenarlas sin conexión y exportar el PDF para tu cliente.</p>
+    </div>
+    <div class="list-actions">
+      <button class="btn btn-gold" id="btnNueva">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva visita
+      </button>
+    </div>
+    <ul class="visitas" id="visitasList"></ul>
+  </div>
+</section>
+
+<!-- VISTA: EDITAR VISITA -->
+<section class="view" id="view-edit">
+  <div class="wrap">
+    <div class="editbar">
+      <button class="back" id="btnBack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Mis visitas
+      </button>
+      <span class="spacer"></span>
+      <button class="btn btn-ghost btn-sm btn-danger" id="btnEliminar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+        Eliminar
+      </button>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="ptxt"><span id="progLabel">Progreso</span><span id="progPct">0%</span></div>
+      <div class="progress-bar"><i id="progBar"></i></div>
+    </div>
+
+    <div id="editForm"><!-- generado por JS --></div>
+
+    <div class="actionbar">
+      <button class="btn btn-ghost" id="btnCompartir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13M8 7l4-4 4 4"/></svg>
+        Compartir
+      </button>
+      <button class="btn btn-gold" id="btnPDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z" fill="none"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+        Generar PDF
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- raíz de impresión -->
+<div id="print-root"></div>
+
+<!-- toast + modal -->
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="modalTitle">¿Seguro?</h3>
+    <p id="modalText"></p>
+    <div class="row">
+      <button class="btn btn-ghost" id="modalCancel">Cancelar</button>
+      <button class="btn btn-danger" id="modalOk">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script src="visita.js"></script>
+</body>
+</html>
