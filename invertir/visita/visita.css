@@ -246,6 +246,61 @@ h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0;l
   .topbar .actions .btn span.txt{display:none;}
 }
 
+/* ---------- PANTALLA DE LOGIN ---------- */
+.auth-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:
+    radial-gradient(120% 130% at 90% 0%, rgba(216,178,94,.12) 0%, transparent 55%),
+    linear-gradient(160deg,#0e1b24 0%,#152a36 60%,#1c3340 100%);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  padding-top:calc(24px + env(safe-area-inset-top));
+}
+.auth-overlay[hidden]{display:none;}
+.auth-card{
+  background:var(--card);border-radius:20px;padding:34px 26px 28px;width:100%;max-width:380px;
+  box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center;
+}
+.auth-card .logo{
+  width:54px;height:54px;border-radius:50%;background:var(--ink);color:var(--gold-bright);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  font-family:var(--serif);font-weight:700;font-size:21px;border:1px solid rgba(216,178,94,.35);
+}
+.auth-card h1{font-size:23px;margin:0 0 6px;}
+.auth-card .auth-sub{font-size:13.5px;color:var(--muted);margin:0 0 20px;line-height:1.5;}
+.auth-card form{display:flex;flex-direction:column;gap:13px;text-align:left;}
+.auth-card .btn{width:100%;justify-content:center;margin-top:4px;}
+.auth-err{background:#fdecea;border:1px solid #f5c6c2;color:#b3261e;border-radius:9px;
+  padding:9px 12px;font-size:12.8px;line-height:1.4;}
+.auth-err[hidden]{display:none;}
+.auth-offline{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.5;
+  background:var(--paper-2);border-radius:9px;padding:9px 12px;}
+.auth-offline[hidden]{display:none;}
+
+/* salir / cuenta en la barra superior */
+.acct{display:flex;align-items:center;gap:8px;}
+.acct .who{font-size:11.5px;color:var(--muted);font-weight:600;max-width:120px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.acct .out{background:none;border:1px solid var(--line-strong);border-radius:8px;
+  color:var(--ink-70);font-family:inherit;font-weight:700;font-size:12px;padding:6px 10px;cursor:pointer;}
+.acct .out:hover{border-color:var(--ink);color:var(--ink);}
+
+/* estado de sincronización (sustituye al punto "guardado") */
+.saved-dot.sync-pend i{background:var(--gold);}
+.saved-dot.sync-ok i{background:var(--green);}
+.saved-dot.sync-run i{background:var(--gold-bright);animation:pulse 1s infinite;}
+.saved-dot.sync-err i{background:#b3261e;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* etiqueta "pendiente de subir" en tarjetas de la lista */
+.vcard .vcloud{font-size:10px;font-weight:800;color:var(--gold);
+  background:rgba(176,130,49,.12);border-radius:20px;padding:2px 7px;margin-top:2px;}
+
+/* miniatura cargando desde la nube */
+.thumb.loading{display:flex;align-items:center;justify-content:center;}
+.thumb.loading::after{content:"";width:18px;height:18px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
 /* ===========================================================
    IMPRESIÓN / PDF — reproduce el documento A4 ya relleno
    =========================================================== */

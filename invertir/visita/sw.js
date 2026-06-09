@@ -2,12 +2,15 @@
    Estrategia: precache del esqueleto de la app (offline-first) +
    cache en runtime de las fuentes de Google.
    Sube la versión (CACHE) cuando cambies index/visita.js/visita.css. */
-const CACHE = 'visita-psi-v1';
+const CACHE = 'visita-psi-v2';
 const APP_SHELL = [
   './',
   './index.html',
   './visita.css',
   './visita.js',
+  './sync.js',
+  './supabase-config.js',
+  './lib/supabase.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',

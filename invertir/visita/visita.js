@@ -144,10 +144,11 @@
       fecha: hoyLocal(),
       campos: {},   // { itemId: "valor texto" }
       checks: {},   // { itemId: true }
-      fotos: {},    // { itemId: [dataURL, ...] }
+      fotos: {},    // { itemId: [ {dataUrl, path, pending} , ...] }
       notas: '',
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
+      _dirty: true
     };
   }
 
@@ -169,6 +170,7 @@
   /* ---------- 4. ESTADO Y UTILIDADES UI ---------- */
   let actual = null;            // visita en edición
   let saveTimer = null;
+  let currentUserEmail = '';    // email de la sesión (para mostrar y cerrar sesión)
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
@@ -191,20 +193,106 @@
     toast._t = setTimeout(() => t.classList.remove('show'), 2200);
   }
 
-  /* ---------- 5. GUARDADO AUTOMÁTICO ---------- */
-  function marcarSucio() {
+  /* ---------- 5. GUARDADO AUTOMÁTICO + SINCRONIZACIÓN ---------- */
+  let cloudTimer = null;
+  const usaCloud = () => !!(window.Cloud && Cloud.available());
+
+  // estado visible: 'ok' | 'pend' | 'run' | 'err'
+  function setSyncState(state, texto) {
     const dot = $('#savedDot');
-    if (dot) dot.classList.add('dirty');
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(guardar, 600);
+    if (!dot) return;
+    dot.classList.remove('sync-ok', 'sync-pend', 'sync-run', 'sync-err');
+    dot.classList.add('sync-' + state);
+    const map = { ok: usaCloud() ? 'Sincronizado' : 'Guardado', pend: 'Sin conexión', run: 'Sincronizando…', err: 'Reintentando…' };
+    dot.querySelector('span').textContent = texto || map[state] || 'Guardado';
   }
-  function guardar() {
+
+  function marcarSucio() {
     if (!actual) return;
+    actual._dirty = true;
+    setSyncState('pend', 'Guardando…');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(guardarLocal, 500);
+    clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(() => cloudPush(actual), 1200);
+  }
+
+  // guarda en el móvil (IndexedDB) — esto SIEMPRE funciona, con o sin internet
+  function guardarLocal() {
+    if (!actual) return Promise.resolve();
     actual.updatedAt = Date.now();
-    return dbPut(actual).then(() => {
-      const dot = $('#savedDot');
-      if (dot) { dot.classList.remove('dirty'); dot.querySelector('span').textContent = 'Guardado'; }
-    }).catch((e) => { console.error(e); toast('No se pudo guardar'); });
+    return dbPut(actual).catch((e) => { console.error(e); toast('No se pudo guardar'); });
+  }
+  // compat: algunos sitios llaman guardar()
+  function guardar() { marcarSucio(); return guardarLocal(); }
+
+  // sube a la nube (si hay sesión y conexión); si no, queda pendiente
+  async function cloudPush(v) {
+    if (!v || !usaCloud()) return;
+    if (!navigator.onLine) { setSyncState('pend'); return; }
+    const user = await Cloud.getUser();
+    if (!user) { setSyncState('pend'); return; }
+    if (actual && actual.id === v.id) setSyncState('run');
+    try {
+      await Cloud.push(v);              // sube fotos pendientes y hace upsert
+      v._dirty = false;
+      await dbPut(v);                   // persiste las rutas de fotos ya subidas
+      if (actual && actual.id === v.id) setSyncState('ok');
+    } catch (e) {
+      console.warn('cloudPush:', e && e.message);
+      if (actual && actual.id === v.id) setSyncState('pend');
+    }
+  }
+
+  // empuja todas las visitas locales con cambios sin sincronizar
+  async function syncPending() {
+    if (!usaCloud() || !navigator.onLine) return;
+    const user = await Cloud.getUser();
+    if (!user) return;
+    const todas = await dbGetAll();
+    for (const v of todas) {
+      if (v._dirty) { try { await Cloud.push(v); v._dirty = false; await dbPut(v); } catch (e) {} }
+    }
+  }
+
+  // trae las visitas de la nube y las mezcla con las locales (la más nueva gana)
+  async function reconcile() {
+    if (!usaCloud() || !navigator.onLine) return;
+    let cloud;
+    try { cloud = await Cloud.pullAll(); } catch (e) { console.warn('pull:', e && e.message); return; }
+    const local = await dbGetAll();
+    const lmap = {}; local.forEach((v) => (lmap[v.id] = v));
+    const cmap = {}; cloud.forEach((v) => (cmap[v.id] = v));
+    const ids = new Set([].concat(Object.keys(lmap), Object.keys(cmap)));
+    for (const id of ids) {
+      const lv = lmap[id], cv = cmap[id];
+      if (cv && !lv) { await dbPut(cv); }                              // nueva en la nube
+      else if (lv && !cv) { try { await Cloud.push(lv); lv._dirty = false; await dbPut(lv); } catch (e) {} } // solo local
+      else {                                                          // existe en ambas
+        if (lv._dirty || lv.updatedAt > cv.updatedAt + 1500) {
+          try { await Cloud.push(lv); lv._dirty = false; await dbPut(lv); } catch (e) {}
+        } else if (cv.updatedAt > lv.updatedAt) {
+          cv.fotos = mergeFotos(lv, cv);
+          await dbPut(cv);
+        }
+      }
+    }
+  }
+  // conserva las dataURL locales (visibles offline) cuando la nube trae solo rutas
+  function mergeFotos(lv, cv) {
+    const byPath = {};
+    Object.values(lv.fotos || {}).forEach((arr) =>
+      (arr || []).forEach((p) => { const o = Cloud.normPhoto(p); if (o.path && o.dataUrl) byPath[o.path] = o.dataUrl; }));
+    const out = {};
+    Object.keys(cv.fotos || {}).forEach((it) => {
+      out[it] = (cv.fotos[it] || []).map((p) => {
+        const o = Cloud.normPhoto(p);
+        const obj = { path: o.path };
+        if (byPath[o.path]) obj.dataUrl = byPath[o.path];
+        return obj;
+      });
+    });
+    return out;
   }
 
   /* ---------- 6. NAVEGACIÓN ENTRE VISTAS ---------- */
@@ -217,7 +305,13 @@
   function renderTopActions(vista) {
     const box = $('#topActions');
     if (vista === 'edit') {
-      box.innerHTML = '<span class="saved-dot" id="savedDot"><i></i><span>Guardado</span></span>';
+      box.innerHTML = '<span class="saved-dot sync-ok" id="savedDot"><i></i><span>Guardado</span></span>';
+      setSyncState(actual && actual._dirty ? 'pend' : 'ok');
+    } else if (usaCloud() && currentUserEmail) {
+      box.innerHTML = '<span class="acct"><span class="who">' + esc(currentUserEmail) + '</span>' +
+        '<button class="out" id="btnSignOut">Salir</button></span>';
+      const so = $('#btnSignOut');
+      if (so) so.addEventListener('click', doSignOut);
     } else {
       box.innerHTML = '';
     }
@@ -241,11 +335,12 @@
         const titulo = (v.campos && v.campos.direccion && v.campos.direccion.trim())
           || (v.cliente && v.cliente.trim()) || 'Visita sin dirección';
         const sub = [v.cliente, v.agencia].filter((x) => x && x.trim()).join(' · ') || 'Sin datos de cliente';
+        const pend = (usaCloud() && v._dirty) ? '<span class="vcloud">Sin subir</span>' : '';
         return (
           '<li><button class="vcard" data-id="' + v.id + '">' +
           '<div class="vmain"><b>' + esc(titulo) + '</b><div class="vsub">' + esc(sub) + '</div></div>' +
           '<div class="vmeta"><span class="vdate">' + esc(fmtFecha(v.fecha)) + '</span>' +
-          '<span class="vprog">' + pct + '%</span></div>' +
+          '<span class="vprog">' + pct + '%</span>' + pend + '</div>' +
           '<svg class="vchev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>' +
           '</button></li>'
         );
@@ -267,7 +362,7 @@
   }
   function crearVisita() {
     actual = nuevaVisita();
-    dbPut(actual).then(() => { renderEditor(); mostrarVista('edit'); });
+    dbPut(actual).then(() => { renderEditor(); mostrarVista('edit'); cloudPush(actual); });
   }
 
   function renderEditor() {
@@ -314,6 +409,19 @@
     form.innerHTML = html;
     bindEditor();
     actualizarProgreso();
+    resolveCloudPhotos(form);
+  }
+
+  // carga las miniaturas que solo tienen ruta en la nube (otras devices)
+  function resolveCloudPhotos(scope) {
+    if (!usaCloud()) return;
+    $$('img[data-path]', scope).forEach((img) => {
+      if (img.getAttribute('src')) return;
+      const path = img.dataset.path;
+      Cloud.signedUrl(path).then((url) => {
+        if (url) { img.src = url; const t = img.closest('.thumb'); if (t) t.classList.remove('loading'); }
+      });
+    });
   }
 
   function metaField(key, label, val, type) {
@@ -344,9 +452,15 @@
 
   function renderPhotos(itemId, list) {
     let h = '<div class="photos" data-photos="' + itemId + '">';
-    list.forEach((src, i) => {
-      h += '<div class="thumb"><img src="' + src + '" alt="">' +
-        '<button class="rm" data-rmphoto="' + itemId + '" data-idx="' + i + '" aria-label="Quitar foto">&times;</button></div>';
+    list.forEach((p, i) => {
+      const o = Cloud.normPhoto(p);
+      const rm = '<button class="rm" data-rmphoto="' + itemId + '" data-idx="' + i + '" aria-label="Quitar foto">&times;</button>';
+      if (o.dataUrl) {
+        h += '<div class="thumb"><img src="' + o.dataUrl + '" alt="">' + rm + '</div>';
+      } else if (o.path) {
+        // foto que vive en la nube: se carga con URL firmada al renderizar
+        h += '<div class="thumb loading"><img data-path="' + esc(o.path) + '" alt="">' + rm + '</div>';
+      }
     });
     h += '<label class="photo-add">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2L8 5h8l1.5 2h2A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="12.5" r="3"/></svg>' +
@@ -405,8 +519,13 @@
       const rm = e.target.closest('[data-rmphoto]');
       if (rm) {
         const id = rm.dataset.rmphoto, idx = +rm.dataset.idx;
+        const quitada = Cloud.normPhoto(actual.fotos[id][idx]);
         actual.fotos[id].splice(idx, 1);
         if (!actual.fotos[id].length) delete actual.fotos[id];
+        // borrado best-effort del archivo en la nube (si ya estaba subido)
+        if (quitada.path && usaCloud() && navigator.onLine) {
+          try { Cloud.client().storage.from(window.SUPABASE_CONFIG.bucket).remove([quitada.path]); } catch (_) {}
+        }
         refrescarFotos(id);
         actualizarProgreso(); marcarSucio();
       }
@@ -423,6 +542,7 @@
     // re-vincular el input file del bloque recreado
     const inp = $('[data-addphoto="' + itemId + '"]', fresh);
     if (inp) inp.addEventListener('change', (e) => onAddPhotos(itemId, e.target.files));
+    resolveCloudPhotos(fresh);
   }
 
   /* ---------- 10. FOTOS: comprimir + guardar ---------- */
@@ -431,11 +551,12 @@
     const arr = Array.from(files);
     toast('Procesando ' + arr.length + (arr.length > 1 ? ' fotos…' : ' foto…'));
     Promise.all(arr.map(comprimir)).then((dataUrls) => {
-      actual.fotos[itemId] = (actual.fotos[itemId] || []).concat(dataUrls.filter(Boolean));
+      const nuevas = dataUrls.filter(Boolean).map((d) => ({ dataUrl: d, pending: true }));
+      actual.fotos[itemId] = (actual.fotos[itemId] || []).concat(nuevas);
       refrescarFotos(itemId);
       actualizarProgreso();
-      guardar();
-      toast('Foto guardada');
+      marcarSucio();   // guarda local y programa subida a la nube
+      toast(usaCloud() ? 'Foto guardada (subiendo…)' : 'Foto guardada');
     }).catch((e) => { console.error(e); toast('No se pudo añadir la foto'); });
   }
 
@@ -516,7 +637,11 @@
         // fotos de la sección
         if (s.tipo === 'fotos') {
           const all = [];
-          s.items.forEach((it) => (v.fotos[it.id] || []).forEach((src) => all.push(src)));
+          s.items.forEach((it) => (v.fotos[it.id] || []).forEach((p) => {
+            const o = Cloud.normPhoto(p);
+            const src = o.dataUrl || o._url;   // _url lo rellena ensurePhotoSrcs()
+            if (src) all.push(src);
+          }));
           if (all.length) {
             h += '<div class="ph-photos">' + all.map((src) => '<img src="' + src + '">').join('') + '</div>';
           }
@@ -529,8 +654,22 @@
   function printMeta(label, val) {
     return '<div class="m"><div class="l">' + esc(label) + '</div><div class="v">' + esc(val || '') + '</div></div>';
   }
-  function generarPDF() {
-    guardar();
+  // resuelve URLs firmadas de las fotos que solo viven en la nube (para el PDF)
+  async function ensurePhotoSrcs() {
+    if (!usaCloud()) return;
+    const jobs = [];
+    Object.values(actual.fotos || {}).forEach((arr) =>
+      (arr || []).forEach((p) => {
+        const o = Cloud.normPhoto(p);
+        if (!o.dataUrl && o.path && !o._url) {
+          jobs.push(Cloud.signedUrl(o.path).then((u) => { if (u && typeof p === 'object') p._url = u; }));
+        }
+      }));
+    await Promise.all(jobs);
+  }
+  async function generarPDF() {
+    guardarLocal();
+    await ensurePhotoSrcs();
     construirPrint();
     setTimeout(() => window.print(), 60);
   }
@@ -579,8 +718,9 @@
     const cerrar = () => { m.classList.remove('show'); ok.onclick = null; cancel.onclick = null; };
     cancel.onclick = cerrar;
     ok.onclick = () => {
-      const id = actual.id;
-      dbDelete(id).then(() => {
+      const v = actual;
+      if (usaCloud() && navigator.onLine) { Cloud.remove(v).catch((e) => console.warn('remove:', e && e.message)); }
+      dbDelete(v.id).then(() => {
         cerrar(); actual = null;
         renderLista().then(() => mostrarVista('list'));
         toast('Visita eliminada');
@@ -588,30 +728,107 @@
     };
   }
 
+  function volverALista() {
+    if (actual) { guardarLocal(); cloudPush(actual); }
+    renderLista().then(() => mostrarVista('list'));
+  }
+
+  /* ---------- 14b. LOGIN / SESIÓN ---------- */
+  function showLogin() {
+    $('#authOverlay').hidden = false;
+    $('#authOffline').hidden = navigator.onLine;
+    const em = $('#authEmail'); if (em) em.focus();
+  }
+  function hideLogin() { $('#authOverlay').hidden = true; }
+
+  function authError(msg) {
+    const el = $('#authErr'); el.textContent = msg; el.hidden = false;
+  }
+  async function onAuthSubmit(e) {
+    e.preventDefault();
+    $('#authErr').hidden = true;
+    if (!navigator.onLine) { $('#authOffline').hidden = false; return; }
+    const email = $('#authEmail').value.trim();
+    const pass = $('#authPass').value;
+    const btn = $('#authBtn'); btn.disabled = true; btn.textContent = 'Entrando…';
+    try {
+      const { data, error } = await Cloud.signIn(email, pass);
+      if (error) { authError(traducirAuth(error.message)); return; }
+      currentUserEmail = (data && data.user && data.user.email) || email;
+      $('#authPass').value = '';
+      hideLogin();
+      await startApp();
+    } catch (err) {
+      authError('No se pudo conectar. Revisa tu internet.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Entrar';
+    }
+  }
+  function traducirAuth(m) {
+    if (/invalid login credentials/i.test(m)) return 'Email o contraseña incorrectos.';
+    if (/email not confirmed/i.test(m)) return 'Tu email aún no está confirmado.';
+    return m || 'No se pudo iniciar sesión.';
+  }
+  async function doSignOut() {
+    try { await Cloud.signOut(); } catch (e) {}
+    currentUserEmail = '';
+    actual = null;
+    showLogin();
+  }
+
+  // arranca la app ya con sesión: pinta la lista y sincroniza en segundo plano
+  async function startApp() {
+    renderTopActions('list');
+    await renderLista();
+    mostrarVista('list');
+    if (usaCloud() && navigator.onLine) {
+      await reconcile();
+      await syncPending();
+      await renderLista();
+    }
+  }
+
+  function onOnline() {
+    if (!usaCloud()) return;
+    reconcile().then(syncPending).then(() => {
+      if ($('#view-list').classList.contains('active')) renderLista();
+      if (actual && actual._dirty) cloudPush(actual);
+    });
+  }
+
   /* ---------- 15. ARRANQUE ---------- */
-  function init() {
+  async function init() {
     $('#btnNueva').addEventListener('click', crearVisita);
-    $('#btnBack').addEventListener('click', () => {
-      guardar();
-      renderLista().then(() => mostrarVista('list'));
-    });
-    $('#homeLink').addEventListener('click', (e) => {
-      e.preventDefault();
-      if (actual) guardar();
-      renderLista().then(() => mostrarVista('list'));
-    });
+    $('#btnBack').addEventListener('click', volverALista);
+    $('#homeLink').addEventListener('click', (e) => { e.preventDefault(); volverALista(); });
     $('#btnPDF').addEventListener('click', generarPDF);
     $('#btnCompartir').addEventListener('click', compartir);
     $('#btnEliminar').addEventListener('click', pedirEliminar);
     $('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal') e.currentTarget.classList.remove('show'); });
-
-    renderLista();
+    $('#authForm').addEventListener('submit', onAuthSubmit);
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', () => { if (actual) setSyncState('pend'); });
 
     // registrar service worker (offline / instalable)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch((e) => console.warn('SW:', e));
-      });
+      navigator.serviceWorker.register('sw.js').catch((e) => console.warn('SW:', e));
+    }
+
+    if (!usaCloud()) {            // sin configuración de nube → modo solo local
+      renderLista().then(() => mostrarVista('list'));
+      return;
+    }
+
+    Cloud.init();
+    const session = await Cloud.getSession();
+    if (session) {
+      currentUserEmail = (session.user && session.user.email) || '';
+      await startApp();
+    } else {
+      // sin sesión: mostramos la lista local detrás y pedimos login
+      await renderLista();
+      mostrarVista('list');
+      showLogin();
     }
   }
 
