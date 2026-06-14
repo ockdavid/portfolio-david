@@ -7,12 +7,23 @@ let sb = null;
 // Inicializar Supabase
 async function initSupabase() {
   const config = window.SUPABASE_CONFIG;
+  console.log('SUPABASE_CONFIG:', config);
+  console.log('supabase global:', typeof supabase);
+
   if (!config) {
     console.error('Falta SUPABASE_CONFIG');
+    alert('❌ Error: Configuración de Supabase no disponible');
+    return;
+  }
+
+  if (typeof supabase === 'undefined') {
+    console.error('Librería supabase no está cargada');
+    alert('❌ Error: Librería Supabase no disponible');
     return;
   }
 
   sb = supabase.createClient(config.url, config.key);
+  console.log('Supabase inicializado:', sb);
   await cargarClientes();
 }
 
