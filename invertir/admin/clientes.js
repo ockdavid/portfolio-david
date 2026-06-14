@@ -75,11 +75,16 @@ async function cargarClientes() {
 }
 
 // Agregar cliente
-document.addEventListener('DOMContentLoaded', function () {
+async function setupForm() {
   const form = document.getElementById('formCliente');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (!sb) {
+        alert('❌ Error: Supabase no está inicializado');
+        return;
+      }
 
       const formData = new FormData(form);
       const cliente = {};
@@ -104,8 +109,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+}
 
-  initSupabase();
+document.addEventListener('DOMContentLoaded', async function () {
+  await initSupabase();
+  await setupForm();
 });
 
 // Eliminar cliente
