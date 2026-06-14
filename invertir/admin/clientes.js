@@ -5,26 +5,38 @@
 let sb = null;
 
 // Inicializar Supabase
+// Devuelve true si hay sesión de admin autenticada y se pudo inicializar.
 async function initSupabase() {
   const config = window.SUPABASE_CONFIG;
-  console.log('SUPABASE_CONFIG:', config);
-  console.log('supabase global:', typeof supabase);
 
   if (!config) {
     console.error('Falta SUPABASE_CONFIG');
     alert('❌ Error: Configuración de Supabase no disponible');
-    return;
+    return false;
   }
 
   if (typeof supabase === 'undefined') {
     console.error('Librería supabase no está cargada');
     alert('❌ Error: Librería Supabase no disponible');
-    return;
+    return false;
   }
 
-  sb = supabase.createClient(config.url, config.key);
-  console.log('Supabase inicializado:', sb);
+  // persistSession comparte la sesión con la plataforma de visitas
+  // (mismo dominio + misma URL de proyecto = mismo localStorage).
+  sb = supabase.createClient(config.url, config.key, {
+    auth: { persistSession: true, autoRefreshToken: true }
+  });
+
+  // El admin requiere estar autenticado como David.
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    alert('Necesitas iniciar sesión para gestionar clientes.');
+    window.location.href = '../visita/index.html';
+    return false;
+  }
+
   await cargarClientes();
+  return true;
 }
 
 // Cargar todos los clientes
@@ -123,8 +135,8 @@ async function setupForm() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-  await initSupabase();
-  await setupForm();
+  const ok = await initSupabase();
+  if (ok) await setupForm();
 });
 
 // Eliminar cliente

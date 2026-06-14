@@ -61,10 +61,8 @@ CREATE INDEX IF NOT EXISTS idx_documentos_propiedad ON documentos(propiedad_id);
 CREATE INDEX IF NOT EXISTS idx_propiedades_estado ON propiedades(estado);
 
 -- Row Level Security (RLS)
--- Por ahora deshabilitado para simplificar. En producción, configura RLS para que:
--- - Solo el admin vea todas las propiedades
--- - Los clientes solo vean las asignadas a ellos
-ALTER TABLE clientes DISABLE ROW LEVEL SECURITY;
-ALTER TABLE propiedades DISABLE ROW LEVEL SECURITY;
-ALTER TABLE asignaciones DISABLE ROW LEVEL SECURITY;
-ALTER TABLE documentos DISABLE ROW LEVEL SECURITY;
+-- Las políticas de seguridad están en rls-policies.sql.
+-- Ejecuta ESE archivo después de crear las tablas:
+--   - Usuario autenticado (David) = control total
+--   - Clave anónima = solo lectura de propiedades/asignaciones/documentos
+-- Ver: rls-policies.sql
