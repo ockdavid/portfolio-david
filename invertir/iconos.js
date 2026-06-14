@@ -33,6 +33,7 @@
     COMPASS:S('<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>'),
     SPARK:  S('<path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6L12 3z"/>'),
     NOTE:   S('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>'),
+    USER:   S('<circle cx="12" cy="8.5" r="3.5"/><path d="M4 20a8 8 0 0 1 16 0"/>'),
   };
 
   function render(){

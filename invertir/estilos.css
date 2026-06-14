@@ -90,6 +90,63 @@ h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.12;letter-spa
 .nav .links a.btn-nav:hover{background:var(--ink-soft);color:#fff;}
 .nav .links a.btn-nav::after{display:none;}
 
+/* Menú de autenticación */
+.auth-menu{position:relative;margin-left:12px;}
+.auth-btn{
+  width:42px;height:42px;border-radius:9px;border:1px solid var(--line-strong);
+  background:var(--paper);color:var(--ink);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.16s;
+  padding:0;flex:none;
+}
+.auth-btn:hover{background:rgba(176,130,49,.08);}
+.auth-btn .ic{width:20px;height:20px;}
+.auth-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 8px 24px rgba(14,27,36,.14);
+  min-width:220px;overflow:hidden;opacity:0;pointer-events:none;
+  transform:translateY(-8px);transition:.2s ease;z-index:2999;
+}
+.auth-dropdown.open{opacity:1;pointer-events:auto;transform:none;}
+.auth-option{
+  display:block;padding:14px 18px;text-decoration:none;
+  font-size:15px;font-weight:600;color:var(--ink);
+  border-bottom:1px solid var(--line);transition:.16s;
+}
+.auth-option:last-child{border-bottom:none;}
+.auth-option:hover{background:rgba(176,130,49,.08);color:var(--gold);}
+.auth-option.auth-login{color:var(--gold);}
+
+/* Modal de número de teléfono */
+.auth-phone-prompt{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:4000;animation:fadeIn .2s ease;
+}
+.auth-phone-prompt .modal-backdrop{
+  position:absolute;inset:0;background:rgba(14,27,36,.5);backdrop-filter:blur(2px);
+}
+.phone-modal{
+  position:relative;z-index:1;background:#fff;border-radius:20px;padding:40px 32px;
+  max-width:420px;width:90%;box-shadow:0 20px 60px rgba(14,27,36,.25);
+}
+.phone-modal .close-btn{
+  position:absolute;top:14px;right:14px;width:36px;height:36px;
+  border:none;background:none;color:var(--ink);font-size:24px;cursor:pointer;
+  border-radius:8px;transition:.16s;display:flex;align-items:center;justify-content:center;
+}
+.phone-modal .close-btn:hover{background:var(--paper);}
+.phone-modal h3{margin:0 0 8px;font-size:22px;}
+.phone-modal p{margin:0 0 24px;color:var(--muted);font-size:15px;line-height:1.5;}
+.phone-input{
+  width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:11px;
+  font-family:var(--sans);font-size:15px;margin-bottom:20px;
+  transition:.16s;box-sizing:border-box;
+}
+.phone-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,130,49,.12);}
+.phone-modal .btn{width:100%;justify-content:center;}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1;}}
+
 /* Botón hamburguesa: lo inyecta nav.js. Oculto en escritorio; visible en móvil. */
 .nav-burger{
   display:none;flex-direction:column;justify-content:center;gap:5px;
@@ -184,6 +241,8 @@ body.mapa{padding-top:0;overflow:hidden;background:var(--paper);}
   .nav.has-burger .links a.activo{background:rgba(176,130,49,.08);}
   .nav.has-burger .links a.activo::after{display:none;}
   .nav.has-burger .links a.btn-nav{margin:6px 0 0;text-align:center;}
+
+  .auth-dropdown{right:auto;left:0;min-width:auto;width:calc(100% + 32px);margin-left:-16px;border-radius:0;}
 }
 @media(max-width:560px){
   :root{--nav-h:64px;}

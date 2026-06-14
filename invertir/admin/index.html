@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · David Landeo PSI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../estilos.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-layout">
+
+<header class="nav">
+  <a class="brand" href="../index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Admin</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html" class="activo">Propiedades</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="#" class="btn-nav" onclick="logout()">Salir</a>
+  </nav>
+</header>
+
+<main class="admin-container">
+  <!-- ===== AGREGAR PROPIEDAD ===== -->
+  <section class="panel agregar-propiedad">
+    <h2>Agregar nueva propiedad</h2>
+    <form id="formPropiedad" class="form-grid">
+      <div class="form-col-2">
+        <label>Título</label>
+        <input type="text" name="titulo" placeholder="Ej: Piso 2 dormitorios en Chamberí" required>
+      </div>
+
+      <div class="form-col-2">
+        <label>Descripción</label>
+        <textarea name="descripcion" placeholder="Características del piso, estado, mejoras, etc." rows="3"></textarea>
+      </div>
+
+      <div class="form-col-2">
+        <label>Dirección</label>
+        <input type="text" name="direccion" placeholder="Calle y número" required>
+      </div>
+
+      <div>
+        <label>Distrito</label>
+        <input type="text" name="distrito" placeholder="Chamberí, Salamanca, etc.">
+      </div>
+
+      <div>
+        <label>Municipio</label>
+        <input type="text" name="municipio" placeholder="Madrid, Alcalá de Henares, etc.">
+      </div>
+
+      <div>
+        <label>Precio de compra (€)</label>
+        <input type="number" name="precio_compra" placeholder="350000" step="1000">
+      </div>
+
+      <div>
+        <label>Precio de alquiler (€/mes)</label>
+        <input type="number" name="precio_alquiler" placeholder="1200" step="100">
+      </div>
+
+      <div>
+        <label>Habitaciones</label>
+        <input type="number" name="habitaciones" min="0" max="10">
+      </div>
+
+      <div>
+        <label>Baños</label>
+        <input type="number" name="banos" min="0" max="5">
+      </div>
+
+      <div>
+        <label>Metros cuadrados</label>
+        <input type="number" name="metros_cuadrados" placeholder="75" step="0.1">
+      </div>
+
+      <div>
+        <label>Año de construcción</label>
+        <input type="number" name="año_construccion" min="1800" max="2100" placeholder="2005">
+      </div>
+
+      <div class="form-col-2">
+        <label>Foto principal (URL)</label>
+        <input type="url" name="foto_principal" placeholder="https://...">
+      </div>
+
+      <div class="form-col-2">
+        <label class="btn btn-gold" style="cursor:pointer; margin-top:26px;">
+          Agregar propiedad
+          <button type="submit" style="display:none;"></button>
+        </label>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===== LISTADO DE PROPIEDADES ===== -->
+  <section class="panel">
+    <h2>Propiedades registradas</h2>
+    <div id="listadoPropiedades" class="propiedades-grid">
+      <div class="loading">Cargando propiedades...</div>
+    </div>
+  </section>
+</main>
+
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin.js" defer></script>
+</body>
+</html>

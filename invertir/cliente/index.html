@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso a mis oportunidades · David Landeo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../estilos.css">
+  <link rel="stylesheet" href="cliente.css">
+</head>
+<body class="cliente-login">
+
+<header class="nav">
+  <a class="brand" href="../index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Tus oportunidades de inversión</small></span>
+  </a>
+  <nav class="links">
+    <a href="../index.html">Volver a inicio</a>
+  </nav>
+</header>
+
+<main class="login-container">
+  <div class="login-box">
+    <h1>Acceso a mis oportunidades</h1>
+    <p class="subtitle">Ingresa tu número de teléfono para ver los pisos seleccionados especialmente para ti</p>
+
+    <form id="formLogin" class="login-form">
+      <div class="form-group">
+        <label for="telefono">Número de teléfono</label>
+        <input
+          type="tel"
+          id="telefono"
+          name="telefono"
+          placeholder="+34 695 128 762"
+          required
+          autofocus
+        >
+        <small>El mismo que registraste con David</small>
+      </div>
+
+      <button type="submit" class="btn btn-gold" style="width:100%;">
+        Acceder a mi portal
+      </button>
+    </form>
+
+    <div id="errorMsg" class="error-msg" style="display:none;"></div>
+
+    <div class="login-footer">
+      <p>¿No estás registrado?</p>
+      <p>Contacta con David para que te agregue como cliente y acceda a tus oportunidades personalizadas.</p>
+      <a href="tel:+34695128762" class="btn btn-ghost-dark">Llamar a David</a>
+    </div>
+  </div>
+</main>
+
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cliente.js" defer></script>
+</body>
+</html>

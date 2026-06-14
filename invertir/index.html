@@ -139,6 +139,25 @@
     <a href="mapa.html">Mapa de calor</a>
     <a href="contacto.html" class="btn-nav">Contacto</a>
   </nav>
+  <div class="auth-menu">
+    <button class="auth-btn" aria-label="Menú de autenticación">
+      <span class="ic">{{USER}}</span>
+    </button>
+    <div class="auth-dropdown">
+      <a href="visita/index.html" class="auth-option auth-login">Iniciar sesión</a>
+      <a href="#" class="auth-option auth-client" onclick="document.querySelector('.auth-phone-prompt').style.display='flex'; return false;">Ver mis oportunidades</a>
+    </div>
+  </div>
+  <div class="auth-phone-prompt" style="display:none;">
+    <div class="phone-modal">
+      <button class="close-btn" onclick="this.closest('.auth-phone-prompt').style.display='none'">×</button>
+      <h3>Acceder a mis oportunidades</h3>
+      <p>Ingresa tu número de teléfono para ver los pisos que he seleccionado para ti</p>
+      <input type="tel" placeholder="+34 695 128 762" class="phone-input" id="clientPhone">
+      <button class="btn btn-gold" onclick="handlePhoneLogin()">Acceder</button>
+    </div>
+    <div class="modal-backdrop"></div>
+  </div>
 </header>
 
 <!-- ===================== HERO ===================== -->
@@ -291,5 +310,6 @@
 </footer>
 
 <script src="iconos.js"></script>
+<script src="auth.js" defer></script>
 </body>
 </html>

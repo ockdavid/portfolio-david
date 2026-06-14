@@ -308,8 +308,12 @@
       box.innerHTML = '<span class="saved-dot sync-ok" id="savedDot"><i></i><span>Guardado</span></span>';
       setSyncState(actual && actual._dirty ? 'pend' : 'ok');
     } else if (usaCloud() && currentUserEmail) {
-      box.innerHTML = '<span class="acct"><span class="who">' + esc(currentUserEmail) + '</span>' +
-        '<button class="out" id="btnSignOut">Salir</button></span>';
+      let html = '<span class="acct"><span class="who">' + esc(currentUserEmail) + '</span>';
+      if (vista === 'list') {
+        html += '<button class="btn-cliente" onclick="window.open(\'../admin/clientes.html\', \'_blank\')">👥 Agregar cliente</button>';
+      }
+      html += '<button class="out" id="btnSignOut">Salir</button></span>';
+      box.innerHTML = html;
       const so = $('#btnSignOut');
       if (so) so.addEventListener('click', doSignOut);
     } else {

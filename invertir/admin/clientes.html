@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes · Admin David Landeo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../estilos.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-layout">
+
+<header class="nav">
+  <a class="brand" href="../index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small>Admin</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Propiedades</a>
+    <a href="clientes.html" class="activo">Clientes</a>
+    <a href="#" class="btn-nav" onclick="volver()">Volver</a>
+  </nav>
+</header>
+
+<main class="admin-container">
+  <!-- ===== AGREGAR CLIENTE ===== -->
+  <section class="panel agregar-propiedad">
+    <h2>Agregar nuevo cliente</h2>
+    <form id="formCliente" class="form-grid">
+      <div>
+        <label>Nombre</label>
+        <input type="text" name="nombre" placeholder="Ej: Juan García López" required>
+      </div>
+
+      <div>
+        <label>Teléfono *</label>
+        <input type="tel" name="telefono" placeholder="+34 695 128 762" required>
+      </div>
+
+      <div class="form-col-2">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="juan@example.com">
+      </div>
+
+      <div class="form-col-2">
+        <label>Notas</label>
+        <textarea name="notas" placeholder="Observaciones especiales, referencias, etc." rows="3"></textarea>
+      </div>
+
+      <div class="form-col-2">
+        <label class="btn btn-gold" style="cursor:pointer; margin-top:26px;">
+          Agregar cliente
+          <button type="submit" style="display:none;"></button>
+        </label>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===== LISTADO DE CLIENTES ===== -->
+  <section class="panel">
+    <h2>Clientes registrados</h2>
+    <div id="listadoClientes" class="clientes-tabla">
+      <div class="loading">Cargando clientes...</div>
+    </div>
+  </section>
+</main>
+
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="clientes.js" defer></script>
+</body>
+</html>

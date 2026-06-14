@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis oportunidades · David Landeo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../estilos.css">
+  <link rel="stylesheet" href="cliente.css">
+</head>
+<body class="cliente-portal">
+
+<header class="nav">
+  <a class="brand" href="../index.html">
+    <span class="logo">DL</span>
+    <span class="brand-txt"><b>David Landeo</b><small id="clienteNombre">Mi portal</small></span>
+  </a>
+  <nav class="links">
+    <a href="#" onclick="logout();" class="btn-nav">Salir</a>
+  </nav>
+</header>
+
+<main class="portal-container">
+  <!-- ===== FILTROS ===== -->
+  <section class="filtros-section">
+    <div class="filtros-header">
+      <h2>Filtrar mis propiedades</h2>
+      <button class="btn-limpiar" onclick="limpiarFiltros()">🔄 Limpiar filtros</button>
+    </div>
+
+    <div class="filtros-grid">
+      <div class="filtro-grupo">
+        <label>🔍 Buscar por dirección o título</label>
+        <input
+          type="text"
+          id="filtroBusqueda"
+          class="filtro-input"
+          placeholder="Ej: Chamberí, Piso 2 dormitorios..."
+          oninput="aplicarFiltros()"
+        >
+      </div>
+
+      <div class="filtro-grupo">
+        <label>💰 Precio de compra (€)</label>
+        <div class="rango-filtro">
+          <input
+            type="range"
+            id="filtroPrecinMin"
+            class="filtro-range"
+            min="0"
+            max="1000000"
+            step="10000"
+            value="0"
+            oninput="aplicarFiltros()"
+          >
+          <input
+            type="range"
+            id="filtroPrecioMax"
+            class="filtro-range"
+            min="0"
+            max="1000000"
+            step="10000"
+            value="1000000"
+            oninput="aplicarFiltros()"
+          >
+          <div class="rango-valores">
+            <span id="valorPrecioMin">€ 0</span> - <span id="valorPrecioMax">€ 1.000.000</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>🛏️ Habitaciones</label>
+        <div class="opciones-filtro">
+          <label><input type="radio" name="habitaciones" value="" onchange="aplicarFiltros()"> Todas</label>
+          <label><input type="radio" name="habitaciones" value="1" onchange="aplicarFiltros()"> 1+</label>
+          <label><input type="radio" name="habitaciones" value="2" onchange="aplicarFiltros()"> 2+</label>
+          <label><input type="radio" name="habitaciones" value="3" onchange="aplicarFiltros()"> 3+</label>
+          <label><input type="radio" name="habitaciones" value="4" onchange="aplicarFiltros()"> 4+</label>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>📏 Metros cuadrados</label>
+        <div class="rango-filtro">
+          <input
+            type="range"
+            id="filtroM2Min"
+            class="filtro-range"
+            min="0"
+            max="500"
+            step="10"
+            value="0"
+            oninput="aplicarFiltros()"
+          >
+          <input
+            type="range"
+            id="filtroM2Max"
+            class="filtro-range"
+            min="0"
+            max="500"
+            step="10"
+            value="500"
+            oninput="aplicarFiltros()"
+          >
+          <div class="rango-valores">
+            <span id="valorM2Min">0</span> - <span id="valorM2Max">500</span> m²
+          </div>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>📍 Ubicación (Distrito/Municipio)</label>
+        <select id="filtroUbicacion" class="filtro-input" onchange="aplicarFiltros()">
+          <option value="">Todas las ubicaciones</option>
+          <!-- Se llena dinámicamente -->
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MIS OPORTUNIDADES ===== -->
+  <section class="oportunidades-section">
+    <h1>Mis oportunidades de inversión</h1>
+    <p class="subtitle" id="textoSubtitulo">Estas son las propiedades seleccionadas especialmente para ti. Haz clic en una para ver fotos, videos y documentos.</p>
+
+    <div id="listadoOportunidades" class="oportunidades-grid">
+      <div class="loading">Cargando tus propiedades...</div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== MODAL DE PROPIEDAD ===== -->
+<div id="modalPropiedad" class="modal-propiedad" style="display:none;">
+  <div class="modal-contenido">
+    <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+
+    <div class="modal-header">
+      <h2 id="modalTitulo">Título de la propiedad</h2>
+      <p id="modalDireccion">Dirección</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="modal-tabs">
+      <button class="tab-btn activo" onclick="cambiarTab('fotos')">📸 Fotos</button>
+      <button class="tab-btn" onclick="cambiarTab('videos')">🎥 Videos</button>
+      <button class="tab-btn" onclick="cambiarTab('documentos')">📄 Documentos</button>
+      <button class="tab-btn" onclick="cambiarTab('detalles')">ℹ️ Detalles</button>
+    </div>
+
+    <!-- Contenido de tabs -->
+    <div class="modal-body">
+      <!-- Fotos -->
+      <div id="tabFotos" class="tab-content activo">
+        <div class="galeria-fotos">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Videos -->
+      <div id="tabVideos" class="tab-content">
+        <div class="galeria-videos">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Documentos -->
+      <div id="tabDocumentos" class="tab-content">
+        <div class="lista-documentos">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Detalles -->
+      <div id="tabDetalles" class="tab-content">
+        <div class="detalles-grid">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" onclick="cerrarModal()"></div>
+</div>
+
+<!-- Visor de imagen a pantalla completa -->
+<div id="visorImagenes" class="visor-imagenes" style="display:none;">
+  <button class="btn-cerrar-visor" onclick="cerrarVisor()">×</button>
+  <img id="imagenVisor" src="" alt="">
+  <div class="visor-controles">
+    <button onclick="imagenAnterior()">← Anterior</button>
+    <span id="contadorImagenes"></span>
+    <button onclick="imagenSiguiente()">Siguiente →</button>
+  </div>
+</div>
+
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cliente.js" defer></script>
+</body>
+</html>

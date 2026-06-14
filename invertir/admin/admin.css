@@ -1,0 +1,382 @@
+/* ============================================
+   Estilos Admin — Gestión de propiedades
+   ============================================ */
+
+.admin-layout {
+  padding-top: var(--nav-h);
+  background: var(--paper);
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* Paneles */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 36px 32px;
+  margin-bottom: 32px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 28px;
+  color: var(--ink);
+}
+
+/* Formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+}
+
+.form-col-2 {
+  grid-column: 1 / -1;
+}
+
+.form-grid label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-grid input,
+.form-grid textarea,
+.form-grid select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  transition: 0.16s;
+  box-sizing: border-box;
+}
+
+.form-grid input:focus,
+.form-grid textarea:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 130, 49, 0.12);
+}
+
+.form-grid textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* Grid de propiedades */
+.propiedades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.propiedad-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.propiedad-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 12px 32px rgba(176, 130, 49, 0.15);
+}
+
+.propiedad-img {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--gold-soft), var(--paper-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 48px;
+  overflow: hidden;
+}
+
+.propiedad-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.propiedad-content {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.propiedad-titulo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.propiedad-direccion {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.propiedad-specs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.spec {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.propiedad-precio {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold);
+  margin: auto 0 12px 0;
+}
+
+.propiedad-acciones {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.propiedad-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.16s;
+}
+
+.btn-asignar {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+.btn-asignar:hover {
+  background: var(--gold);
+  color: #fff;
+}
+
+.btn-editar {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.btn-editar:hover {
+  background: var(--line-strong);
+}
+
+.btn-eliminar {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.btn-eliminar:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--muted);
+}
+
+/* Tabla de clientes */
+.tabla-clientes {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-clientes thead {
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+}
+
+.tabla-clientes th {
+  padding: 16px 14px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+.tabla-clientes td {
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-70);
+}
+
+.tabla-clientes td a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.tabla-clientes td a:hover {
+  text-decoration: underline;
+}
+
+.tabla-clientes tbody tr:hover {
+  background: var(--paper);
+}
+
+.btn-tabla {
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: 0.16s;
+  margin-right: 6px;
+}
+
+.btn-tabla.btn-editar {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.btn-tabla.btn-editar:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+.btn-tabla.btn-eliminar {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.btn-tabla.btn-eliminar:hover {
+  background: #dc2626;
+  color: #fff;
+  border-color: #dc2626;
+}
+
+/* Modal de asignación */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 27, 36, 0.5);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+}
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(14, 27, 36, 0.25);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.modal-content p {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.clientes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.cliente-item {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.16s;
+}
+
+.cliente-item:hover {
+  background: var(--paper);
+  border-color: var(--gold);
+}
+
+.cliente-nombre {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cliente-telefono {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 24px 16px;
+  }
+
+  .panel {
+    padding: 24px 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-col-2 {
+    grid-column: auto;
+  }
+
+  .propiedades-grid {
+    grid-template-columns: 1fr;
+  }
+}
