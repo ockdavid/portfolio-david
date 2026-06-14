@@ -6,15 +6,38 @@
 let sb = null;
 
 // Inicializar Supabase
+// Devuelve true si hay sesión de admin autenticada y se pudo inicializar.
 async function initSupabase() {
   const config = window.SUPABASE_CONFIG;
+
   if (!config) {
     console.error('Falta SUPABASE_CONFIG');
-    return;
+    alert('❌ Error: Configuración de Supabase no disponible');
+    return false;
   }
 
-  sb = supabase.createClient(config.url, config.key);
+  if (typeof supabase === 'undefined') {
+    console.error('Librería supabase no está cargada');
+    alert('❌ Error: Librería Supabase no disponible');
+    return false;
+  }
+
+  // persistSession comparte la sesión con la plataforma de visitas
+  // (mismo dominio + misma URL de proyecto = mismo localStorage).
+  sb = supabase.createClient(config.url, config.key, {
+    auth: { persistSession: true, autoRefreshToken: true }
+  });
+
+  // El admin requiere estar autenticado como David.
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    alert('Necesitas iniciar sesión para gestionar propiedades.');
+    window.location.href = '../visita/index.html';
+    return false;
+  }
+
   await cargarPropiedades();
+  return true;
 }
 
 // Cargar todas las propiedades
@@ -93,11 +116,16 @@ function crearTarjetaPropiedad(prop) {
 }
 
 // Agregar/editar propiedad
-document.addEventListener('DOMContentLoaded', function () {
+function setupForm() {
   const form = document.getElementById('formPropiedad');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (!sb) {
+        alert('❌ Error: Supabase no está inicializado');
+        return;
+      }
 
       const formData = new FormData(form);
       const propiedad = {};
@@ -118,8 +146,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+}
 
-  initSupabase();
+document.addEventListener('DOMContentLoaded', async function () {
+  const ok = await initSupabase();
+  if (ok) setupForm();
 });
 
 // Modal para asignar a cliente
@@ -222,11 +253,9 @@ async function eliminarPropiedad(propiedadId) {
   }
 }
 
-// Logout
-function logout() {
-  if (confirm('¿Cerrar sesión?')) {
-    window.location.href = '../';
-  }
+// Volver a visitas
+function volver() {
+  window.location.href = '../visita/index.html';
 }
 
 // Editar propiedad (placeholder)
